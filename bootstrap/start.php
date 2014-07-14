@@ -26,7 +26,7 @@ $app = new Illuminate\Foundation\Application;
 
 $env = $app->detectEnvironment(function()
 {
-    return (getenv('SERVER_NAME') === 'office.anavallasuiza.com') ? 'prod' : 'local';
+    return (gethostname() === 'zelda') ? 'prod' : 'local';
 });
 
 /*
