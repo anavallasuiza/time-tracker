@@ -1,3 +1,4 @@
+/app/config/local/
 /app/storage/*
 /bootstrap/compiled.php
 /vendor
