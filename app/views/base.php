@@ -10,10 +10,13 @@
 		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" />
 		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/lumen/bootstrap.min.css" />
 
+		<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 	</head>
 
 	<body>
-		<?= $body; ?>
+		<div class="container">
+			<?= $body; ?>
+		</div>
 	</body>
 </html>

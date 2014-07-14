@@ -35,6 +35,8 @@ class CreateTimeTables extends Migration {
             $table->engine = 'InnoDB';
 
             $table->increments('id');
+            $table->integer('remote_id')->unsigned();
+
             $table->text('description');
             $table->timestamp('start_time');
             $table->timestamp('end_time');
@@ -67,6 +69,7 @@ class CreateTimeTables extends Migration {
 
             $table->increments('id');
             $table->text('name');
+            $table->text('email');
             $table->text('hash');
         });
 

@@ -9,11 +9,6 @@ class Users extends Eloquent {
 
     public $timestamps = false;
 
-    public function activities()
-    {
-        return $this->hasMany('App\Models\Activities', 'id_users', 'id');
-    }
-
     public function facts()
     {
         return $this->hasMany('App\Models\Facts', 'id_users', 'id');
