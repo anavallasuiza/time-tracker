@@ -24,11 +24,10 @@ $app = new Illuminate\Foundation\Application;
 |
 */
 
-$env = $app->detectEnvironment(array(
-
-	'local' => array('homestead'),
-
-));
+$env = $app->detectEnvironment(function()
+{
+    return (getenv('SERVER_NAME') === 'office.anavallasuiza.com') ? 'prod' : 'local';
+});
 
 /*
 |--------------------------------------------------------------------------

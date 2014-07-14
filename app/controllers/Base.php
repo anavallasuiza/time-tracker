@@ -1,6 +1,7 @@
 <?php
+namespace App\Controllers;
 
-class BaseController extends Controller {
+class Base extends \Controller {
 
 	/**
 	 * Setup the layout used by the controller.
