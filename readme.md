@@ -4,7 +4,7 @@ ANS Time Tracker is an app based in Laravel to store and list time spend in proj
 
 ## API
 
-You can connect with ANS Time Tracker using [anavallasuiza/time-tracker-sync](http://github.com/anavallasuiza/time-tracker-sync) which allow import tracking databases from Hamster(http://projecthamster.wordpress.com/screenshots/) or Time Tracker for Mac(https://code.google.com/p/time-tracker-mac/).
+You can connect with ANS Time Tracker using [anavallasuiza/time-tracker-sync](http://github.com/anavallasuiza/time-tracker-sync) which allow import tracking databases from [Hamster](http://projecthamster.wordpress.com/screenshots/) or [Time Tracker for Mac](https://code.google.com/p/time-tracker-mac/).
 
 ### License
 
