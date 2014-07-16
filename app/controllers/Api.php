@@ -1,7 +1,7 @@
 <?php
 namespace App\Controllers;
 
-use \App\Models, \Response, \Input;
+use \App\Models, \App\Libs, \Response, \Input;
 
 class Api extends ApiBase {
     public function getActivities()
@@ -154,9 +154,33 @@ class Api extends ApiBase {
             }
         }
 
+        if (!($start_time = Libs\Utils::checkDate($start_time, 'Y-m-d H:i:s'))) {
+            return Response::json(array(
+                'code' =>  404,
+                'message' => sprintf(_('"%s" has not a valid date time format (Y-m-d H:i:s)'), 'start_time')
+            ), 404);
+        }
+
+        if (!($end_time = Libs\Utils::checkDate($end_time, 'Y-m-d H:i:s'))) {
+            return Response::json(array(
+                'code' =>  404,
+                'message' => sprintf(_('"%s" has not a valid date time format (Y-m-d H:i:s)'), 'end_time')
+            ), 404);
+        }
+
+        $total = round(($end_time->getTimestamp() - $start_time->getTimestamp()) / 60);
+
+        if ($total < 0) {
+            return Response::json(array(
+                'code' =>  404,
+                'message' => _('"start_time" date is older than "end_time" date')
+            ), 404);
+        }
+
         $fact = Models\Facts::create([
             'start_time' => $start_time,
             'end_time' => $end_time,
+            'total_time' => $total,
             'description' => trim(Input::get('description')),
             'hostname' => $hostname,
             'remote_id' => $remote_id,

@@ -38,6 +38,8 @@ class CreateTimeTables extends Migration {
 
             $table->timestamp('start_time');
             $table->timestamp('end_time');
+            $table->integer('total_time');
+
             $table->text('description');
             $table->text('hostname');
 

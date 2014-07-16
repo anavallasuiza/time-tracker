@@ -3,27 +3,10 @@ namespace App\Libs;
 
 class Utils
 {
-    public static function checkdate($date)
+    public static function checkDate($date, $format = 'Y-m-d')
     {
-        preg_match('#^([0-9]+)[/-]([0-9]+)[/-]([0-9]+)$#', $date, $date);
-
-        if (strlen($date[1]) === 4) {
-            $year = $date[1];
-            $day = $date[3];
-        } elseif (strlen($date[3]) === 4) {
-            $year = $date[3];
-            $day = $date[1];
-        } else {
-            return false;
-        }
-
-        $month = $date[2];
-
-        if (checkdate($month, $day, $year)) {
-            return new \Datetime($year.'/'.$month.'/'.$day);
-        }
-
-        return false;
+        $d = \DateTime::createFromFormat($format, $date);
+        return ($d && ($d->format($format) === $date)) ? $d : false;
     }
 
     public static function sumHours($list)

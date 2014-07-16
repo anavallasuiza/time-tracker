@@ -1,5 +1,7 @@
 
 <form method="get" class="row">
+    <input type="hidden" name="sort" value="<?= $sort; ?>" />
+
     <div class="col-sm-2 form-group">
         <select name="user" class="form-control filter">
             <option value=""><?= _('All Users'); ?></option>
@@ -46,9 +48,15 @@
             <th class="column-user"><?= _('User'); ?></th>
             <th class="column-activity"><?= _('Activity'); ?></th>
             <th class="column-tags"><?= _('Tags'); ?></th>
-            <th class="text-center column-start"><?= _('Start time'); ?></th>
-            <th class="text-center column-end"><?= _('End time'); ?></th>
-            <th class="text-center column-time"><?= _('Total time'); ?></th>
+            <th class="text-center column-start">
+                <a href="<?= \App\Libs\Utils::url('sort', ($sort === 'start-desc') ? 'start-asc' : 'start-desc'); ?>"><?= _('Start time'); ?></a>
+            </th>
+            <th class="text-center column-end">
+                <a href="<?= \App\Libs\Utils::url('sort', ($sort === 'end-desc') ? 'end-asc' : 'end-desc'); ?>"><?= _('End time'); ?></a>
+            </th>
+            <th class="text-center column-time">
+                <a href="<?= \App\Libs\Utils::url('sort', ($sort === 'total-desc') ? 'total-asc' : 'total-desc'); ?>"><?= _('Total time'); ?></a>
+            </th>
         </tr>
     </thead>
 
@@ -66,7 +74,7 @@
             <td class="column-tags"><?= implode(', ', array_column(json_decode(json_encode($fact->tags), true), 'name')); ?></a></td>
             <td class="text-center column-start"><?= $fact->start_time->format('d/m/Y'); ?> <span class="hour"><?= $fact->start_time->format('H:i'); ?></span></td>
             <td class="text-center column-end"><?= $fact->end_time->format('d/m/Y'); ?> <span class="hour"><?= $fact->end_time->format('H:i'); ?></span></td>
-            <td class="text-center column-time"><?= $fact->start_time->diff($fact->end_time)->format('%H:%I'); ?></td>
+            <td class="text-center column-time"><?= date('H:i', mktime(0, $fact->total_time)); ?></td>
         </tr>
         <?php } ?>
     </tbody>

@@ -3,14 +3,11 @@ namespace App\Controllers;
 
 use \App\Models, \App\Libs, \View, \Redirect, \Input, \Session;
 
-class Home extends Base {
+class Home extends \Controller {
 
 	public function index()
 	{
-        $facts = Models\Facts::orderBy('facts.end_time', 'DESC')
-            ->with(['activities'])
-            ->with(['users'])
-            ->with(['tags']);
+        $facts = Models\Facts::with(['activities'])->with(['users'])->with(['tags']);
 
         if ($user = (int)Input::get('user')) {
             $facts->where('id_users', '=', $user);
@@ -25,13 +22,13 @@ class Home extends Base {
                 ->where('facts_tags.id_tags', '=', $tag);
         }
 
-        if (($first = Input::get('first')) && ($first = Libs\Utils::checkdate($first))) {
+        if (($first = Input::get('first')) && ($first = Libs\Utils::checkdate($first, 'd/m/Y'))) {
             $facts->where('end_time', '>=', $first->format('Y-m-d 00:00:00'));
         } else {
             $first = null;
         }
 
-        if (($last = Input::get('last')) && ($last = Libs\Utils::checkdate($last))) {
+        if (($last = Input::get('last')) && ($last = Libs\Utils::checkdate($last, 'd/m/Y'))) {
             $facts->where('end_time', '<=', $last->format('Y-m-d 23:59:59'));
         } else {
             $last = null;
@@ -39,6 +36,14 @@ class Home extends Base {
 
         if ($description = Input::get('description')) {
             $facts->where('description', 'LIKE', '%'.$description.'%');
+        }
+
+        list($sort_field, $sort_mode) = explode('-', $sort = Input::get('sort') ?: 'end-desc');
+
+        if (in_array($sort_field, ['start', 'end', 'total'], true)) {
+            $facts->orderBy($sort_field.'_time', ($sort_mode === 'asc') ? 'ASC' : 'DESC');
+        } else {
+            $facts->orderBy('end_time', 'DESC');
         }
 
         if (Input::get('export') === 'csv') {
@@ -60,6 +65,7 @@ class Home extends Base {
             'activities' => Models\Activities::orderBy('name', 'ASC')->get(),
             'tags' => Models\Tags::orderBy('name', 'ASC')->get(),
             'rows' => $rows,
+            'sort' => $sort,
             'filter' => [
                 'user' => $user,
                 'activity' => $activity,
