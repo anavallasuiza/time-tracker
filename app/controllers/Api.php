@@ -7,14 +7,14 @@ class Api extends ApiBase {
     public function getActivities()
     {
         return Response::json([
-            'data' => Models\Activities::orderBy('id', 'DESC')->take(100)->get()
+            'data' => Models\Activities::orderBy('id', 'DESC')->get()
         ]);
     }
 
     public function getCategories()
     {
         return Response::json([
-            'data' => Models\Categories::orderBy('id', 'DESC')->take(100)->get()
+            'data' => Models\Categories::orderBy('id', 'DESC')->get()
         ]);
     }
 
@@ -22,12 +22,12 @@ class Api extends ApiBase {
     {
         $facts = Models\Facts::orderBy('id', 'DESC');
 
-        if ($tags = Input::get('tags')) {
+        if (Input::get('tags')) {
             $facts->with(['tags']);
         }
 
         return Response::json([
-            'data' => $facts->take(100)->get()
+            'data' => $facts->get()
         ]);
     }
 
@@ -35,12 +35,12 @@ class Api extends ApiBase {
     {
         $tags = Models\Tags::orderBy('name', 'ASC');
 
-        if ($facts = Input::get('facts')) {
+        if (Input::get('facts')) {
             $tags->with(['facts']);
         }
 
         return Response::json([
-            'data' => $tags->take(100)->get()
+            'data' => $tags->get()
         ]);
     }
 
@@ -51,7 +51,7 @@ class Api extends ApiBase {
             ->orderBy('id', 'DESC');
 
         return Response::json([
-            'data' => $facts_tags->take(100)->get()
+            'data' => $facts_tags->get()
         ]);
     }
 
