@@ -27,4 +27,6 @@ Route::group(['prefix' => 'api', 'before' => 'auth.api'], function()
     Route::post('facts', 'App\Controllers\Api@setFacts');
     Route::post('tags', 'App\Controllers\Api@setTags');
     Route::post('facts-tags', 'App\Controllers\Api@setFactsTags');
+
+    Route::delete('facts', 'App\Controllers\Api@deleteFacts');
 });

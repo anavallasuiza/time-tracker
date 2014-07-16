@@ -97,11 +97,13 @@ class CreateTimeTables extends Migration {
         {
             $table->foreign('id_facts')
                 ->references('id')
-                ->on('facts');
+                ->on('facts')
+                ->onDelete('cascade');
 
             $table->foreign('id_tags')
                 ->references('id')
-                ->on('tags');
+                ->on('tags')
+                ->onDelete('cascade');
         });
 	}
 

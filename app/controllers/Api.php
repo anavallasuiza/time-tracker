@@ -161,6 +161,31 @@ class Api extends ApiBase {
         ]);
     }
 
+    public function deleteFacts()
+    {
+        $remote_id = (int)Input::get('remote_id');
+        $hostname = trim(Input::get('hostname'));
+
+        foreach (['remote_id', 'hostname'] as $field) {
+            if (empty($$field)) {
+                return Response::json(array(
+                    'code' =>  404,
+                    'message' => sprintf(_('"%s" field is required'), $field)
+                ), 404);
+            }
+        }
+
+        Models\Facts::where([
+            'hostname' => $hostname,
+            'remote_id' => $remote_id,
+            'id_users' => $this->user()->id
+        ])->delete();
+
+        return Response::json([
+            'success' => true
+        ]);
+    }
+
     public function setFactsTags()
     {
         $id_facts = (int)Input::get('id_facts');
