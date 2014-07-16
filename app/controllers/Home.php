@@ -1,7 +1,7 @@
 <?php
 namespace App\Controllers;
 
-use \App\Models, \App\Libs, \View, \Redirect, \Input;
+use \App\Models, \App\Libs, \View, \Redirect, \Input, \Session;
 
 class Home extends Base {
 
@@ -135,6 +135,43 @@ class Home extends Base {
             'Content-Type' => 'application/octet-stream',
             'Content-Transfer-Encoding' => 'binary',
             'Content-Disposition' => 'attachment; filename="'._('time-tracking.sql').'"'
+        ]);
+    }
+
+    public function gitUpdate()
+    {
+        $Shell = new Libs\Shell();
+
+        if (!$Shell->exists('git')) {
+            Session::flash('flash-message', [
+                'message' => _('GIT command not exists'),
+                'status' => 'danger'
+            ]);
+
+            return View::make('base')->nest('body', 'git-update', [
+                'response' => _('GIT command not exists')
+            ]);
+        }
+
+        $Shell->exec('git pull -u origin master');
+
+        $log = $Shell->getLog();
+        $log = end($log);
+
+        if ($log['success']) {
+            Session::flash('flash-message', [
+                'status' => 'success',
+                'message' => _('Environment updated successfully')
+            ]);
+        } else {
+            Session::flash('flash-message', [
+                'status' => 'danger',
+                'message' => _('Error updating environment from git')
+            ]);
+        }
+
+        return View::make('base')->nest('body', 'git-update', [
+            'response' => ($log['success'] ? $log['response'] : $log['error'])
         ]);
     }
 }

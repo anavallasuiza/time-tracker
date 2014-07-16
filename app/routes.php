@@ -13,6 +13,7 @@
 
 Route::get('/', 'App\Controllers\Home@index');
 Route::get('/dump-sql', 'App\Controllers\Home@dumpSQL');
+Route::get('/git-update', 'App\Controllers\Home@gitUpdate');
 
 Route::group(['prefix' => 'api', 'before' => 'auth.api'], function()
 {
