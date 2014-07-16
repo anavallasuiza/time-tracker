@@ -55,9 +55,17 @@ class Api extends ApiBase {
             ->where('hostname', '=', $hostname)
             ->get();
 
+        $ids = array_column($facts->toArray(), 'id');
+
+        if (empty($ids)) {
+            return Response::json([
+                'data' => []
+            ]);
+        }
+
         $facts_tags = \DB::table('facts_tags')
             ->select('id', 'id_facts', 'id_tags')
-            ->whereIn('id_facts', array_column($facts->toArray(), 'id'))
+            ->whereIn('id_facts', $ids)
             ->orderBy('id', 'DESC');
 
         return Response::json([
