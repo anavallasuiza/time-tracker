@@ -129,6 +129,8 @@ class Home extends Base {
             $output = str_replace($user, "('".implode("','", $clean)."')", $output);
         }
 
+        $output = "SET FOREIGN_KEY_CHECKS=0;\n".$output."\nSET FOREIGN_KEY_CHECKS=1;";
+
         return \Response::make($output, 200, [
             'Content-Type' => 'application/octet-stream',
             'Content-Transfer-Encoding' => 'binary',

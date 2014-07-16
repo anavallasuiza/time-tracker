@@ -7,24 +7,28 @@ class Api extends ApiBase {
     public function getActivities()
     {
         return Response::json([
-            'data' => Models\Activities::orderBy('id', 'DESC')->get()
+            'data' => Models\Activities::get()
         ]);
     }
 
     public function getCategories()
     {
         return Response::json([
-            'data' => Models\Categories::orderBy('id', 'DESC')->get()
+            'data' => Models\Categories::get()
         ]);
     }
 
     public function getFacts()
     {
-        $facts = Models\Facts::orderBy('id', 'DESC');
+        $hostname = Input::get('hostname');
 
-        if (Input::get('tags')) {
-            $facts->with(['tags']);
+        if (empty($hostname)) {
+            throw new \Exception(_('"hostname" parameter is required'));
         }
+
+        $facts = Models\Facts
+            ::where('id_users', '=', $this->user()->id)
+            ->where('hostname', '=', $hostname);
 
         return Response::json([
             'data' => $facts->get()
@@ -33,21 +37,27 @@ class Api extends ApiBase {
 
     public function getTags()
     {
-        $tags = Models\Tags::orderBy('name', 'ASC');
-
-        if (Input::get('facts')) {
-            $tags->with(['facts']);
-        }
-
         return Response::json([
-            'data' => $tags->get()
+            'data' => Models\Tags::get()
         ]);
     }
 
     public function getFactsTags()
     {
+        $hostname = Input::get('hostname');
+
+        if (empty($hostname)) {
+            throw new \Exception(_('"hostname" parameter is required'));
+        }
+
+        $facts = Models\Facts
+            ::where('id_users', '=', $this->user()->id)
+            ->where('hostname', '=', $hostname)
+            ->get();
+
         $facts_tags = \DB::table('facts_tags')
             ->select('id', 'id_facts', 'id_tags')
+            ->whereIn('id_facts', array_column($facts->toArray(), 'id'))
             ->orderBy('id', 'DESC');
 
         return Response::json([
@@ -124,9 +134,10 @@ class Api extends ApiBase {
         $start_time = trim(Input::get('start_time'));
         $end_time = trim(Input::get('end_time'));
         $remote_id = (int)Input::get('remote_id');
+        $hostname = trim(Input::get('hostname'));
         $id_activities = (int)Input::get('id_activities');
 
-        foreach (['start_time', 'end_time', 'remote_id', 'id_activities'] as $field) {
+        foreach (['start_time', 'end_time', 'hostname', 'remote_id', 'id_activities'] as $field) {
             if (empty($$field)) {
                 return Response::json(array(
                     'code' =>  404,
@@ -139,6 +150,7 @@ class Api extends ApiBase {
             'start_time' => $start_time,
             'end_time' => $end_time,
             'description' => trim(Input::get('description')),
+            'hostname' => $hostname,
             'remote_id' => $remote_id,
             'id_activities' => $id_activities,
             'id_users' => $this->user()->id
