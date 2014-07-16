@@ -19,6 +19,11 @@ class Facts extends Eloquent {
         return $this->belongsTo('App\Models\Users', 'id_users');
     }
 
+    public function tags()
+    {
+        return $this->belongsToMany('App\Models\Tags', 'facts_tags', 'id_facts', 'id_tags');
+    }
+
     private function formatDate($date)
     {
         try {

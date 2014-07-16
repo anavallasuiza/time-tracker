@@ -5,6 +5,8 @@
 
     RewriteEngine On
 
+    RewriteBase /time
+
     # Redirect Trailing Slashes...
     RewriteRule ^(.*)/$ /$1 [L,R=301]
 

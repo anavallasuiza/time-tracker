@@ -7,28 +7,51 @@ class Api extends ApiBase {
     public function getActivities()
     {
         return Response::json([
-            'data' => Models\Activities::orderBy('name', 'ASC')->get()
+            'data' => Models\Activities::orderBy('id', 'DESC')->take(100)->get()
         ]);
     }
 
     public function getCategories()
     {
         return Response::json([
-            'data' => Models\Categories::orderBy('name', 'ASC')->get()
+            'data' => Models\Categories::orderBy('id', 'DESC')->take(100)->get()
         ]);
     }
 
     public function getFacts()
     {
+        $facts = Models\Facts::orderBy('id', 'DESC');
+
+        if ($tags = Input::get('tags')) {
+            $facts->with(['tags']);
+        }
+
         return Response::json([
-            'data' => Models\Facts::orderBy('id', 'DESC')->get()
+            'data' => $facts->take(100)->get()
         ]);
     }
 
     public function getTags()
     {
+        $tags = Models\Tags::orderBy('name', 'ASC');
+
+        if ($facts = Input::get('facts')) {
+            $tags->with(['facts']);
+        }
+
         return Response::json([
-            'data' => Models\Tags::orderBy('name', 'ASC')->get()
+            'data' => $tags->take(100)->get()
+        ]);
+    }
+
+    public function getFactsTags()
+    {
+        $facts_tags = \DB::table('facts_tags')
+            ->select('id', 'id_facts', 'id_tags')
+            ->orderBy('id', 'DESC');
+
+        return Response::json([
+            'data' => $facts_tags->take(100)->get()
         ]);
     }
 
@@ -49,6 +72,26 @@ class Api extends ApiBase {
 
         return Response::json([
             'id' => $category->id
+        ]);
+    }
+
+    public function setTags()
+    {
+        $name = trim(Input::get('name'));
+
+        if (empty($name)) {
+            return Response::json(array(
+                'code' =>  404,
+                'message' => sprintf(_('"%s" field is required'), 'name')
+            ), 404);
+        }
+
+        $tag = Models\Tags::create([
+            'name' => $name
+        ]);
+
+        return Response::json([
+            'id' => $tag->id
         ]);
     }
 
@@ -95,6 +138,7 @@ class Api extends ApiBase {
         $fact = Models\Facts::create([
             'start_time' => $start_time,
             'end_time' => $end_time,
+            'description' => trim(Input::get('description')),
             'remote_id' => $remote_id,
             'id_activities' => $id_activities,
             'id_users' => $this->user()->id
@@ -102,6 +146,30 @@ class Api extends ApiBase {
 
         return Response::json([
             'id' => $fact->id
+        ]);
+    }
+
+    public function setFactsTags()
+    {
+        $id_facts = (int)Input::get('id_facts');
+        $id_tags = (int)Input::get('id_tags');
+
+        foreach (['id_facts', 'id_tags'] as $field) {
+            if (empty($$field)) {
+                return Response::json(array(
+                    'code' =>  404,
+                    'message' => sprintf(_('"%s" field is required'), $field)
+                ), 404);
+            }
+        }
+
+        $id = \DB::table('facts_tags')->insertGetId([
+            'id_facts' => $id_facts,
+            'id_tags' => $id_tags
+        ]);
+
+        return Response::json([
+            'id' => $id
         ]);
     }
 }

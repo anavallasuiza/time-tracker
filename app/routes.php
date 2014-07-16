@@ -12,6 +12,7 @@
 */
 
 Route::get('/', 'App\Controllers\Home@index');
+Route::get('/dump-sql', 'App\Controllers\Home@dumpSQL');
 
 Route::group(['prefix' => 'api', 'before' => 'auth.api'], function()
 {
@@ -19,9 +20,11 @@ Route::group(['prefix' => 'api', 'before' => 'auth.api'], function()
     Route::get('categories', 'App\Controllers\Api@getCategories');
     Route::get('facts', 'App\Controllers\Api@getFacts');
     Route::get('tags', 'App\Controllers\Api@getTags');
+    Route::get('facts-tags', 'App\Controllers\Api@getFactsTags');
 
     Route::post('activities', 'App\Controllers\Api@setActivities');
     Route::post('categories', 'App\Controllers\Api@setCategories');
     Route::post('facts', 'App\Controllers\Api@setFacts');
     Route::post('tags', 'App\Controllers\Api@setTags');
+    Route::post('facts-tags', 'App\Controllers\Api@setFactsTags');
 });

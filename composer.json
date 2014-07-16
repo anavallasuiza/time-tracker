@@ -4,7 +4,8 @@
 	"keywords": ["framework", "laravel"],
 	"license": "MIT",
 	"require": {
-		"laravel/framework": "dev-master"
+		"laravel/framework": "dev-master",
+		"ifsnop/mysqldump-php": "dev-master"
 	},
 	"autoload": {
 		"classmap": [
@@ -17,7 +18,8 @@
 		],
 		"psr-4": {
 	            "App\\Controllers\\": "app/controllers",
-        	    "App\\Models\\": "app/models"
+        	    "App\\Models\\": "app/models",
+        	    "App\\Libs\\": "app/libs"
 	        }
 	},
 	"scripts": {

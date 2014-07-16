@@ -1,0 +1,47 @@
+.page-header {
+    margin: 10px 0;
+    padding: 0 0 10px 0;
+}
+
+.page-header h1 {
+    margin: 0 0 0 40px;
+    padding: 0;
+    line-height: 100px;
+}
+
+.page-header + div.alert {
+    margin-top: -10px;
+}
+
+.facts-table thead {
+    background: white;
+}
+
+.facts-table thead tr th {
+    border-bottom: 1px solid #CCC;
+}
+
+.facts-table tbody:before {
+    line-height: 1em;
+    content: "-";
+    color: white;
+    display: block;
+}
+
+.facts-table a {
+    text-decoration: none;
+}
+
+.facts-table a:hover {
+    text-decoration: underline;
+}
+
+.floatThead-container {
+    z-index: 1 !important;
+}
+
+@media (max-width: 720px) {
+    .facts-table .column-tags, .facts-table .hour {
+        display: none;
+    }
+}

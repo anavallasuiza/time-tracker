@@ -37,9 +37,9 @@ class CreateTimeTables extends Migration {
             $table->increments('id');
             $table->integer('remote_id')->unsigned();
 
-            $table->text('description');
             $table->timestamp('start_time');
             $table->timestamp('end_time');
+            $table->text('description');
 
             $table->integer('id_activities')->unsigned();
             $table->integer('id_users')->unsigned();
