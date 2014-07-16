@@ -2,6 +2,7 @@
 /app/config/prod/
 /bootstrap/compiled.php
 /vendor
+/public/.htaccess
 composer.phar
 composer.lock
 .env.*.php
