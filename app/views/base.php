@@ -6,6 +6,11 @@
 
         <title><?= _('ANS Time Tracker'); ?></title>
 
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=yes">
+
+        <meta name="apple-mobile-web-app-capable" content="yes"/>
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+
         <meta http-equiv="X-UA-Compatible" content="IE=10; IE=9; IE=8; IE=7; IE=EDGE" />
 
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/united/bootstrap.min.css" />
