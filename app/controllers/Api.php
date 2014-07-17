@@ -177,6 +177,10 @@ class Api extends ApiBase {
             ), 404);
         }
 
+        if ($total === 0) {
+            continue;
+        }
+
         $fact = Models\Facts::create([
             'start_time' => $start_time,
             'end_time' => $end_time,
