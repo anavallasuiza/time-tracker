@@ -178,7 +178,9 @@ class Api extends ApiBase {
         }
 
         if ($total === 0) {
-            continue;
+            return Response::json([
+                'id' => 0
+            ]);
         }
 
         $fact = Models\Facts::create([
