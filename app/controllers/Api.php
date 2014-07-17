@@ -168,7 +168,7 @@ class Api extends ApiBase {
             ), 404);
         }
 
-        $total = round(($end_time->getTimestamp() - $start_time->getTimestamp()) / 60);
+        $total = (int)round(($end_time->getTimestamp() - $start_time->getTimestamp()) / 60);
 
         if ($total < 0) {
             return Response::json(array(
