@@ -1,9 +1,7 @@
 <?php
 namespace App\Models;
 
-use Eloquent;
-
-class Activities extends Eloquent {
+class Activities extends \Eloquent {
     protected $table = 'activities';
     protected $guarded = ['id'];
 

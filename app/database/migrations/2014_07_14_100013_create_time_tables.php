@@ -17,7 +17,7 @@ class CreateTimeTables extends Migration {
             $table->engine = 'InnoDB';
 
             $table->increments('id');
-            $table->text('name');
+            $table->string('name');
 
             $table->integer('id_categories')->unsigned();
         });
@@ -27,7 +27,7 @@ class CreateTimeTables extends Migration {
             $table->engine = 'InnoDB';
 
             $table->increments('id');
-            $table->text('name');
+            $table->string('name');
         });
 
         Schema::create('facts', function($table)
@@ -41,7 +41,7 @@ class CreateTimeTables extends Migration {
             $table->integer('total_time');
 
             $table->text('description');
-            $table->text('hostname');
+            $table->string('hostname');
 
             $table->integer('remote_id')->unsigned();
 
@@ -59,12 +59,24 @@ class CreateTimeTables extends Migration {
             $table->integer('id_tags')->unsigned();
         });
 
+        Schema::create('logs', function($table)
+        {
+            $table->engine = 'InnoDB';
+
+            $table->increments('id');
+
+            $table->timestamp('date');
+            $table->string('description');
+
+            $table->integer('id_users')->unsigned();
+        });
+
         Schema::create('tags', function($table)
         {
             $table->engine = 'InnoDB';
 
             $table->increments('id');
-            $table->text('name');
+            $table->string('name');
         });
 
         Schema::create('users', function($table)
@@ -72,9 +84,15 @@ class CreateTimeTables extends Migration {
             $table->engine = 'InnoDB';
 
             $table->increments('id');
-            $table->text('name');
-            $table->text('email');
-            $table->text('hash');
+            $table->string('name')->unique();
+            $table->string('user')->unique();
+            $table->string('email');
+            $table->string('password');
+            $table->string('password_token');
+            $table->string('remember_token');
+            $table->string('api_key');
+            $table->boolean('admin');
+            $table->boolean('enabled');
         });
 
         Schema::table('activities', function($table)
@@ -90,6 +108,13 @@ class CreateTimeTables extends Migration {
                 ->references('id')
                 ->on('activities');
 
+            $table->foreign('id_users')
+                ->references('id')
+                ->on('users');
+        });
+
+        Schema::table('logs', function($table)
+        {
             $table->foreign('id_users')
                 ->references('id')
                 ->on('users');
@@ -120,8 +145,8 @@ class CreateTimeTables extends Migration {
         Schema::drop('facts');
         Schema::drop('activities');
         Schema::drop('categories');
+        Schema::drop('logs');
         Schema::drop('tags');
         Schema::drop('users');
 	}
-
 }

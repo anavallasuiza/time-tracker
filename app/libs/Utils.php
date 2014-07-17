@@ -3,6 +3,53 @@ namespace App\Libs;
 
 class Utils
 {
+    public static function setMessage($data)
+    {
+        \Session::flash('flash-message', [
+            'message' => $data['message'],
+            'status' => $data['status']
+        ]);
+    }
+
+    public static function isBot(array $data = [])
+    {
+        $bots = [
+            'ask jeeves','baiduspider','butterfly','fast','feedfetcher-google','firefly','gigabot',
+            'googlebot','infoseek','me.dium','mediapartners-google','nationaldirectory','rankivabot',
+            'scooter','slurp','sogou web spider','spade','tecnoseek','technoratisnoop','teoma',
+            'tweetmemebot','twiceler','twitturls','url_spider_sql','webalta crawler','webbug',
+            'webfindbot','zyborg','alexa','appie','crawler','froogle','girafabot','inktomi',
+            'looksmart','msnbot','rabaz','www.galaxy.com','rogerbot'
+        ];
+
+        $agent = strtolower($_SERVER['HTTP_USER_AGENT']);
+
+        foreach ($bots as $bot) {
+            if (strstr($agent, $bot) !== false) {
+                return true;
+            }
+        }
+
+        return $data ? self::checkTags($data) : false;
+    }
+
+    public static function checkTags(array $data, array $fake = ['email', 'url'])
+    {
+        foreach ($fake as $name) {
+            if (!array_key_exists($name, $data) || $data[$name]) {
+                return true;
+            }
+        }
+
+        foreach ($data as $value) {
+            if (strstr($value, '<')) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public static function checkDate($date, $format = 'Y-m-d')
     {
         $d = \DateTime::createFromFormat($format, $date);

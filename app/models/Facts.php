@@ -1,9 +1,9 @@
 <?php
 namespace App\Models;
 
-use Eloquent;
+use App\Libs;
 
-class Facts extends Eloquent {
+class Facts extends \Eloquent {
     protected $table = 'facts';
     protected $guarded = ['id'];
 
@@ -41,5 +41,53 @@ class Facts extends Eloquent {
     public function getEndTimeAttribute($value)
     {
         return $this->formatDate($value);
+    }
+
+    public static function filter($filters)
+    {
+        extract($filters);
+
+        $facts = self::with(['activities'])->with(['users'])->with(['tags']);
+
+        if (isset($user) && (int)$user) {
+            $facts->where('id_users', '=', (int)$user);
+        }
+
+        if (isset($activity) && (int)$activity) {
+            $facts->where('id_activities', '=', (int)$activity);
+        }
+
+        if (isset($tag) && (int)$tag) {
+            $facts->join('facts_tags', 'facts_tags.id_facts', '=', 'facts.id')
+                ->where('facts_tags.id_tags', '=', (int)$tag);
+        }
+
+        if (isset($first) && $first && ($filters['first'] = Libs\Utils::checkdate($first, 'd/m/Y'))) {
+            $facts->where('end_time', '>=', $filters['first']->format('Y-m-d 00:00:00'));
+        } else {
+            $filters['first'] = null;
+        }
+
+        if (isset($last) && $last && ($filters['last'] = Libs\Utils::checkdate($last, 'd/m/Y'))) {
+            $facts->where('end_time', '<=', $filters['last']->format('Y-m-d 23:59:59'));
+        } else {
+            $filters['last'] = null;
+        }
+
+        if (isset($description) && $description) {
+            $facts->where('description', 'LIKE', '%'.$description.'%');
+        }
+
+        $filters['sort'] = empty($sort) ? 'end-desc' : $sort;
+
+        list($sort_field, $sort_mode) = explode('-', $filters['sort']);
+
+        if (in_array($sort_field, ['start', 'end', 'total'], true)) {
+            $facts->orderBy($sort_field.'_time', ($sort_mode === 'asc') ? 'ASC' : 'DESC');
+        } else {
+            $facts->orderBy('end_time', 'DESC');
+        }
+
+        return [$facts, $filters];
     }
 }

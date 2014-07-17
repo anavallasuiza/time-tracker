@@ -1,50 +1,51 @@
 <?php
 namespace App\Controllers;
 
-use \App\Models, \App\Libs, \View, \Redirect, \Input, \Session;
+use App\Models, App\Libs, View, Redirect, Input, Session;
 
-class Home extends \Controller {
+class Home extends Base {
+    public function login()
+    {
+        if ($this->user) {
+            return Redirect::to('/');
+        }
+
+        if (\Config::get('auth')['method'] !== 'html') {
+            return Redirect::to('/401');
+        }
+
+        $form = (new Forms\User)->login();
+
+        if (is_object($action = $this->action(__FUNCTION__, $form))) {
+            return $action;
+        }
+
+        return View::make('base')->nest('body', 'login', [
+            'form' => $form
+        ]);
+    }
+
+    public function error401()
+    {
+        return \Response::make(View::make('base')->nest('body', 'error401'), 401);
+    }
+
+    public function error404()
+    {
+        return \Response::make(View::make('base')->nest('body', 'error404'), 404);
+    }
 
 	public function index()
 	{
-        $facts = Models\Facts::with(['activities'])->with(['users'])->with(['tags']);
-
-        if ($user = (int)Input::get('user')) {
-            $facts->where('id_users', '=', $user);
-        }
-
-        if ($activity = (int)Input::get('activity')) {
-            $facts->where('id_activities', '=', $activity);
-        }
-
-        if ($tag = (int)Input::get('tag')) {
-            $facts->join('facts_tags', 'facts_tags.id_facts', '=', 'facts.id')
-                ->where('facts_tags.id_tags', '=', $tag);
-        }
-
-        if (($first = Input::get('first')) && ($first = Libs\Utils::checkdate($first, 'd/m/Y'))) {
-            $facts->where('end_time', '>=', $first->format('Y-m-d 00:00:00'));
-        } else {
-            $first = null;
-        }
-
-        if (($last = Input::get('last')) && ($last = Libs\Utils::checkdate($last, 'd/m/Y'))) {
-            $facts->where('end_time', '<=', $last->format('Y-m-d 23:59:59'));
-        } else {
-            $last = null;
-        }
-
-        if ($description = Input::get('description')) {
-            $facts->where('description', 'LIKE', '%'.$description.'%');
-        }
-
-        list($sort_field, $sort_mode) = explode('-', $sort = Input::get('sort') ?: 'end-desc');
-
-        if (in_array($sort_field, ['start', 'end', 'total'], true)) {
-            $facts->orderBy($sort_field.'_time', ($sort_mode === 'asc') ? 'ASC' : 'DESC');
-        } else {
-            $facts->orderBy('end_time', 'DESC');
-        }
+        list($facts, $filters) = Models\Facts::filter([
+            'user' => Input::get('user'),
+            'activity' => Input::get('activity'),
+            'tag' => Input::get('tag'),
+            'first' => Input::get('first'),
+            'last' => Input::get('last'),
+            'description' => Input::get('description'),
+            'sort' => Input::get('sort')
+        ]);
 
         if (Input::get('export') === 'csv') {
             return $this->csvDownload($facts->get());
@@ -65,15 +66,8 @@ class Home extends \Controller {
             'activities' => Models\Activities::orderBy('name', 'ASC')->get(),
             'tags' => Models\Tags::orderBy('name', 'ASC')->get(),
             'rows' => $rows,
-            'sort' => $sort,
-            'filter' => [
-                'user' => $user,
-                'activity' => $activity,
-                'tag' => $tag,
-                'description' => $description,
-                'first' => $first,
-                'last' => $last
-            ]
+            'sort' => $filters['sort'],
+            'filter' => $filters
         ]);
 	}
 

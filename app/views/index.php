@@ -30,7 +30,7 @@
     </div>
 
     <div class="col-sm-2 form-group">
-        <input type="search" name="description" value="<?= $filter['description']; ?>" class="form-control" placeholder="<?= _('Search in description'); ?>">
+        <input type="search" name="description" value="<?= $filter['description']; ?>" class="form-control filter" placeholder="<?= _('Search in description'); ?>">
     </div>
 
     <div class="col-sm-3 form-group">

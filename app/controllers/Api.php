@@ -1,9 +1,20 @@
 <?php
 namespace App\Controllers;
 
-use \App\Models, \App\Libs, \Response, \Input;
+use App\Models, App\Libs, Response, Input;
 
-class Api extends ApiBase {
+class Api extends \Controller {
+    protected $user;
+
+    protected function user()
+    {
+        if (empty($this->user)) {
+            $this->user = Libs\Auth::user();
+        }
+
+        return $this->user;
+    }
+
     public function getActivities()
     {
         return Response::json([

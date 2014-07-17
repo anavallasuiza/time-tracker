@@ -5,6 +5,7 @@
 	"license": "MIT",
 	"require": {
 		"laravel/framework": "dev-master",
+		"form-manager/form-manager": "master-dev",
 		"ifsnop/mysqldump-php": "dev-master"
 	},
 	"autoload": {
@@ -17,9 +18,10 @@
 			"app/tests/TestCase.php"
 		],
 		"psr-4": {
+	            "App\\Actions\\": "app/actions",
 	            "App\\Controllers\\": "app/controllers",
-        	    "App\\Models\\": "app/models",
-        	    "App\\Libs\\": "app/libs"
+        	    "App\\Libs\\": "app/libs",
+        	    "App\\Models\\": "app/models"
 	        }
 	},
 	"scripts": {

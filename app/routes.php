@@ -11,9 +11,17 @@
 |
 */
 
-Route::get('/', 'App\Controllers\Home@index');
-Route::get('/dump-sql', 'App\Controllers\Home@dumpSQL');
-Route::get('/git-update', 'App\Controllers\Home@gitUpdate');
+Route::any('/login', 'App\Controllers\Home@login');
+
+Route::get('/401', 'App\Controllers\Home@error401');
+Route::get('/404', 'App\Controllers\Home@error404');
+
+Route::group(['before' => 'auth'], function()
+{
+    Route::get('/', 'App\Controllers\Home@index');
+    Route::get('/dump-sql', 'App\Controllers\Home@dumpSQL');
+    Route::get('/git-update', 'App\Controllers\Home@gitUpdate');
+});
 
 Route::group(['prefix' => 'api', 'before' => 'auth.api'], function()
 {
