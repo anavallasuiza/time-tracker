@@ -12,6 +12,13 @@ Route::filter('auth', function()
 
 Route::filter('auth.api', function()
 {
+    if (!Request::isJson()) {
+        return Response::json(array(
+            'code' =>  401,
+            'message' => _('Unauthorized')
+        ), 401);
+    }
+
     return (($response = Libs\Auth::login('api')) === true) ? null : $response;
 });
 
