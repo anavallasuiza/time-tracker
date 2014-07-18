@@ -92,7 +92,7 @@ class Api extends \Controller {
 
                 return Response::json(array(
                     'code' =>  404,
-                    'message' => sprintf(_('"%s" field is required in %s'), $field, array_shift($trace)['class'])
+                    'message' => sprintf(_('"%s" field is required in %s'), $field, array_shift($trace)['function'])
                 ), 404);
             }
         }
