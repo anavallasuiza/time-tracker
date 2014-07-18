@@ -32,7 +32,7 @@ class Auth extends \Auth
     {
         if (empty($user) || empty($password)) {
             if (self::guest()) {
-                return $this->unauthorized(_('User or password is not correct'), $path);
+                return self::unauthorized(_('User or password is not correct'), $path);
             }
 
             return true;
@@ -57,7 +57,7 @@ class Auth extends \Auth
     private static function loginApi()
     {
         if (empty($user = \Input::get('user')) || empty($secret = \Input::get('secret'))) {
-            return $this->unauthorized();
+            return self::unauthorized();
         }
 
         $user = \App\Models\Users::where('user', '=', $user)->where('api_key', '=', $secret)->first();
