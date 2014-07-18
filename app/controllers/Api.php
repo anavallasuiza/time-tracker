@@ -33,8 +33,10 @@ class Api extends \Controller {
     {
         $hostname = Input::get('hostname');
 
-        if (empty($hostname)) {
-            throw new \Exception(_('"hostname" parameter is required'));
+        $response = $this->required(['hostname' => $hostname]);
+
+        if ($response !== true) {
+            return $response;
         }
 
         $facts = Models\Facts
@@ -57,8 +59,10 @@ class Api extends \Controller {
     {
         $hostname = Input::get('hostname');
 
-        if (empty($hostname)) {
-            throw new \Exception(_('"hostname" parameter is required'));
+        $response = $this->required(['hostname' => $hostname]);
+
+        if ($response !== true) {
+            return $response;
         }
 
         $facts = Models\Facts
@@ -88,11 +92,11 @@ class Api extends \Controller {
     {
         foreach ($fields as $field => $value) {
             if (empty($value)) {
-                $trace = debug_backtrace();
+                $trace = debug_backtrace()[1];
 
                 return Response::json(array(
                     'code' =>  404,
-                    'message' => sprintf(_('"%s" field is required in %s'), $field, array_shift($trace)['function'])
+                    'message' => sprintf(_('"%s" field is required in %s'), $field, $trace['function'])
                 ), 404);
             }
         }
