@@ -31,7 +31,11 @@ class Auth extends \Auth
     private static function loginUserPassword($user, $password, $path = '')
     {
         if (empty($user) || empty($password)) {
-            return $this->unauthorized(_('User or password is not correct'), $path);
+            if (self::guest()) {
+                return $this->unauthorized(_('User or password is not correct'), $path);
+            }
+
+            return true;
         }
 
         $success = self::attempt([

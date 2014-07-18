@@ -3,11 +3,7 @@ use App\Libs;
 
 Route::filter('auth', function()
 {
-    if (!Libs\Auth::guest()) {
-        return;
-    }
-
-    return Libs\Auth::unauthorized();
+    return (($response = Libs\Auth::login()) === true) ? null : $response;
 });
 
 Route::filter('auth.api', function()
