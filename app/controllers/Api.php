@@ -84,15 +84,30 @@ class Api extends \Controller {
         ]);
     }
 
+    private function required(array $fields)
+    {
+        foreach ($fields as $field => $value) {
+            if (empty($value)) {
+                $trace = debug_backtrace();
+
+                return Response::json(array(
+                    'code' =>  404,
+                    'message' => sprintf(_('"%s" field is required in %s'), $field, array_shift($trace)['class'])
+                ), 404);
+            }
+        }
+
+        return true;
+    }
+
     public function setCategories()
     {
         $name = trim(Input::get('name'));
 
-        if (empty($name)) {
-            return Response::json(array(
-                'code' =>  404,
-                'message' => sprintf(_('"%s" field is required'), 'name')
-            ), 404);
+        $response = $this->required(['name' => $name]);
+
+        if ($response !== true) {
+            return $response;
         }
 
         $category = Models\Categories::create([
@@ -108,11 +123,10 @@ class Api extends \Controller {
     {
         $name = trim(Input::get('name'));
 
-        if (empty($name)) {
-            return Response::json(array(
-                'code' =>  404,
-                'message' => sprintf(_('"%s" field is required'), 'name')
-            ), 404);
+        $response = $this->required(['name' => $name]);
+
+        if ($response !== true) {
+            return $response;
         }
 
         $tag = Models\Tags::create([
@@ -129,13 +143,13 @@ class Api extends \Controller {
         $name = trim(Input::get('name'));
         $id_categories = (int)Input::get('id_categories');
 
-        foreach (['name', 'id_categories'] as $field) {
-            if (empty($$field)) {
-                return Response::json(array(
-                    'code' =>  404,
-                    'message' => sprintf(_('"%s" field is required'), $field)
-                ), 404);
-            }
+        $response = $this->required([
+            'name' => $name,
+            'id_categories' => $id_categories
+        ]);
+
+        if ($response !== true) {
+            return $response;
         }
 
         $activity = Models\Activities::create([
@@ -156,13 +170,16 @@ class Api extends \Controller {
         $hostname = trim(Input::get('hostname'));
         $id_activities = (int)Input::get('id_activities');
 
-        foreach (['start_time', 'end_time', 'hostname', 'remote_id', 'id_activities'] as $field) {
-            if (empty($$field)) {
-                return Response::json(array(
-                    'code' =>  404,
-                    'message' => sprintf(_('"%s" field is required'), $field)
-                ), 404);
-            }
+        $response = $this->required([
+            'start_time' => $start_time,
+            'end_time' => $end_time,
+            'hostname' => $hostname,
+            'remote_id' => $remote_id,
+            'id_activities' => $id_activities
+        ]);
+
+        if ($response !== true) {
+            return $response;
         }
 
         if (!($start_time = Libs\Utils::checkDate($start_time, 'Y-m-d H:i:s'))) {
