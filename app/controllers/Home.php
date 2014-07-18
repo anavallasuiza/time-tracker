@@ -27,6 +27,10 @@ class Home extends Base {
 
     public function error401()
     {
+        if (\Config::get('auth')['method'] === 'basic') {
+            return View::make('base')->nest('body', 'error401');
+        }
+
         return \Response::make(View::make('base')->nest('body', 'error401'), 401);
     }
 
