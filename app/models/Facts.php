@@ -47,7 +47,13 @@ class Facts extends \Eloquent {
     {
         extract($filters);
 
+        $I = \Auth::user();
+
         $facts = self::with(['activities'])->with(['users'])->with(['tags']);
+
+        if (empty($I->admin)) {
+            $facts->where('id_users', '=', $I->id);
+        }
 
         if (isset($user) && (int)$user) {
             $facts->where('id_users', '=', (int)$user);
