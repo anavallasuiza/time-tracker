@@ -2,7 +2,8 @@
 <form method="get" class="row">
     <input type="hidden" name="sort" value="<?= $sort; ?>" />
 
-    <?php if (empty($I->admin)) { ?>
+    <?php if ($I->admin) { ?>
+
     <div class="col-sm-2 form-group">
         <select name="user" class="form-control filter">
             <option value=""><?= _('All Users'); ?></option>
@@ -11,6 +12,13 @@
             <?php } ?>
         </select>
     </div>
+
+    <?php } else {?>
+
+    <div class="col-sm-2 form-group">
+        <input type="text" class="form-control" value="<?= $I->name; ?>" readonly disabled />
+    </div>
+
     <?php } ?>
 
     <div class="col-sm-3 form-group">
