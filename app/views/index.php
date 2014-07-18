@@ -72,8 +72,8 @@
             <?php } ?>
 
             <td class="column-tags"><?= implode(', ', array_column(json_decode(json_encode($fact->tags), true), 'name')); ?></a></td>
-            <td class="text-center column-start"><?= $fact->start_time->format('d/m/Y'); ?> <span class="hour"><?= $fact->start_time->format('H:i'); ?></span></td>
-            <td class="text-center column-end"><?= $fact->end_time->format('d/m/Y'); ?> <span class="hour"><?= $fact->end_time->format('H:i'); ?></span></td>
+            <td class="text-center column-start"><?= $fact->start_time->format('d/m/Y'); ?></td>
+            <td class="text-center column-end"><?= $fact->end_time->format('d/m/Y'); ?></td>
             <td class="text-center column-time"><?= date('H:i', mktime(0, $fact->total_time)); ?></td>
         </tr>
         <?php } ?>
