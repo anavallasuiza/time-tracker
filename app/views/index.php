@@ -2,6 +2,7 @@
 <form method="get" class="row">
     <input type="hidden" name="sort" value="<?= $sort; ?>" />
 
+    <?php if (empty($I->admin)) { ?>
     <div class="col-sm-2 form-group">
         <select name="user" class="form-control filter">
             <option value=""><?= _('All Users'); ?></option>
@@ -10,6 +11,7 @@
             <?php } ?>
         </select>
     </div>
+    <?php } ?>
 
     <div class="col-sm-3 form-group">
         <select name="activity" class="form-control filter">
@@ -72,8 +74,8 @@
             <?php } ?>
 
             <td class="column-tags"><?= implode(', ', array_column(json_decode(json_encode($fact->tags), true), 'name')); ?></a></td>
-            <td class="text-center column-start"><?= $fact->start_time->format('d/m/Y'); ?></td>
-            <td class="text-center column-end"><?= $fact->end_time->format('d/m/Y'); ?></td>
+            <td class="text-center column-start"><?= $fact->start_time->format($I->admin ? 'd/m/Y H:i' : 'd/m/Y'); ?></td>
+            <td class="text-center column-end"><?= $fact->end_time->format($I->admin ? 'd/m/Y H:i' : 'd/m/Y'); ?></td>
             <td class="text-center column-time"><?= date('H:i', mktime(0, $fact->total_time)); ?></td>
         </tr>
         <?php } ?>
@@ -113,7 +115,10 @@
     echo ($rows === -1) ? '</strong>' : '';
 
     echo ' | <a href="'.\App\Libs\Utils::url('export', 'csv').'">'._('Export as CSV').'</a>';
-    echo ' | <a href="'.url('/dump-sql').'">'._('Dump SQL').'</a>';
+
+    if ($I->admin) {
+        echo ' | <a href="'.url('/dump-sql').'">'._('Dump SQL').'</a>';
+    }
 
     echo '</p>';
     ?>

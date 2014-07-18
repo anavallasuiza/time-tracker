@@ -53,9 +53,7 @@ class Facts extends \Eloquent {
 
         if (empty($I->admin)) {
             $facts->where('id_users', '=', $I->id);
-        }
-
-        if (isset($user) && (int)$user) {
+        } elseif (isset($user) && (int)$user) {
             $facts->where('id_users', '=', (int)$user);
         }
 

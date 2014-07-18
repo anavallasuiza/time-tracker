@@ -64,9 +64,10 @@ class Home extends Base {
         }
 
         return View::make('base')->nest('body', 'index', [
+            'I' => $this->user,
             'facts' => $facts,
             'total_time' => Libs\Utils::sumHours($facts),
-            'users' => Models\Users::orderBy('name', 'ASC')->get(),
+            'users' => ($this->user->admin ? Models\Users::orderBy('name', 'ASC')->get() : []),
             'activities' => Models\Activities::orderBy('name', 'ASC')->get(),
             'tags' => Models\Tags::orderBy('name', 'ASC')->get(),
             'rows' => $rows,
@@ -77,6 +78,8 @@ class Home extends Base {
 
     public function csvDownload($facts)
     {
+        $date_format = $this->user->admin ? 'd/m/Y H:i' : 'd/m/Y';
+
         $output = '"'._('User').'","'._('Activity').'","'._('Description').'","'._('Tags').'","'._('Start time').'","'._('End time').'","'._('Total time').'"';
 
         foreach ($facts as $fact) {
@@ -84,8 +87,8 @@ class Home extends Base {
                 .',"'.str_replace('"', "'", $fact->activities->name).'"'
                 .',"'.str_replace('"', "'", $fact->description).'"'
                 .',"'.str_replace('"', "'", implode(', ', array_column(json_decode(json_encode($fact->tags), true), 'name'))).'"'
-                .',"'.$fact->start_time->format('d/m/Y H:i').'"'
-                .',"'.$fact->end_time->format('d/m/Y H:i').'"'
+                .',"'.$fact->start_time->format($date_format).'"'
+                .',"'.$fact->end_time->format($date_format).'"'
                 .',"'.$fact->start_time->diff($fact->end_time)->format('%H:%I').'"';
         }
 
@@ -98,6 +101,10 @@ class Home extends Base {
 
     public function dumpSQL()
     {
+        if (empty($this->user->admin)) {
+            return Redirect::to('/401');
+        }
+
         $config = \Config::get('database.connections.mysql');
         $file = storage_path().'/work/dump.sql';
 
@@ -144,6 +151,10 @@ class Home extends Base {
 
     public function gitUpdate()
     {
+        if (empty($this->user->admin)) {
+            return Redirect::to('/401');
+        }
+
         $Shell = new Libs\Shell();
 
         if (!$Shell->exists('git')) {
