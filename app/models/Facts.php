@@ -2,12 +2,14 @@
 namespace App\Models;
 
 use App\Libs;
+use Illuminate\Database\Eloquent\SoftDeletingTrait;
 
 class Facts extends \Eloquent {
+    use SoftDeletingTrait;
+
     protected $table = 'facts';
     protected $guarded = ['id'];
-
-    public $timestamps = false;
+    protected $dates = ['deleted_at'];
 
     public function activities()
     {

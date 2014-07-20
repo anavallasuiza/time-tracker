@@ -19,6 +19,8 @@ class CreateTimeTables extends Migration {
             $table->increments('id');
             $table->string('name');
 
+            $table->timestamps();
+
             $table->integer('id_categories')->unsigned();
         });
 
@@ -28,6 +30,8 @@ class CreateTimeTables extends Migration {
 
             $table->increments('id');
             $table->string('name');
+
+            $table->timestamps();
         });
 
         Schema::create('facts', function($table)
@@ -44,6 +48,9 @@ class CreateTimeTables extends Migration {
             $table->string('hostname');
 
             $table->integer('remote_id')->unsigned();
+
+            $table->timestamps();
+            $table->softDeletes();
 
             $table->integer('id_activities')->unsigned();
             $table->integer('id_users')->unsigned();
@@ -68,6 +75,7 @@ class CreateTimeTables extends Migration {
             $table->timestamp('date');
             $table->string('description');
 
+            $table->integer('id_facts')->unsigned();
             $table->integer('id_users')->unsigned();
         });
 
@@ -77,6 +85,8 @@ class CreateTimeTables extends Migration {
 
             $table->increments('id');
             $table->string('name');
+
+            $table->timestamps();
         });
 
         Schema::create('users', function($table)
@@ -93,6 +103,8 @@ class CreateTimeTables extends Migration {
             $table->string('api_key');
             $table->boolean('admin');
             $table->boolean('enabled');
+
+            $table->timestamps();
         });
 
         Schema::table('activities', function($table)
@@ -115,6 +127,10 @@ class CreateTimeTables extends Migration {
 
         Schema::table('logs', function($table)
         {
+            $table->foreign('id_facts')
+                ->references('id')
+                ->on('facts');
+
             $table->foreign('id_users')
                 ->references('id')
                 ->on('users');

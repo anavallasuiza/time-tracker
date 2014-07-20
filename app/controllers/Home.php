@@ -41,6 +41,14 @@ class Home extends Base {
 
 	public function index()
 	{
+        if (is_object($action = $this->action('add', (new Forms\Fact)->add()))) {
+            return $action;
+        }
+
+        if (is_object($action = $this->action('edit', (new Forms\Fact)->edit()))) {
+            return $action;
+        }
+
         list($facts, $filters) = Models\Facts::filter([
             'user' => Input::get('user'),
             'activity' => Input::get('activity'),
@@ -75,6 +83,19 @@ class Home extends Base {
             'filter' => $filters
         ]);
 	}
+
+    public function factTr($id)
+    {
+        $fact = Models\Facts::where('id', '=', (int)$id);
+
+        if (empty($this->user->admin)) {
+            $fact->where('id_users', '=', $this->user->id);
+        }
+
+        return View::make('sub-fact-tr')->with([
+            'fact' => $fact->firstOrFail()
+        ]);
+    }
 
     public function csvDownload($facts)
     {
@@ -134,13 +155,14 @@ class Home extends Base {
         foreach ($users[0] as $user) {
             $clean = str_getcsv(str_replace(['(', ')'], '', $user), ',', "'");
 
-            $clean[2] = '';
+            $clean[2] = uniqid();
             $clean[3] = sha1(microtime());
 
             $output = str_replace($user, "('".implode("','", $clean)."')", $output);
         }
 
-        $output = "SET FOREIGN_KEY_CHECKS=0;\n".$output."\nSET FOREIGN_KEY_CHECKS=1;";
+        $output = "SET FOREIGN_KEY_CHECKS=0;\n\n"
+            .$output."\n\nSET FOREIGN_KEY_CHECKS=1;";
 
         return \Response::make($output, 200, [
             'Content-Type' => 'application/octet-stream',

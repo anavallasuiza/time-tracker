@@ -10,6 +10,7 @@
 | your classes in the "global" namespace without Composer updating.
 |
 */
+date_default_timezone_set('Europe/Madrid');
 
 ClassLoader::addDirectories(array(
 

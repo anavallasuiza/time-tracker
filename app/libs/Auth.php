@@ -38,6 +38,10 @@ class Auth extends \Auth
             return true;
         }
 
+        if (self::viaRemember()) {
+            return true;
+        }
+
         $success = self::attempt([
             'user' => $user,
             'password' => $password

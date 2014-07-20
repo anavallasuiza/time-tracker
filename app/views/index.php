@@ -1,4 +1,3 @@
-
 <form method="get" class="row">
     <input type="hidden" name="sort" value="<?= $sort; ?>" />
 
@@ -57,7 +56,7 @@
         <tr>
             <th class="column-user"><?= _('User'); ?></th>
             <th class="column-activity"><?= _('Activity'); ?></th>
-            <th class="column-tags"><?= _('Tags'); ?></th>
+            <th class="column-tag"><?= _('Tags'); ?></th>
             <th class="text-center column-start">
                 <a href="<?= \App\Libs\Utils::url('sort', ($sort === 'start-desc') ? 'start-asc' : 'start-desc'); ?>"><?= _('Start time'); ?></a>
             </th>
@@ -71,22 +70,20 @@
     </thead>
 
     <tbody>
-        <?php foreach ($facts as $fact) { ?>
-        <tr>
-            <td class="column-user"><a href="?user=<?= $fact->users->id; ?>"><?= $fact->users->name; ?></a></td>
-
-            <?php if ($fact->description) { ?>
-            <td class="column-activity"><a href="?activity=<?= $fact->activities->id; ?>" data-toggle="tooltip" data-placement="right" title="<?= $fact->description; ?>"><?= $fact->activities->name; ?> *</a></td>
-            <?php } else { ?>
-            <td class="column-activity"><a href="?activity=<?= $fact->activities->id; ?>"><?= $fact->activities->name; ?></a></td>
-            <?php } ?>
-
-            <td class="column-tags"><?= implode(', ', array_column(json_decode(json_encode($fact->tags), true), 'name')); ?></a></td>
-            <td class="text-center column-start"><?= $fact->start_time->format($I->admin ? 'd/m/Y H:i' : 'd/m/Y'); ?></td>
-            <td class="text-center column-end"><?= $fact->end_time->format($I->admin ? 'd/m/Y H:i' : 'd/m/Y'); ?></td>
-            <td class="text-center column-time"><?= date('H:i', mktime(0, $fact->total_time)); ?></td>
+        <tr data-id="0" data-remote="0" class="row-fact">
+            <td colspan="6">
+                <?= View::make('sub-fact-add')->with([
+                    'activities' => $activities,
+                    'tags' => $tags
+                ])->render(); ?>
+            </td>
         </tr>
-        <?php } ?>
+
+        <?php
+        foreach ($facts as $fact) {
+            echo View::make('sub-fact-tr')->with('fact', $fact)->render();
+        }
+        ?>
     </tbody>
 
     <tfoot>
@@ -95,6 +92,11 @@
         </tr>
     </tfoot>
 </table>
+
+<?= View::make('sub-fact-edit')->with([
+    'activities' => $activities,
+    'tags' => $tags
+])->render(); ?>
 
 <div class="text-center">
     <?php

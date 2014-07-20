@@ -41,7 +41,8 @@ class Api extends \Controller {
 
         $facts = Models\Facts
             ::where('id_users', '=', $this->user()->id)
-            ->where('hostname', '=', $hostname);
+            ->where('hostname', '=', $hostname)
+            ->withTrashed();
 
         return Response::json([
             'data' => $facts->get()
@@ -96,7 +97,7 @@ class Api extends \Controller {
 
                 return Response::json(array(
                     'code' =>  404,
-                    'message' => sprintf(_('"%s" field is required in %s'), $field, $trace['function'])
+                    'message' => sprintf(_('"%s" field is required in %s'), _($field), $trace['function'])
                 ), 404);
             }
         }

@@ -18,7 +18,8 @@ Route::get('/404', 'App\Controllers\Home@error404');
 
 Route::group(['before' => 'auth'], function()
 {
-    Route::get('/', 'App\Controllers\Home@index');
+    Route::any('/', 'App\Controllers\Home@index');
+    Route::any('/fact-tr/{id}', 'App\Controllers\Home@factTr');
     Route::get('/dump-sql', 'App\Controllers\Home@dumpSQL');
     Route::get('/git-update', 'App\Controllers\Home@gitUpdate');
 });
