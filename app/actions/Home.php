@@ -55,6 +55,10 @@ class Home extends Base {
             throw new \Exception(sprintf(_('Error creating fact: %s'), $e->getMessage()));
         }
 
+        \DB::table('facts_tags')
+            ->where('id_facts', '=', $fact->id)
+            ->delete();
+
         \DB::table('facts_tags')->insert([
             'id_facts' => $fact->id,
             'id_tags' => (int)Input::get('tag')
@@ -114,6 +118,10 @@ class Home extends Base {
         } catch (\Exception $e) {
             throw new \Exception(sprintf(_('Error updating fact: %s'), $e->getMessage()));
         }
+
+        \DB::table('facts_tags')
+            ->where('id_facts', '=', $fact->id)
+            ->delete();
 
         \DB::table('facts_tags')->insert([
             'id_facts' => $fact->id,
