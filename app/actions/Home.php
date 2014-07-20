@@ -115,6 +115,11 @@ class Home extends Base {
             throw new \Exception(sprintf(_('Error updating fact: %s'), $e->getMessage()));
         }
 
+        \DB::table('facts_tags')->insert([
+            'id_facts' => $fact->id,
+            'id_tags' => (int)Input::get('tag')
+        ]);
+
         Models\Logs::create([
             'description' => _('Updated fact'),
             'date' => date('Y-m-d H:i:s'),
