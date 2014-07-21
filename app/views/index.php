@@ -1,3 +1,8 @@
+<?= View::make('sub-fact-add')->with([
+    'activities' => $activities,
+    'tags' => $tags
+])->render(); ?>
+
 <form method="get" class="row">
     <input type="hidden" name="sort" value="<?= $sort; ?>" />
 
@@ -70,15 +75,6 @@
     </thead>
 
     <tbody>
-        <tr data-id="0" data-remote="0" class="row-fact">
-            <td colspan="6">
-                <?= View::make('sub-fact-add')->with([
-                    'activities' => $activities,
-                    'tags' => $tags
-                ])->render(); ?>
-            </td>
-        </tr>
-
         <?php
         foreach ($facts as $fact) {
             echo View::make('sub-fact-tr')->with('fact', $fact)->render();

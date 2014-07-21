@@ -20,18 +20,6 @@ class CreateTimeTables extends Migration {
             $table->string('name');
 
             $table->timestamps();
-
-            $table->integer('id_categories')->unsigned();
-        });
-
-        Schema::create('categories', function($table)
-        {
-            $table->engine = 'InnoDB';
-
-            $table->increments('id');
-            $table->string('name');
-
-            $table->timestamps();
         });
 
         Schema::create('facts', function($table)
@@ -107,13 +95,6 @@ class CreateTimeTables extends Migration {
             $table->timestamps();
         });
 
-        Schema::table('activities', function($table)
-        {
-            $table->foreign('id_categories')
-                ->references('id')
-                ->on('categories');
-        });
-
         Schema::table('facts', function($table)
         {
             $table->foreign('id_activities')
@@ -160,7 +141,6 @@ class CreateTimeTables extends Migration {
         Schema::drop('facts_tags');
         Schema::drop('facts');
         Schema::drop('activities');
-        Schema::drop('categories');
         Schema::drop('logs');
         Schema::drop('tags');
         Schema::drop('users');

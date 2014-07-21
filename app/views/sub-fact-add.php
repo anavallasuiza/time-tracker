@@ -1,4 +1,4 @@
-<form method="post" id="facts-form-add" class="facts-form">
+<form method="post" id="facts-form-add" class="facts-form well hidden">
     <?= Form::token(); ?>
 
     <div class="row">

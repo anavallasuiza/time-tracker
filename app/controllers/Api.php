@@ -24,13 +24,6 @@ class Api extends \Controller {
         ]);
     }
 
-    public function getCategories()
-    {
-        return Response::json([
-            'data' => Models\Categories::get()
-        ]);
-    }
-
     public function getFacts()
     {
         $hostname = Input::get('hostname');
@@ -109,25 +102,6 @@ class Api extends \Controller {
         return true;
     }
 
-    public function setCategories()
-    {
-        $name = trim(Input::get('name'));
-
-        $response = $this->required(['name' => $name]);
-
-        if ($response !== true) {
-            return $response;
-        }
-
-        $category = Models\Categories::create([
-            'name' => $name
-        ]);
-
-        return Response::json([
-            'id' => $category->id
-        ]);
-    }
-
     public function setTags()
     {
         $name = trim(Input::get('name'));
@@ -150,11 +124,9 @@ class Api extends \Controller {
     public function setActivities()
     {
         $name = trim(Input::get('name'));
-        $id_categories = (int)Input::get('id_categories');
 
         $response = $this->required([
-            'name' => $name,
-            'id_categories' => $id_categories
+            'name' => $name
         ]);
 
         if ($response !== true) {
@@ -162,8 +134,7 @@ class Api extends \Controller {
         }
 
         $activity = Models\Activities::create([
-            'name' => $name,
-            'id_categories' => $id_categories
+            'name' => $name
         ]);
 
         return Response::json([
