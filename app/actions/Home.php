@@ -42,6 +42,15 @@ class Home extends Base {
             throw new \Exception(_('"start_time" date is older than "end_time" date'));
         }
 
+        $overwrite = Models\Facts::where('id_users', '=', $this->user->id)
+            ->where('start_time', '<', $start)
+            ->where('end_time', '>', $end)
+            ->first();
+
+        if ($overwrite) {
+            throw new \Exception(_('This fact ovewrite on same time other different fact'));
+        }
+
         try {
             $fact = Models\Facts::create([
                 'start_time' => $start,
