@@ -191,6 +191,17 @@ class Api extends \Controller {
             ]);
         }
 
+        $overwrite = Models\Facts::where('id_users', '=', $this->user()->id)
+            ->where('start_time', '<', $end_time)
+            ->where('end_time', '>', $start_time)
+            ->first();
+
+        if ($overwrite) {
+            return Response::json([
+                'id' => 0
+            ]);
+        }
+
         $fact = Models\Facts::create([
             'start_time' => $start_time,
             'end_time' => $end_time,
