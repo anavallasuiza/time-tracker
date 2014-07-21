@@ -17,7 +17,7 @@
         <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" />
         <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/lumen/bootstrap.min.css" />
         <link rel="stylesheet" type="text/css" href="//eternicode.github.io/bootstrap-datepicker/bootstrap-datepicker/css/datepicker3.css" />
-        <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Press+Start+2P" />
+        <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Press+Start+2P" />
         <link rel="stylesheet" type="text/css" href="<?= asset('css/styles.css'); ?>" />
     </head>
 
