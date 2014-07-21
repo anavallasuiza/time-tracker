@@ -4,6 +4,8 @@ namespace App\Controllers;
 use App\Models, App\Libs, Response, Input;
 
 class Api extends \Controller {
+    const FACTS_TIME_LIMIT = '-1 month';
+
     protected $user;
 
     protected function user()
@@ -42,6 +44,7 @@ class Api extends \Controller {
         $facts = Models\Facts
             ::where('id_users', '=', $this->user()->id)
             ->where('hostname', '=', $hostname)
+            ->where('start_time', '>=', date('Y-m-d H:i:s', strtotime(self::FACTS_TIME_LIMIT)))
             ->withTrashed();
 
         return Response::json([
@@ -69,6 +72,7 @@ class Api extends \Controller {
         $facts = Models\Facts
             ::where('id_users', '=', $this->user()->id)
             ->where('hostname', '=', $hostname)
+            ->where('start_time', '>=', date('Y-m-d H:i:s', strtotime(self::FACTS_TIME_LIMIT)))
             ->get();
 
         $ids = array_column($facts->toArray(), 'id');
