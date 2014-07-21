@@ -35,6 +35,10 @@
     font-size: 1.2em;
 }
 
+#header-timer h1 {
+    font-family: 'Press Start 2P', System, Terminal, Fixedsys;
+}
+
 .facts-table thead {
     background: white;
 }
