@@ -3,14 +3,36 @@
     padding: 0 0 10px 0;
 }
 
-.page-header h1 {
-    margin: 0 0 0 40px;
-    padding: 0;
-    line-height: 100px;
-}
-
 .page-header + div.alert {
     margin-top: -10px;
+}
+
+.navbar-default {
+    height: 80px;
+}
+
+.dropdown-large {
+    position: static !important;
+}
+
+.dropdown-menu-large {
+    margin-left: 0;
+    margin-right: 0;
+    padding: 15px;
+}
+
+#header-timer {
+    display: block;
+    height: 80px;
+}
+
+#header-timer h1, #header-timer h2 {
+    color: #999;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    line-height: 1.5em;
+    font-size: 1.2em;
 }
 
 .facts-table thead {
@@ -32,16 +54,44 @@
     text-decoration: none;
 }
 
-.facts-table a:hover {
+.table.facts-table a:hover {
     text-decoration: underline;
+}
+
+.row-fact.hover td {
+    background-color: #f5f5f5;
+}
+
+.row-fact .column-actions a {
+    visibility: hidden;
+}
+
+.row-fact .column-actions a span {
+    display: none;
+}
+
+.row-fact:hover .column-actions a {
+    visibility: visible;
+}
+
+.row-fact input, .row-fact select {
+    padding-right: 4px;
+    padding-left: 4px;
 }
 
 .floatThead-container {
     z-index: 1 !important;
 }
 
+@media (max-width: 768px) {
+    .dropdown-menu-large {
+        margin-left: 0 ;
+        margin-right: 0 ;
+    }
+}
+
 @media (max-width: 720px) {
-    .facts-table .column-tags, .facts-table .hour {
+    .facts-table .column-tag, .facts-table .hour {
         display: none;
     }
 }

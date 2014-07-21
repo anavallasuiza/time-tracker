@@ -2,12 +2,14 @@
 namespace App\Models;
 
 use App\Libs;
+use Illuminate\Database\Eloquent\SoftDeletingTrait;
 
 class Facts extends \Eloquent {
+    use SoftDeletingTrait;
+
     protected $table = 'facts';
     protected $guarded = ['id'];
-
-    public $timestamps = false;
+    protected $dates = ['deleted_at'];
 
     public function activities()
     {
@@ -47,9 +49,13 @@ class Facts extends \Eloquent {
     {
         extract($filters);
 
+        $I = \Auth::user();
+
         $facts = self::with(['activities'])->with(['users'])->with(['tags']);
 
-        if (isset($user) && (int)$user) {
+        if (empty($I->admin)) {
+            $facts->where('id_users', '=', $I->id);
+        } elseif (isset($user) && (int)$user) {
             $facts->where('id_users', '=', (int)$user);
         }
 

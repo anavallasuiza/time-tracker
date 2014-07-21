@@ -6,7 +6,7 @@ use App\Libs;
 class Base extends \Controller {
     public function __construct()
     {
-        $this->user = \Auth::user();
+        \View::share('user', $this->user = \Auth::user());
     }
 
     public function action($action, $form, array $params = [])
@@ -25,12 +25,12 @@ class Base extends \Controller {
                 $message = '['.$e->getFile().' - '.$e->getLine().'] ';
             }
 
-            Libs\Utils::setMessage([
+            $response = Libs\Utils::setMessage([
                 'message' => ($message.$e->getMessage()),
                 'status' => 'danger'
-            ]);
+            ], 401);
 
-            return false;
+            return is_object($response) ? $response : false;
         }
     }
 }

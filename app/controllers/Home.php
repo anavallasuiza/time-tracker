@@ -41,6 +41,14 @@ class Home extends Base {
 
 	public function index()
 	{
+        if (is_object($action = $this->action('add', (new Forms\Fact)->add()))) {
+            return $action;
+        }
+
+        if (is_object($action = $this->action('edit', (new Forms\Fact)->edit()))) {
+            return $action;
+        }
+
         list($facts, $filters) = Models\Facts::filter([
             'user' => Input::get('user'),
             'activity' => Input::get('activity'),
@@ -63,20 +71,41 @@ class Home extends Base {
             $facts = $facts->paginate($rows);
         }
 
+        $activities = Models\Activities::orderBy('name', 'ASC')->get();
+        $tags = Models\Tags::orderBy('name', 'ASC')->get();
+
+        View::share([
+            'activities' => $activities,
+            'tags' => $tags
+        ]);
+
         return View::make('base')->nest('body', 'index', [
             'facts' => $facts,
             'total_time' => Libs\Utils::sumHours($facts),
-            'users' => Models\Users::orderBy('name', 'ASC')->get(),
-            'activities' => Models\Activities::orderBy('name', 'ASC')->get(),
-            'tags' => Models\Tags::orderBy('name', 'ASC')->get(),
+            'users' => ($this->user->admin ? Models\Users::orderBy('name', 'ASC')->get() : []),
             'rows' => $rows,
             'sort' => $filters['sort'],
             'filter' => $filters
         ]);
 	}
 
+    public function factTr($id)
+    {
+        $fact = Models\Facts::where('id', '=', (int)$id);
+
+        if (empty($this->user->admin)) {
+            $fact->where('id_users', '=', $this->user->id);
+        }
+
+        return View::make('sub-fact-tr')->with([
+            'fact' => $fact->firstOrFail()
+        ]);
+    }
+
     public function csvDownload($facts)
     {
+        $date_format = $this->user->admin ? 'd/m/Y H:i' : 'd/m/Y';
+
         $output = '"'._('User').'","'._('Activity').'","'._('Description').'","'._('Tags').'","'._('Start time').'","'._('End time').'","'._('Total time').'"';
 
         foreach ($facts as $fact) {
@@ -84,8 +113,8 @@ class Home extends Base {
                 .',"'.str_replace('"', "'", $fact->activities->name).'"'
                 .',"'.str_replace('"', "'", $fact->description).'"'
                 .',"'.str_replace('"', "'", implode(', ', array_column(json_decode(json_encode($fact->tags), true), 'name'))).'"'
-                .',"'.$fact->start_time->format('d/m/Y H:i').'"'
-                .',"'.$fact->end_time->format('d/m/Y H:i').'"'
+                .',"'.$fact->start_time->format($date_format).'"'
+                .',"'.$fact->end_time->format($date_format).'"'
                 .',"'.$fact->start_time->diff($fact->end_time)->format('%H:%I').'"';
         }
 
@@ -98,6 +127,10 @@ class Home extends Base {
 
     public function dumpSQL()
     {
+        if (empty($this->user->admin)) {
+            return Redirect::to('/401');
+        }
+
         $config = \Config::get('database.connections.mysql');
         $file = storage_path().'/work/dump.sql';
 
@@ -127,13 +160,14 @@ class Home extends Base {
         foreach ($users[0] as $user) {
             $clean = str_getcsv(str_replace(['(', ')'], '', $user), ',', "'");
 
-            $clean[2] = '';
+            $clean[2] = uniqid();
             $clean[3] = sha1(microtime());
 
             $output = str_replace($user, "('".implode("','", $clean)."')", $output);
         }
 
-        $output = "SET FOREIGN_KEY_CHECKS=0;\n".$output."\nSET FOREIGN_KEY_CHECKS=1;";
+        $output = "SET FOREIGN_KEY_CHECKS=0;\n\n"
+            .$output."\n\nSET FOREIGN_KEY_CHECKS=1;";
 
         return \Response::make($output, 200, [
             'Content-Type' => 'application/octet-stream',
@@ -144,6 +178,10 @@ class Home extends Base {
 
     public function gitUpdate()
     {
+        if (empty($this->user->admin)) {
+            return Redirect::to('/401');
+        }
+
         $Shell = new Libs\Shell();
 
         if (!$Shell->exists('git')) {

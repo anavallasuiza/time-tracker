@@ -18,7 +18,8 @@ Route::get('/404', 'App\Controllers\Home@error404');
 
 Route::group(['before' => 'auth'], function()
 {
-    Route::get('/', 'App\Controllers\Home@index');
+    Route::any('/', 'App\Controllers\Home@index');
+    Route::any('/fact-tr/{id}', 'App\Controllers\Home@factTr');
     Route::get('/dump-sql', 'App\Controllers\Home@dumpSQL');
     Route::get('/git-update', 'App\Controllers\Home@gitUpdate');
 });
@@ -26,13 +27,11 @@ Route::group(['before' => 'auth'], function()
 Route::group(['prefix' => 'api', 'before' => 'auth.api'], function()
 {
     Route::get('activities', 'App\Controllers\Api@getActivities');
-    Route::get('categories', 'App\Controllers\Api@getCategories');
     Route::get('facts', 'App\Controllers\Api@getFacts');
     Route::get('tags', 'App\Controllers\Api@getTags');
     Route::get('facts-tags', 'App\Controllers\Api@getFactsTags');
 
     Route::post('activities', 'App\Controllers\Api@setActivities');
-    Route::post('categories', 'App\Controllers\Api@setCategories');
     Route::post('facts', 'App\Controllers\Api@setFacts');
     Route::post('tags', 'App\Controllers\Api@setTags');
     Route::post('facts-tags', 'App\Controllers\Api@setFactsTags');

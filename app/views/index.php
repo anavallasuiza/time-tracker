@@ -1,6 +1,7 @@
-
 <form method="get" class="row">
     <input type="hidden" name="sort" value="<?= $sort; ?>" />
+
+    <?php if ($user->admin) { ?>
 
     <div class="col-sm-2 form-group">
         <select name="user" class="form-control filter">
@@ -10,6 +11,14 @@
             <?php } ?>
         </select>
     </div>
+
+    <?php } else {?>
+
+    <div class="col-sm-2 form-group">
+        <input type="text" class="form-control" value="<?= $user->name; ?>" readonly disabled />
+    </div>
+
+    <?php } ?>
 
     <div class="col-sm-3 form-group">
         <select name="activity" class="form-control filter">
@@ -47,7 +56,7 @@
         <tr>
             <th class="column-user"><?= _('User'); ?></th>
             <th class="column-activity"><?= _('Activity'); ?></th>
-            <th class="column-tags"><?= _('Tags'); ?></th>
+            <th class="column-tag"><?= _('Tags'); ?></th>
             <th class="text-center column-start">
                 <a href="<?= \App\Libs\Utils::url('sort', ($sort === 'start-desc') ? 'start-asc' : 'start-desc'); ?>"><?= _('Start time'); ?></a>
             </th>
@@ -61,22 +70,11 @@
     </thead>
 
     <tbody>
-        <?php foreach ($facts as $fact) { ?>
-        <tr>
-            <td class="column-user"><a href="?user=<?= $fact->users->id; ?>"><?= $fact->users->name; ?></a></td>
-
-            <?php if ($fact->description) { ?>
-            <td class="column-activity"><a href="?activity=<?= $fact->activities->id; ?>" data-toggle="tooltip" data-placement="right" title="<?= $fact->description; ?>"><?= $fact->activities->name; ?> *</a></td>
-            <?php } else { ?>
-            <td class="column-activity"><a href="?activity=<?= $fact->activities->id; ?>"><?= $fact->activities->name; ?></a></td>
-            <?php } ?>
-
-            <td class="column-tags"><?= implode(', ', array_column(json_decode(json_encode($fact->tags), true), 'name')); ?></a></td>
-            <td class="text-center column-start"><?= $fact->start_time->format('d/m/Y'); ?> <span class="hour"><?= $fact->start_time->format('H:i'); ?></span></td>
-            <td class="text-center column-end"><?= $fact->end_time->format('d/m/Y'); ?> <span class="hour"><?= $fact->end_time->format('H:i'); ?></span></td>
-            <td class="text-center column-time"><?= date('H:i', mktime(0, $fact->total_time)); ?></td>
-        </tr>
-        <?php } ?>
+        <?php
+        foreach ($facts as $fact) {
+            echo View::make('sub-fact-tr')->with('fact', $fact)->render();
+        }
+        ?>
     </tbody>
 
     <tfoot>
@@ -85,6 +83,11 @@
         </tr>
     </tfoot>
 </table>
+
+<?= View::make('sub-fact-edit')->with([
+    'activities' => $activities,
+    'tags' => $tags
+])->render(); ?>
 
 <div class="text-center">
     <?php
@@ -113,7 +116,10 @@
     echo ($rows === -1) ? '</strong>' : '';
 
     echo ' | <a href="'.\App\Libs\Utils::url('export', 'csv').'">'._('Export as CSV').'</a>';
-    echo ' | <a href="'.url('/dump-sql').'">'._('Dump SQL').'</a>';
+
+    if ($user->admin) {
+        echo ' | <a href="'.url('/dump-sql').'">'._('Dump SQL').'</a>';
+    }
 
     echo '</p>';
     ?>

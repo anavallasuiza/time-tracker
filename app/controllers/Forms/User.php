@@ -14,7 +14,7 @@ class User {
                 'placeholder' => _('Your user')
             ]),
             'password' => Input::password()->required()->attr([
-                'pattern' => '^.{6,}$',
+                'pattern' => '.{6,}',
                 'placeholder' => _('Password')
             ])
         ]);

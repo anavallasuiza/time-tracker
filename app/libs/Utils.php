@@ -1,11 +1,22 @@
 <?php
 namespace App\Libs;
 
+use Request, Response, Session;
+
 class Utils
 {
-    public static function setMessage($data)
+    public static function setMessage($data, $code = 200)
     {
-        \Session::flash('flash-message', [
+        if (Request::ajax()) {
+            return Response::make($data['message'], $code);
+        } elseif (Request::isJson()) {
+            return Response::json(array(
+                'code' =>  $code,
+                'message' => $data['message']
+            ), $code);
+        }
+
+        Session::flash('flash-message', [
             'message' => $data['message'],
             'status' => $data['status']
         ]);
@@ -33,7 +44,7 @@ class Utils
         return $data ? self::checkTags($data) : false;
     }
 
-    public static function checkTags(array $data, array $fake = ['email', 'url'])
+    public static function checkTags(array $data, array $fake = [])
     {
         foreach ($fake as $name) {
             if (!array_key_exists($name, $data) || $data[$name]) {
@@ -83,5 +94,10 @@ class Utils
         } else {
             return $url.$sep.$key.'='.$value;
         }
+    }
+
+    public static function objectColumn($object, $column)
+    {
+        return array_column(json_decode(json_encode($object), true), $column);
     }
 }

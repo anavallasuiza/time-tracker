@@ -19,15 +19,7 @@ class CreateTimeTables extends Migration {
             $table->increments('id');
             $table->string('name');
 
-            $table->integer('id_categories')->unsigned();
-        });
-
-        Schema::create('categories', function($table)
-        {
-            $table->engine = 'InnoDB';
-
-            $table->increments('id');
-            $table->string('name');
+            $table->timestamps();
         });
 
         Schema::create('facts', function($table)
@@ -44,6 +36,9 @@ class CreateTimeTables extends Migration {
             $table->string('hostname');
 
             $table->integer('remote_id')->unsigned();
+
+            $table->timestamps();
+            $table->softDeletes();
 
             $table->integer('id_activities')->unsigned();
             $table->integer('id_users')->unsigned();
@@ -68,6 +63,7 @@ class CreateTimeTables extends Migration {
             $table->timestamp('date');
             $table->string('description');
 
+            $table->integer('id_facts')->unsigned();
             $table->integer('id_users')->unsigned();
         });
 
@@ -77,6 +73,8 @@ class CreateTimeTables extends Migration {
 
             $table->increments('id');
             $table->string('name');
+
+            $table->timestamps();
         });
 
         Schema::create('users', function($table)
@@ -93,13 +91,8 @@ class CreateTimeTables extends Migration {
             $table->string('api_key');
             $table->boolean('admin');
             $table->boolean('enabled');
-        });
 
-        Schema::table('activities', function($table)
-        {
-            $table->foreign('id_categories')
-                ->references('id')
-                ->on('categories');
+            $table->timestamps();
         });
 
         Schema::table('facts', function($table)
@@ -115,6 +108,10 @@ class CreateTimeTables extends Migration {
 
         Schema::table('logs', function($table)
         {
+            $table->foreign('id_facts')
+                ->references('id')
+                ->on('facts');
+
             $table->foreign('id_users')
                 ->references('id')
                 ->on('users');
@@ -144,7 +141,6 @@ class CreateTimeTables extends Migration {
         Schema::drop('facts_tags');
         Schema::drop('facts');
         Schema::drop('activities');
-        Schema::drop('categories');
         Schema::drop('logs');
         Schema::drop('tags');
         Schema::drop('users');
