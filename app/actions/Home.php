@@ -16,6 +16,6 @@ class Home extends Base {
             return $response;
         }
 
-        return \Redirect::intended('/');
+        return \Redirect::to('/');
     }
 }
