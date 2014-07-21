@@ -108,7 +108,7 @@ var $addForm = $('#facts-form-add'),
         });
     };
 
-    var resetTimes = function () {
+    var loadTimes = function () {
         $addForm.find('input[name="start"], input[name="end"]').mask('00/00/0000 00:00');
 
         if (!$fact) {
@@ -137,6 +137,7 @@ var $addForm = $('#facts-form-add'),
 
     var $editOpen,
         $editForm = $('#facts-form-edit'),
+        $headerTimer = $('#header-timer'),
         timeCounter;
 
     $('.input-daterange').datepicker({
@@ -203,7 +204,7 @@ var $addForm = $('#facts-form-add'),
         $original.addClass('hover').after($editOpen.append($td));
     });
 
-    $('.facts-table').on('submit', 'form', function (e) {
+    $('body').on('submit', '.facts-form', function (e) {
         e.preventDefault();
 
         if (e.keyCode === 13) {
@@ -225,9 +226,11 @@ var $addForm = $('#facts-form-add'),
 
         setFact();
 
+        $end.val(moment().format('DD/MM/YYYY HH:mm')).trigger('change');
+
         timeCounter = setInterval(function () {
             $end.val(moment().format('DD/MM/YYYY HH:mm')).trigger('change');
-        }, 1000);
+        }, 60000);
     });
 
     $addForm.find('[data-action="refresh"]').on('click', function (e) {
@@ -243,18 +246,16 @@ var $addForm = $('#facts-form-add'),
         }
 
         var loaded = $fact ? true : false;
-console.log($fact);
-console.log(loaded);
-        saveFact($addForm);
 
+        saveFact($addForm);
         refreshFact();
-console.log(loaded);
+
         if (loaded) {
             $addForm.find('[data-action="play"]').trigger('click');
         }
     });
 
-    $('.facts-table').on('keyup change', 'input:not(readonly)', function (e) {
+    $('.facts-form').on('keyup change', 'input:not(readonly)', function (e) {
         e.preventDefault();
 
         if (e.keyCode === 13) {
@@ -270,10 +271,17 @@ console.log(loaded);
         start = moment(start, 'DD/MM/YYYY HH:mm');
         end = moment(end, 'DD/MM/YYYY HH:mm');
 
-        $time.val(moment.utc(end.diff(start)).format('HH:mm'));
+        var diff = moment.utc(end.diff(start)).format('HH:mm');
+
+        $time.val(diff);
+
+        if ($fact) {
+            $headerTimer.find('h1').text(diff);
+            $headerTimer.find('h2').text($addForm.find('select[name="activity"] option:selected').text());
+        }
     });
 
-    resetTimes();
+    loadTimes();
 })(jQuery);
 
 $(window).bind('beforeunload', function() {

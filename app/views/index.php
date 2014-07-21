@@ -1,12 +1,7 @@
-<?= View::make('sub-fact-add')->with([
-    'activities' => $activities,
-    'tags' => $tags
-])->render(); ?>
-
 <form method="get" class="row">
     <input type="hidden" name="sort" value="<?= $sort; ?>" />
 
-    <?php if ($I->admin) { ?>
+    <?php if ($user->admin) { ?>
 
     <div class="col-sm-2 form-group">
         <select name="user" class="form-control filter">
@@ -20,7 +15,7 @@
     <?php } else {?>
 
     <div class="col-sm-2 form-group">
-        <input type="text" class="form-control" value="<?= $I->name; ?>" readonly disabled />
+        <input type="text" class="form-control" value="<?= $user->name; ?>" readonly disabled />
     </div>
 
     <?php } ?>
@@ -122,7 +117,7 @@
 
     echo ' | <a href="'.\App\Libs\Utils::url('export', 'csv').'">'._('Export as CSV').'</a>';
 
-    if ($I->admin) {
+    if ($user->admin) {
         echo ' | <a href="'.url('/dump-sql').'">'._('Dump SQL').'</a>';
     }
 

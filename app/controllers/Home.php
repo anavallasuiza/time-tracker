@@ -71,13 +71,18 @@ class Home extends Base {
             $facts = $facts->paginate($rows);
         }
 
+        $activities = Models\Activities::orderBy('name', 'ASC')->get();
+        $tags = Models\Tags::orderBy('name', 'ASC')->get();
+
+        View::share([
+            'activities' => $activities,
+            'tags' => $tags
+        ]);
+
         return View::make('base')->nest('body', 'index', [
-            'I' => $this->user,
             'facts' => $facts,
             'total_time' => Libs\Utils::sumHours($facts),
             'users' => ($this->user->admin ? Models\Users::orderBy('name', 'ASC')->get() : []),
-            'activities' => Models\Activities::orderBy('name', 'ASC')->get(),
-            'tags' => Models\Tags::orderBy('name', 'ASC')->get(),
             'rows' => $rows,
             'sort' => $filters['sort'],
             'filter' => $filters

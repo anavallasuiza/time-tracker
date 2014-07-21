@@ -23,8 +23,7 @@
     <body>
         <div class="page-header">
             <div class="container">
-                <a href="<?= url('/'); ?>" class="pull-left"><img src="<?= asset('images/logo.png'); ?>" alt="<?= _('A Navalla Suíza'); ?>" /></a>
-                <h1 class="pull-left"><?= _('Time Tracker'); ?></h1>
+                <?= View::make('sub-header')->render(); ?>
             </div>
         </div>
 
