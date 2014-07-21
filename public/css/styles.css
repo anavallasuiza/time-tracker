@@ -3,18 +3,12 @@
     padding: 0 0 10px 0;
 }
 
-.page-header h1 {
-    margin: 0 0 0 40px;
-    padding: 0;
-    line-height: 100px;
-}
-
 .page-header + div.alert {
     margin-top: -10px;
 }
 
 .navbar-default {
-    height: 135px;
+    height: 80px;
 }
 
 .dropdown-large {
@@ -29,7 +23,7 @@
 
 #header-timer {
     display: block;
-    height: 100px;
+    height: 80px;
 }
 
 #header-timer h1, #header-timer h2 {
@@ -38,7 +32,7 @@
     padding: 0;
     text-align: center;
     line-height: 1.5em;
-    font-size: 2em;
+    font-size: 1.2em;
 }
 
 .facts-table thead {

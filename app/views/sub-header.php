@@ -7,7 +7,7 @@
             <span class="icon-bar"></span>
         </button>
 
-        <a href="<?= url('/'); ?>" class="navbar-brand"><img src="<?= asset('images/logo.png'); ?>" alt="<?= _('A Navalla Suíza'); ?>" /></a>
+        <a href="<?= url('/'); ?>" class="navbar-brand"><img src="<?= asset('images/logo-50.png'); ?>" alt="<?= _('A Navalla Suíza'); ?>" /></a>
     </div>
 
     <?php if (Request::is('/')) { ?>
