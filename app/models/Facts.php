@@ -53,11 +53,10 @@ class Facts extends \Eloquent {
 
         $facts = self::with(['activities'])->with(['users'])->with(['tags']);
 
-        if ($I->admin && isset($user) && (int)$user) {
-            $facts->where('id_users', '=', (int)$user);
-        } else {
-            $filters['user'] = null;
+        if (empty($I->admin)) {
             $facts->where('id_users', '=', $I->id);
+        } elseif (isset($user) && (int)$user) {
+            $facts->where('id_users', '=', (int)$user);
         }
 
         if (isset($activity) && (int)$activity) {
