@@ -82,7 +82,7 @@ var $addForm = $('#facts-form-add'),
             $tr.after($original);
         }
 
-        $tr.find('div[rel="error-message"]').addClass('hidden');
+        $form.find('div[rel="error-message"]').hide();
 
         $.ajax({
             type: 'POST',
@@ -123,15 +123,13 @@ var $addForm = $('#facts-form-add'),
     };
 
     var showError = function (message, $form) {
-        var $tr = $form.closest('tr');
-
-        $tr.addClass('danger')
+        $form.addClass('alert alert-danger')
             .find('div[rel="error-message"]')
-            .removeClass('hidden')
+            .show().removeClass('hidden')
             .html(message);
 
         setTimeout(function () {
-            $tr.removeClass('danger');
+            $form.removeClass('alert alert-danger');
         }, 1000);
     };
 
@@ -216,6 +214,14 @@ var $addForm = $('#facts-form-add'),
 
     $addForm.find('[data-action="play"]').on('click', function (e) {
         e.preventDefault();
+
+        var $activity = $addForm.find('select[name="activity"]');
+
+        if (!$activity.val()) {
+            return showError('Please, select a project', $addForm);
+        }
+
+        $addForm.find('[rel="error-message"]').hide();
 
         var $start = $addForm.find('input[name="start"]'),
             $end = $addForm.find('input[name="end"]'),
