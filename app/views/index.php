@@ -1,55 +1,7 @@
-<form method="get" class="row">
-    <input type="hidden" name="sort" value="<?= $sort; ?>" />
-
-    <?php if ($user->admin) { ?>
-
-    <div class="col-sm-2 form-group">
-        <select name="user" class="form-control filter">
-            <option value=""><?= _('All Users'); ?></option>
-            <?php foreach ($users as $user) { ?>
-            <option value="<?= $user->id; ?>" <?= ($filter['user'] == $user->id) ? 'selected' : ''; ?>><?= $user->name; ?></option>
-            <?php } ?>
-        </select>
-    </div>
-
-    <?php } else {?>
-
-    <div class="col-sm-2 form-group">
-        <input type="text" class="form-control" value="<?= $user->name; ?>" readonly disabled />
-    </div>
-
-    <?php } ?>
-
-    <div class="col-sm-3 form-group">
-        <select name="activity" class="form-control filter">
-            <option value=""><?= _('All Projects'); ?></option>
-            <?php foreach ($activities as $activity) { ?>
-            <option value="<?= $activity->id; ?>" <?= ($filter['activity'] == $activity->id) ? 'selected' : ''; ?>><?= $activity->name; ?></option>
-            <?php } ?>
-        </select>
-    </div>
-
-    <div class="col-sm-2 form-group">
-        <select name="tag" class="form-control filter">
-            <option value=""><?= _('All Tags'); ?></option>
-            <?php foreach ($tags as $tag) { ?>
-            <option value="<?= $tag->id; ?>" <?= ($filter['tag'] == $tag->id) ? 'selected' : ''; ?>><?= $tag->name; ?></option>
-            <?php } ?>
-        </select>
-    </div>
-
-    <div class="col-sm-2 form-group">
-        <input type="search" name="description" value="<?= $filter['description']; ?>" class="form-control filter" placeholder="<?= _('Search in description'); ?>">
-    </div>
-
-    <div class="col-sm-3 form-group">
-        <div class="input-daterange input-group">
-            <input type="text" class="form-control filter" name="first" value="<?= $filter['first'] ? $filter['first']->format('d/m/Y') : ''; ?>" placeholder="<?= _('Start date'); ?>" />
-            <span class="input-group-addon"><?= _('to'); ?></span>
-            <input type="text" class="form-control filter" name="last" value="<?= $filter['last'] ? $filter['last']->format('d/m/Y') : ''; ?>" placeholder="<?= _('End date'); ?>" />
-        </div>
-    </div>
-</form>
+<?= View::make('sub-filters')->with([
+    'filters' => $filters,
+    'sort' => $sort
+])->render(); ?>
 
 <table class="table table-hover facts-table">
     <thead>
@@ -115,6 +67,7 @@
     echo '<a href="'.\App\Libs\Utils::url('rows', -1).'">'._('All').'</a>';
     echo ($rows === -1) ? '</strong>' : '';
 
+    echo ' | <a href="'.url('/stats').'">'._('Stats').'</a>';
     echo ' | <a href="'.\App\Libs\Utils::url('export', 'csv').'">'._('Export as CSV').'</a>';
 
     if ($user->admin) {

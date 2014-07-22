@@ -39,8 +39,8 @@ class Home extends Base {
         return \Response::make(View::make('base')->nest('body', 'error404'), 404);
     }
 
-	public function index()
-	{
+    public function index()
+    {
         if (is_object($action = $this->action('add', (new Forms\Fact)->add()))) {
             return $action;
         }
@@ -71,23 +71,113 @@ class Home extends Base {
             $facts = $facts->paginate($rows);
         }
 
-        $activities = Models\Activities::orderBy('name', 'ASC')->get();
-        $tags = Models\Tags::orderBy('name', 'ASC')->get();
-
         View::share([
-            'activities' => $activities,
-            'tags' => $tags
+            'users' => ($this->user->admin ? Models\Users::orderBy('name', 'ASC')->get() : []),
+            'activities' => Models\Activities::orderBy('name', 'ASC')->get(),
+            'tags' => Models\Tags::orderBy('name', 'ASC')->get()
         ]);
 
         return View::make('base')->nest('body', 'index', [
             'facts' => $facts,
             'total_time' => Libs\Utils::sumHours($facts),
-            'users' => ($this->user->admin ? Models\Users::orderBy('name', 'ASC')->get() : []),
             'rows' => $rows,
             'sort' => $filters['sort'],
-            'filter' => $filters
+            'filters' => $filters
         ]);
-	}
+    }
+
+    public function stats()
+    {
+        $first = Input::get('first');
+
+        if (empty($first)) {
+            $first = date('d/m/Y', strtotime('-1 month'));
+        }
+
+        list($facts, $filters) = Models\Facts::filter([
+            'user' => Input::get('user'),
+            'activity' => Input::get('activity'),
+            'tag' => Input::get('tag'),
+            'first' => $first,
+            'last' => Input::get('last'),
+            'description' => Input::get('description'),
+            'sort' => Input::get('sort')
+        ]);
+
+        $facts = $facts->get();
+
+        $activities = $tags = $users = [];
+
+        $add_users = $this->user->admin && ($filters['activity'] || $filters['tag']);
+
+        foreach ($facts as $fact) {
+            if (array_key_exists($fact->activities->id, $activities)) {
+                $activities[$fact->activities->id]['time'] += $fact->total_time;
+            } else {
+                $activities[$fact->activities->id] = [
+                    'name' => $fact->activities->name,
+                    'time' => $fact->total_time
+                ];
+            }
+
+            foreach ($fact->tags as $tag) {
+                if (array_key_exists($tag->id, $tags)) {
+                    $tags[$tag->id]['time'] += $fact->total_time;
+                } else {
+                    $tags[$tag->id] = [
+                        'name' => $tag->name,
+                        'time' => $fact->total_time
+                    ];
+                }
+            }
+
+            if (empty($add_users)) {
+                continue;
+            }
+
+            if (array_key_exists($fact->users->id, $users)) {
+                $users[$fact->users->id]['time'] += $fact->total_time;
+            } else {
+                $users[$fact->users->id] = [
+                    'name' => $fact->users->name,
+                    'time' => $fact->total_time
+                ];
+            }
+        }
+
+        foreach (['activities', 'tags', 'users'] as $stats) {
+            $contents = &$$stats;
+
+            if (empty($contents)) {
+                continue;
+            }
+
+            $max = max(array_column($contents, 'time'));
+
+            array_walk($contents, function (&$value) use ($max) {
+                $value['percent'] = round(($value['time'] * 100) / $max);
+            });
+
+            usort($contents, function ($a, $b) {
+                return ($a['time'] > $b['time']) ? -1 : 1;
+            });
+        }
+
+        View::share([
+            'users' => ($this->user->admin ? Models\Users::orderBy('name', 'ASC')->get() : []),
+            'activities' => Models\Activities::orderBy('name', 'ASC')->get(),
+            'tags' => Models\Tags::orderBy('name', 'ASC')->get()
+        ]);
+
+        return View::make('base')->nest('body', 'stats', [
+            'filters' => $filters,
+            'stats' => [
+                'activities' => $activities,
+                'tags' => $tags,
+                'users' => $users
+            ]
+        ]);
+    }
 
     public function factTr($id)
     {
