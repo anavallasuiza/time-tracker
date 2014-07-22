@@ -1,12 +1,20 @@
 
-<?php foreach ($response as $data) { ?>
-<h2><?= $data['user']; ?></h2>
+<?php if (is_array($response)) { ?>
 
-<?php foreach ($data['log'] as $row) { ?>
+<?php foreach ($response as $name => $log) { ?>
+<h2><?= $name; ?></h2>
+
+<?php foreach ($log as $row) { ?>
 <div class="alert alert-<?= $row['status']; ?>">
     <?= $row['message']; ?>
 </div>
 <?php } ?>
+
+<?php } ?>
+
+<?php } else { ?>
+
+<pre><code><?= $response; ?></code></pre>
 
 <?php } ?>
 
