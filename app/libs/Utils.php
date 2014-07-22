@@ -78,6 +78,11 @@ class Utils
         return sprintf('%02d:%02d', floor($seconds / 3600), ($seconds / 60) % 60);
     }
 
+    public static function minutes2hour($minutes)
+    {
+        return floor($minutes / 60).':'.($minutes % 60);
+    }
+
     public static function url($key, $value)
     {
         $url = getenv('REQUEST_URI');
