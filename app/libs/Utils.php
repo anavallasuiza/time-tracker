@@ -80,7 +80,7 @@ class Utils
 
     public static function minutes2hour($minutes)
     {
-        return sprintf('%0d:%02d', floor($minutes / 60).':'.($minutes % 60));
+        return sprintf('%01d:%02d', floor($minutes / 60), ($minutes % 60));
     }
 
     public static function url($key, $value)
