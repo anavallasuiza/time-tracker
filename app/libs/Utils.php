@@ -72,7 +72,7 @@ class Utils
         $seconds = 0;
 
         foreach ($list as $row) {
-            $seconds += $row->end_time->getTimestamp() - $row->start_time->getTimestamp();
+            $seconds += ($row->total_time * 60);
         }
 
         return sprintf('%02d:%02d', floor($seconds / 3600), ($seconds / 60) % 60);
@@ -81,6 +81,37 @@ class Utils
     public static function minutes2hour($minutes)
     {
         return sprintf('%01d:%02d', floor($minutes / 60), ($minutes % 60));
+    }
+
+    public static function startEndTime($start, $end, $total)
+    {
+        $user = Auth::user();
+
+        if (empty($user->store_hours)) {
+            list($start) = explode(' ', $start);
+            list($end) = explode(' ', $end);
+        }
+
+        if (!($start = self::checkDate($start,  $user->dateFormat))) {
+            throw new \Exception(sprintf(_('"%s" has not a valid date time format (%s)'), _('start_time'), $user->dateFormat));
+        }
+
+        if (!($end = self::checkDate($end, $user->dateFormat))) {
+            throw new \Exception(sprintf(_('"%s" has not a valid date time format (%s)'), _('end_time'), $user->dateFormat));
+        }
+
+        if ($user->store_hours) {
+            $total = (int)round(($end->getTimestamp() - $start->getTimestamp()) / 60);
+        } else {
+            list($hours, $minutes) = explode(':', $total);
+            $total = ($hours * 60) + $minutes;
+        }
+
+        if ((int)$total <= 0) {
+            throw new \Exception(_('Total time has not a valid value'));
+        }
+
+        return [$start, $end, $total];
     }
 
     public static function url($key, $value)
@@ -101,8 +132,13 @@ class Utils
         }
     }
 
+    public static function object2array($object)
+    {
+        return json_decode(json_encode($object), true);
+    }    
+
     public static function objectColumn($object, $column)
     {
-        return array_column(json_decode(json_encode($object), true), $column);
+        return array_column(self::object2array($object), $column);
     }
 }

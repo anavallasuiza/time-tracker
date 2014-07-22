@@ -32,6 +32,12 @@ class Base {
         $form->load($post);
 
         if ($form->isValid() !== true) {
+            foreach ($form as $input) {
+                if ($input->error()) {
+                    throw new \ErrorException($input->attr('name').': '.$input->error());
+                }
+            }
+
             throw new \ErrorException(_('You must fill form with all required fields'));
         }
 

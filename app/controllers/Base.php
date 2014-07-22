@@ -6,7 +6,7 @@ use App\Libs;
 class Base extends \Controller {
     public function __construct()
     {
-        \View::share('user', $this->user = \Auth::user());
+        \View::share('user', $this->user = Libs\Auth::user());
     }
 
     public function action($action, $form, array $params = [])

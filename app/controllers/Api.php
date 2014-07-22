@@ -146,6 +146,7 @@ class Api extends \Controller {
     {
         $start_time = trim(Input::get('start_time'));
         $end_time = trim(Input::get('end_time'));
+        $time = trim(Input::get('time'));
         $remote_id = (int)Input::get('remote_id');
         $hostname = trim(Input::get('hostname'));
         $id_activities = (int)Input::get('id_activities');
@@ -162,21 +163,32 @@ class Api extends \Controller {
             return $response;
         }
 
-        if (!($start_time = Libs\Utils::checkDate($start_time, 'Y-m-d H:i:s'))) {
+        if ($store_hours = $this->user()->store_hours) {
+            $format = 'Y-m-d H:i:s';
+        } else {
+            $format = strstr($start_time, ':') ? 'Y-m-d H:i:s' : 'Y-m-d';
+        }
+
+        if (!($start_time = Libs\Utils::checkDate($start_time, $format))) {
             return Response::json(array(
                 'code' =>  404,
-                'message' => sprintf(_('"%s" has not a valid date time format (Y-m-d H:i:s)'), 'start_time')
+                'message' => sprintf(_('"%s" has not a valid date time format (%s)'), 'start_time', $format)
             ), 404);
         }
 
-        if (!($end_time = Libs\Utils::checkDate($end_time, 'Y-m-d H:i:s'))) {
+        if (!($end_time = Libs\Utils::checkDate($end_time, $format))) {
             return Response::json(array(
                 'code' =>  404,
-                'message' => sprintf(_('"%s" has not a valid date time format (Y-m-d H:i:s)'), 'end_time')
+                'message' => sprintf(_('"%s" has not a valid date time format (%format)'), 'end_time', $format)
             ), 404);
         }
 
-        $total = (int)round(($end_time->getTimestamp() - $start_time->getTimestamp()) / 60);
+        if ($store_hours) {
+            $total = (int)round(($end_time->getTimestamp() - $start_time->getTimestamp()) / 60);
+        } else {
+            list($hours, $minutes) = explode(':', $time);
+            $total = ($hours * 60) + $minutes;
+        }
 
         if ($total < 0) {
             return Response::json(array(
@@ -186,25 +198,32 @@ class Api extends \Controller {
         }
 
         if ($total === 0) {
-            return Response::json([
-                'id' => 0
-            ]);
+            return Response::json(array(
+                'code' =>  404,
+                'message' => _('Empty total time. Skip.')
+            ), 404);
         }
 
-        $overwrite = Models\Facts::where('id_users', '=', $this->user()->id)
-            ->where('start_time', '<', $end_time)
-            ->where('end_time', '>', $start_time)
-            ->first();
+        if ($store_hours) {
+            $overwrite = Models\Facts::where('id_users', '=', $this->user()->id)
+                ->where('start_time', '<', $end_time)
+                ->where('end_time', '>', $start_time)
+                ->first();
 
-        if ($overwrite) {
-            return Response::json([
-                'id' => 0
-            ]);
+            if ($overwrite) {
+                $time1 = $overwrite->start_time->format('d/m/Y H:i:s').' - '.$overwrite->end_time->format('d/m/Y H:i:s');
+                $time2 = $start_time->format('d/m/Y H:i:s').' - '.$end_time->format('d/m/Y H:i:s');
+
+                return Response::json(array(
+                    'code' =>  404,
+                    'message' => sprintf(_('This fact overwrite another fact at same time: %s vs %s'), $time1, $time2)
+                ), 404);
+            }
         }
 
         $fact = Models\Facts::create([
-            'start_time' => $start_time,
-            'end_time' => $end_time,
+            'start_time' => $start_time->format('Y/m/d'.($store_hours ? ' H:i:s' : '')),
+            'end_time' => $end_time->format('Y/m/d'.($store_hours ? ' H:i:s' : '')),
             'total_time' => $total,
             'description' => trim(Input::get('description')),
             'hostname' => $hostname,

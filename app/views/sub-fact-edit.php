@@ -29,7 +29,7 @@
         </div>
 
         <div class="col-sm-1 text-center form-group">
-            <input type="text" name="time" value="0" class="form-control text-center" readonly />
+            <input type="text" name="time" value="00:00" class="form-control text-center" <?= $user->store_hours ? 'readonly' : ''; ?> />
         </div>
 
         <div class="col-sm-2 text-center form-group">

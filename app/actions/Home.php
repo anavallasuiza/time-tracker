@@ -25,22 +25,7 @@ class Home extends Base {
             return false;
         }
 
-        $start = trim(Input::get('start'));
-        $end = trim(Input::get('end'));
-
-        if (!($start = Libs\Utils::checkDate($start, 'd/m/Y H:i'))) {
-            throw new \Exception(sprintf(_('"%s" has not a valid date time format (d-m-Y H:i)'), _('start_time')));
-        }
-
-        if (!($end = Libs\Utils::checkDate($end, 'd/m/Y H:i'))) {
-            throw new \Exception(sprintf(_('"%s" has not a valid date time format (d-m-Y H:i)'), _('end_time')));
-        }
-
-        $total = (int)round(($end->getTimestamp() - $start->getTimestamp()) / 60);
-
-        if ($total <= 0) {
-            throw new \Exception(_('"start_time" date is older than "end_time" date'));
-        }
+        list($start, $end, $total) = Libs\Utils::startEndTime(Input::get('start'), Input::get('end'), Input::get('time'));
 
         $overwrite = Models\Facts::where('id_users', '=', $this->user->id)
             ->where('start_time', '<', $start)
@@ -99,22 +84,7 @@ class Home extends Base {
 
         $fact = $fact->firstOrFail();
 
-        $start = trim(Input::get('start'));
-        $end = trim(Input::get('end'));
-
-        if (!($start = Libs\Utils::checkDate($start, 'd/m/Y H:i'))) {
-            throw new \Exception(sprintf(_('"%s" has not a valid date time format (d-m-Y H:i)'), _('start_time')));
-        }
-
-        if (!($end = Libs\Utils::checkDate($end, 'd/m/Y H:i'))) {
-            throw new \Exception(sprintf(_('"%s" has not a valid date time format (d-m-Y H:i)'), _('end_time')));
-        }
-
-        $total = (int)round(($end->getTimestamp() - $start->getTimestamp()) / 60);
-
-        if ($total <= 0) {
-            throw new \Exception(_('"start_time" date is older than "end_time" date'));
-        }
+        list($start, $end, $total) = Libs\Utils::startEndTime(Input::get('start'), Input::get('end'), Input::get('time'));
 
         $fact->start_time = $start;
         $fact->end_time = $end;

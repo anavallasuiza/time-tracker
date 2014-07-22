@@ -11,15 +11,8 @@
         implode(', ', array_column($fact->tags->toArray(), 'name'));
     ?></td>
 
-    <td class="text-center column-start"><?php
-        echo $fact->start_time->format('d/m/Y');
-        echo '<span class="hour'.($user->admin ? '' : ' hidden').'"> '.$fact->start_time->format('H:i').'</span>';
-    ?></td>
-
-    <td class="text-center column-end"><?php
-        echo $fact->end_time->format('d/m/Y');
-        echo '<span class="hour'.($user->admin ? '' : ' hidden').'"> '.$fact->end_time->format('H:i').'</span>';
-    ?></td>
+    <td class="text-center column-start"><?= $fact->start_time->format($user->dateFormat); ?></td>
+    <td class="text-center column-end"><?= $fact->end_time->format($user->dateFormat); ?></td>
 
     <td class="text-center column-time">
         <div class="col-xs-8">

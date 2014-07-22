@@ -5,6 +5,15 @@ use Config, Request, Response, Redirect;
 
 class Auth extends \Auth
 {
+    public static function user()
+    {
+        $user = parent::user();
+
+        $user->dateFormat = 'd/m/Y'.($user->store_hours ? ' H:i' : '');
+
+        return $user;
+    }
+
     public static function login($method = '')
     {
         if (empty($method)) {

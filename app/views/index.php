@@ -68,6 +68,7 @@
     echo ($rows === -1) ? '</strong>' : '';
 
     echo ' | <a href="'.url('/stats').'">'._('Stats').'</a>';
+    echo ' | <a href="'.url('/sync').'">'._('Sync').'</a>';
     echo ' | <a href="'.\App\Libs\Utils::url('export', 'csv').'">'._('Export as CSV').'</a>';
 
     if ($user->admin) {

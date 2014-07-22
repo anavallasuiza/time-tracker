@@ -55,6 +55,7 @@
 
         <script>
         var BASE_WWW = '<?= URL::to('/'); ?>';
+        var HOUR = <?= $user->store_hours ? 'true' : 'false'; ?>;
         </script>
 
         <script src="<?= asset('js/scripts.js'); ?>" type="text/javascript"></script>

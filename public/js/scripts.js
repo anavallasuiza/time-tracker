@@ -62,24 +62,13 @@ var $addForm = $('#facts-form-add'),
     var saveFact = function ($form) {
         var $tr = $form.closest('tr'),
             start = $form.find('input[name="start"]').val(),
-            end = $form.find('input[name="end"]').val(),
-            action = $form.find('input[name="action"]').val();
+            end = $form.find('input[name="end"]').val();
 
         start = moment(start, 'DD/MM/YYYY HH:mm');
         end = moment(end, 'DD/MM/YYYY HH:mm');
 
-        if (moment.utc(end.diff(start)).format('HH:mm') === '00:00') {
+        if (HOUR && (moment.utc(end.diff(start)).format('HH:mm') === '00:00')) {
             return;
-        }
-
-        if (action === 'edit') {
-            var $original = $tr.prev();
-        } else {
-            var $original = $tr.clone();
-
-            $original.find('> td').html('');
-
-            $tr.after($original);
         }
 
         $form.find('div[rel="error-message"]').hide();
@@ -92,9 +81,22 @@ var $addForm = $('#facts-form-add'),
                     return showError('I don\'t know whats happend', $form);
                 }
 
+                var action = $form.find('input[name="action"]').val();
+
+                if (action === 'add') {
+                    var $original = $factsTable.find('tbody > tr:first').clone();
+                    $factsTable.find('tbody').prepend($original);
+                } else {
+                    var $original = $tr.prev();
+                }
+
                 $.get(BASE_WWW + '/fact-tr/' + response.id, function (response) {
                     $original.replaceWith(response).find('[data-toggle="tooltip"]').tooltip();
                 });
+
+                if (action === 'add') {
+                    $tr = $original;
+                }
 
                 $tr.addClass('success');
 
@@ -123,19 +125,16 @@ var $addForm = $('#facts-form-add'),
     };
 
     var showError = function (message, $form) {
-        $form.addClass('alert alert-danger')
-            .find('div[rel="error-message"]')
+        $form.find('div[rel="error-message"]')
             .show().removeClass('hidden')
             .html(message);
-
-        setTimeout(function () {
-            $form.removeClass('alert alert-danger');
-        }, 1000);
     };
 
     var $editOpen,
         $editForm = $('#facts-form-edit'),
         $headerTimer = $('#header-timer'),
+        $factsTable = $('.facts-table'),
+        MASK_FORMAT = ('00/00/0000' + (HOUR ? ' 00:00' : '')),
         timeCounter;
 
     $('.input-daterange').datepicker({
@@ -149,15 +148,25 @@ var $addForm = $('#facts-form-add'),
         $(this).closest('form').submit();
     });
 
-    $('.facts-table').tooltip({
+    $('body').on('submit', '.facts-form', function (e) {
+        e.preventDefault();
+
+        if (e.keyCode === 13) {
+            return;
+        }
+
+        saveFact($(this));
+    });
+
+    $factsTable.tooltip({
         selector: '[data-toggle="tooltip"]'
     });
 
-    $('.facts-table').floatThead({
+    $factsTable.floatThead({
         useAbsolutePositioning: false
     });
 
-    $('.facts-table').on('click', '[data-action="edit"]', function (e) {
+    $factsTable.on('click', '[data-action="edit"]', function (e) {
         e.preventDefault();
 
         var $original = $(this).closest('tr'),
@@ -179,8 +188,8 @@ var $addForm = $('#facts-form-add'),
 
         $clone.find('input[name="id"]').val(id);
 
-        setValue($clone, $original, 'start', '00/00/0000 00:00');
-        setValue($clone, $original, 'end', '00/00/0000 00:00');
+        setValue($clone, $original, 'start', MASK_FORMAT);
+        setValue($clone, $original, 'end', MASK_FORMAT);
 
         $clone.find('input[name="time"]').val($.trim($original.find('.column-time div:first').text()));
 
@@ -200,16 +209,6 @@ var $addForm = $('#facts-form-add'),
         $editOpen = $('<tr class="' + className + ' hover">');
         $td.append($clone.removeClass('hidden'));
         $original.addClass('hover').after($editOpen.append($td));
-    });
-
-    $('body').on('submit', '.facts-form', function (e) {
-        e.preventDefault();
-
-        if (e.keyCode === 13) {
-            return;
-        }
-
-        saveFact($(this));
     });
 
     $addForm.find('[data-action="play"]').on('click', function (e) {
@@ -251,14 +250,8 @@ var $addForm = $('#facts-form-add'),
             return showError('Please check all form fields', $addForm);
         }
 
-        var loaded = $fact ? true : false;
-
         saveFact($addForm);
         refreshFact();
-
-        if (loaded) {
-            $addForm.find('[data-action="play"]').trigger('click');
-        }
     });
 
     $('.facts-form').on('keyup change', 'input:not(readonly)', function (e) {
@@ -269,10 +262,16 @@ var $addForm = $('#facts-form-add'),
         }
 
         var $this = $(this),
-            $clone = $this.closest('form'),
-            start = $clone.find('input[name="start"]').val(),
-            end = $clone.find('input[name="end"]').val(),
-            $time = $clone.find('input[name="time"]');
+            $form = $this.closest('form'),
+            action = $form.find('input[name="action"]').val();
+
+        if ((action !== 'add') && !HOUR) {
+            return;
+        }
+
+        var start = $form.find('input[name="start"]').val(),
+            end = $form.find('input[name="end"]').val(),
+            $time = $form.find('input[name="time"]');
 
         start = moment(start, 'DD/MM/YYYY HH:mm');
         end = moment(end, 'DD/MM/YYYY HH:mm');

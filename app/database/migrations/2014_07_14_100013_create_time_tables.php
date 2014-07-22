@@ -89,6 +89,7 @@ class CreateTimeTables extends Migration {
             $table->string('password_token');
             $table->string('remember_token');
             $table->string('api_key');
+            $table->boolean('store_hours');
             $table->boolean('admin');
             $table->boolean('enabled');
 
