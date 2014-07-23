@@ -2,13 +2,16 @@
     'filters' => $filters
 ])->render(); ?>
 
-<?php foreach ($stats as $group => $values) { ?>
-<?php if (empty($values)) continue; ?>
+<?php foreach ($stats as $group) { ?>
+<?php if (empty($group['rows'])) continue; ?>
 
-<h2><?= $group; ?></h2>
+<h2><?= $group['title']; ?></h2>
 
-<?php foreach ($values as $row) { ?>
-<h4 class="text-muted"><?= $row['name']; ?> (<?= \App\Libs\Utils::minutes2hour($row['time']); ?> - <?= $row['percent']; ?>%)</h4>
+<?php foreach ($group['rows'] as $row) { ?>
+<h4 class="text-muted">
+    <a href="<?= \App\Libs\Utils::url($group['filter'], $row['id']); ?>"><?= $row['name']; ?></a>
+    (<?= \App\Libs\Utils::minutes2hour($row['time']); ?> - <?= $row['percent']; ?>%)
+</h4>
 
 <div class="progress">
     <div class="progress-bar" role="progressbar" aria-valuenow="<?= $row['percent']; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?= $row['percent']; ?>%;">

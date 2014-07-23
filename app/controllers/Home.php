@@ -98,6 +98,7 @@ class Home extends Base {
             'user' => Input::get('user'),
             'activity' => Input::get('activity'),
             'tag' => Input::get('tag'),
+            'tag_unique' => true,
             'first' => $first,
             'last' => Input::get('last'),
             'description' => Input::get('description'),
@@ -115,6 +116,7 @@ class Home extends Base {
                 $activities[$fact->activities->id]['time'] += $fact->total_time;
             } else {
                 $activities[$fact->activities->id] = [
+                    'id' => $fact->activities->id,
                     'name' => $fact->activities->name,
                     'time' => $fact->total_time
                 ];
@@ -125,6 +127,7 @@ class Home extends Base {
                     $tags[$tag->id]['time'] += $fact->total_time;
                 } else {
                     $tags[$tag->id] = [
+                        'id' => $tag->id,
                         'name' => $tag->name,
                         'time' => $fact->total_time
                     ];
@@ -139,6 +142,7 @@ class Home extends Base {
                 $users[$fact->users->id]['time'] += $fact->total_time;
             } else {
                 $users[$fact->users->id] = [
+                    'id' => $fact->users->id,
                     'name' => $fact->users->name,
                     'time' => $fact->total_time
                 ];
@@ -172,9 +176,21 @@ class Home extends Base {
         return View::make('base')->nest('body', 'stats', [
             'filters' => $filters,
             'stats' => [
-                'activities' => $activities,
-                'tags' => $tags,
-                'users' => $users
+                [
+                    'title' => _('Activities'),
+                    'filter' => 'activity',
+                    'rows' => $activities
+                ],
+                [
+                    'title' => _('Tags'),
+                    'filter' => 'tag',
+                    'rows' => $tags
+                ],
+                [
+                    'title' => _('Users'),
+                    'filter' => 'user',
+                    'rows' => $users
+                ],
             ]
         ]);
     }

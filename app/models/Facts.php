@@ -51,7 +51,7 @@ class Facts extends \Eloquent {
 
         $I = \Auth::user();
 
-        $facts = self::with(['activities'])->with(['users'])->with(['tags']);
+        $facts = self::with(['activities'])->with(['users']);
 
         if (empty($I->admin)) {
             $facts->where('id_users', '=', $I->id);
@@ -66,6 +66,14 @@ class Facts extends \Eloquent {
         if (isset($tag) && (int)$tag) {
             $facts->join('facts_tags', 'facts_tags.id_facts', '=', 'facts.id')
                 ->where('facts_tags.id_tags', '=', (int)$tag);
+        }
+
+        if (isset($tag) && (int)$tag && isset($tag_unique) && $tag_unique) {
+            $facts->with(['tags' => function($query) use ($tag) {
+                $query->where('tags.id', '=', (int)$tag);
+            }]);
+        } else {
+            $facts->with(['tags']);
         }
 
         if (isset($first) && $first && ($filters['first'] = Libs\Utils::checkdate($first, 'd/m/Y'))) {
