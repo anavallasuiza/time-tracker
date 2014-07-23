@@ -32,6 +32,7 @@
         <div class="alert alert-<?= $flash['status']; ?>">
             <div class="container center">
                 <?= $flash['message']; ?>
+                <?php Session::forget('flash-message'); ?>
             </div>
         </div>
         <?php } ?>
