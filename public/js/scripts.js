@@ -134,7 +134,7 @@ var $addForm = $('#facts-form-add'),
         $editForm = $('#facts-form-edit'),
         $headerTimer = $('#header-timer'),
         $factsTable = $('.facts-table'),
-        MASK_FORMAT = ('00/00/0000' + (HOUR ? ' 00:00' : '')),
+        MASK_FORMAT = ('00/00/0000' + (((typeof HOUR !== 'undefined') && HOUR) ? ' 00:00' : '')),
         timeCounter;
 
     $('.input-daterange').datepicker({
@@ -147,6 +147,23 @@ var $addForm = $('#facts-form-add'),
     $('.filter').on('change', function () {
         $(this).closest('form').submit();
     });
+
+    var $wait = $('.submit-wait');
+
+    if ($wait.length) {
+        if ($wait.is('form') !== true) {
+            $wait = $wait.closest('form');
+        }
+
+        $wait.on('submit', function () {
+            var message = $wait.data('message');
+
+            $('body').append('<div class="waiting-layer"></div>')
+                .append('<div class="waiting-layer-message">' + message + '</div>');
+
+            return true;
+        });
+    }
 
     $('body').on('submit', '.facts-form', function (e) {
         e.preventDefault();

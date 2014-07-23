@@ -1,5 +1,11 @@
+<form class="text-center well submit-wait" data-message="<?= _('Please wait...'); ?>" method="post">
+    <button type="submit" name="action" value="sync" class="btn btn-success">
+        <i class="glyphicon glyphicon-refresh"></i>
+        <?= _('Syncronize database'); ?>
+    </button>
+</form>
 
-<?php if (is_array($response)) { ?>
+<?php if ($action) { ?>
 
 <?php foreach ($response as $name => $log) { ?>
 <h2><?= $name; ?></h2>
@@ -12,12 +18,8 @@
 
 <?php } ?>
 
-<?php } else { ?>
-
-<pre><code><?= $response; ?></code></pre>
-
 <?php } ?>
 
-<div class="text-center">
+<div class="text-center row">
     <a href="<?= url('/'); ?>" class="btn btn-info"><?= _('Back'); ?></a>
 </div>

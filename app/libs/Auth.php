@@ -7,9 +7,9 @@ class Auth extends \Auth
 {
     public static function user()
     {
-        $user = parent::user();
-
-        $user->dateFormat = 'd/m/Y'.($user->store_hours ? ' H:i' : '');
+        if ($user = parent::user()) {
+            $user->dateFormat = 'd/m/Y'.($user->store_hours ? ' H:i' : '');
+        }
 
         return $user;
     }

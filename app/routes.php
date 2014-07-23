@@ -20,10 +20,10 @@ Route::group(['before' => 'auth'], function()
 {
     Route::any('/', 'App\Controllers\Home@index');
     Route::get('/stats', 'App\Controllers\Home@stats');
-    Route::get('/sync', 'App\Controllers\Home@sync');
+    Route::any('/sync', 'App\Controllers\Home@sync');
     Route::get('/fact-tr/{id}', 'App\Controllers\Home@factTr');
     Route::get('/dump-sql', 'App\Controllers\Home@dumpSQL');
-    Route::get('/git-update', 'App\Controllers\Home@gitUpdate');
+    Route::any('/git-update', 'App\Controllers\Home@gitUpdate');
 });
 
 Route::group(['prefix' => 'api', 'before' => 'auth.api'], function()

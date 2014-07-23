@@ -9,7 +9,7 @@ class Base extends \Controller {
         \View::share('user', $this->user = Libs\Auth::user());
     }
 
-    public function action($action, $form, array $params = [])
+    public function action($action, \FormManager\Form $form = null, array $params = [])
     {
         if (!\Request::isMethod('post')) {
             return null;

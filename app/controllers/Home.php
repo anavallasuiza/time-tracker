@@ -181,42 +181,13 @@ class Home extends Base {
 
     public function sync()
     {
-        $config = \Config::get('app');
-
-        $Shell = new Libs\Shell();
-
-        $cmd = 'php -f "'.$config['sync_php'].'" showdb=false response=json';
-
-        if (empty($this->user->admin)) {
-            $cmd .= ' user="'.$this->user->user.'"';
-        }
-
-        $Shell->exec($cmd);
-
-        $log = $Shell->getLog();
-        $log = end($log);
-
-        if ($log['success']) {
-            $response = Libs\Utils::object2array(json_decode(trim($log['response'])));
-
-            Session::flash('flash-message', [
-                'status' => 'success',
-                'message' => _('Databases synchronized successfully')
-            ]);
-        } else {
-            $response = [[
-                'status' => 'danger',
-                'message' => $log['error']
-            ]];
-
-            Session::flash('flash-message', [
-                'status' => 'danger',
-                'message' => _('Error synchronizing databases')
-            ]);
+        if (is_object($action = $this->action(__FUNCTION__))) {
+            return $action;
         }
 
         return View::make('base')->nest('body', 'sync', [
-            'response' => $response
+            'response' => $action,
+            'action' => Input::get('action')
         ]);
     }
 
@@ -313,38 +284,13 @@ class Home extends Base {
             return Redirect::to('/401');
         }
 
-        $Shell = new Libs\Shell();
-
-        if (!$Shell->exists('git')) {
-            Session::flash('flash-message', [
-                'message' => _('GIT command not exists'),
-                'status' => 'danger'
-            ]);
-
-            return View::make('base')->nest('body', 'git-update', [
-                'response' => _('GIT command not exists')
-            ]);
-        }
-
-        $Shell->exec('git pull -u origin master');
-
-        $log = $Shell->getLog();
-        $log = end($log);
-
-        if ($log['success']) {
-            Session::flash('flash-message', [
-                'status' => 'success',
-                'message' => _('Environment updated successfully')
-            ]);
-        } else {
-            Session::flash('flash-message', [
-                'status' => 'danger',
-                'message' => _('Error updating environment from git')
-            ]);
+        if (is_object($action = $this->action(__FUNCTION__))) {
+            return $action;
         }
 
         return View::make('base')->nest('body', 'git-update', [
-            'response' => ($log['success'] ? $log['response'] : $log['error'])
+            'action' => Input::get('action'),
+            'response' => $action
         ]);
     }
 }

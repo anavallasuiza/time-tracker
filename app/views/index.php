@@ -78,3 +78,7 @@
     echo '</p>';
     ?>
 </div>
+
+<script>
+var HOUR = <?= $user->store_hours ? 'true' : 'false'; ?>;
+</script>
