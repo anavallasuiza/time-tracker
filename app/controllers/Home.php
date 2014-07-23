@@ -152,7 +152,7 @@ class Home extends Base {
                 continue;
             }
 
-            $max = max(array_column($contents, 'time'));
+            $max = array_sum(array_column($contents, 'time'));
 
             array_walk($contents, function (&$value) use ($max) {
                 $value['percent'] = round(($value['time'] * 100) / $max);
