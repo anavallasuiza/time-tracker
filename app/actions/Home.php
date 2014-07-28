@@ -121,6 +121,8 @@ class Home extends Base {
 
     public function sync()
     {
+        set_time_limit(0);
+
         $config = \Config::get('app');
 
         $Shell = new Libs\Shell();
@@ -162,6 +164,8 @@ class Home extends Base {
 
     public function gitUpdate()
     {
+        set_time_limit(0);
+
         if (empty($this->user->admin)) {
             return Redirect::to('/401');
         }
