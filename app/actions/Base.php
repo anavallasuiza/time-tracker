@@ -21,7 +21,7 @@ class Base {
             return null;
         }
 
-        if (Libs\Utils::isBot($post) || empty($post['_token']) || (\Session::token() !== $post['_token'])) {
+        if (Libs\Utils::isBot($post) || empty($post['_token'])) {
             throw new \ErrorException(_('Not allowed'));
         }
 
