@@ -45,7 +45,6 @@ var $addForm = $('#facts-form-add'),
     var refreshFact = function () {
         var time = moment().format('DD/MM/YYYY HH:mm');
 
-        $addForm.find('select').val('');
         $addForm.find('input[name="time"]').val('');
         $addForm.find('input[name="description"]').val('');
 
@@ -244,10 +243,12 @@ var $addForm = $('#facts-form-add'),
             end = moment($end.val(), 'DD/MM/YYYY HH:mm');
 
         $(this).hide();
+
         $addForm.find('[data-action="refresh"]').removeClass('hidden').show();
 
         setFact();
 
+        $start.val(moment().format('DD/MM/YYYY HH:mm')).trigger('change');
         $end.val(moment().format('DD/MM/YYYY HH:mm')).trigger('change');
 
         timeCounter = setInterval(function () {
