@@ -103,6 +103,9 @@ class Utils
         if ($user->store_hours) {
             $total = (int)round(($end->getTimestamp() - $start->getTimestamp()) / 60);
         } else {
+            $start->setTime(0, 0, 0);
+            $end->setTime(0, 0, 0);
+
             list($hours, $minutes) = explode(':', $total);
             $total = ($hours * 60) + $minutes;
         }
