@@ -136,21 +136,10 @@ class CreateTimeTables extends Migration {
 
         Schema::table('logs', function($table)
         {
-            $table->foreign('id_activities')
-                ->references('id')
-                ->on('activities');
-
-            $table->foreign('id_facts')
-                ->references('id')
-                ->on('facts');
-
-            $table->foreign('id_logs')
-                ->references('id')
-                ->on('logs');
-
-            $table->foreign('id_users')
-                ->references('id')
-                ->on('users');
+            $table->index('id_activities');
+            $table->index('id_facts');
+            $table->index('id_logs');
+            $table->index('id_users');
         });
 
         Schema::table('facts_tags', function($table)
