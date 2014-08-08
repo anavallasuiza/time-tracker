@@ -5,25 +5,16 @@
     <h1><?= sprintf(_('Activity %s'), $activity->name); ?></h1>
 
     <div class="row">
-        <div class="col-lg-10 col-xs-8">
-            <div class="form-group">
-                <?= $form['name']; ?>
-            </div>
+        <div class="col-lg-8 col-sm-6 col-xs-12">
+            <?= $form['name']; ?>
         </div>
 
-        <div class="col-lg-2 col-xs-4">
-            <div class="form-group">
-                <input type="text" name="total_hours" value="<?= sprintf(_('Estimated %s hours'), $activity->total_hours); ?>" class="form-control text-center" readonly />
-            </div>
+        <div class="col-lg-2 col-sm-3 col-xs-6">
+            <?= $form['archived']; ?>
         </div>
-    </div>
 
-    <div class="form-group">
-        <div class="checkbox">
-            <label>
-                <?= $form['archived']; ?>
-                <?= _('This activity is archived'); ?>
-            </label>
+        <div class="col-lg-2 col-sm-3 col-xs-6">
+            <?= $form['total_hours']; ?>
         </div>
     </div>
 

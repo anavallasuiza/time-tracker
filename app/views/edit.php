@@ -8,7 +8,14 @@
 
         <div class="list-group">
             <?php foreach ($activities as $activity) { ?>
-            <a href="<?= url('activity', $activity->id); ?>" class="list-group-item"><?= $activity->name; ?></a>
+            <a href="<?= url('activity', $activity->id); ?>" class="list-group-item">
+                <?= $activity->name; ?>
+
+                <span class="label label-<?= $activity->archived ? 'warning' : 'primary'; ?> pull-right">
+                    <?= $activity->total_hours; ?>
+                    <i class="glyphicon glyphicon-<?= $activity->archived ? 'pause' : 'ok'; ?>"></i>
+                </span>
+            </a>
             <?php } ?>
         </div>
 

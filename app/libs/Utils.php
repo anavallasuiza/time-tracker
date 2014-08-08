@@ -143,4 +143,60 @@ class Utils
     {
         return array_column(self::object2array($object), $column);
     }
+
+    public static function progressText($row)
+    {
+        $span = '<span data-toggle="tooltip" data-placement="top" title="%title">%text</span>';
+
+        $time = self::minutes2hour($row['time']);
+
+        $html = str_replace(['%title', '%text'], [_('Worked time'), $time], $span);
+        $html .= ' - ';
+        $html .= str_replace(['%title', '%text'], [_('Percent over all activities'), $row['percent'].'%'], $span);
+
+        if (empty($row['total_hours'])) {
+            return $html;
+        }
+
+        $label = '<span class="label label-%label" data-toggle="tooltip" data-placement="top" title="%title">%text</span>';
+
+        $hours = round($row['time'] / 60);
+        $percent = round(($hours * 100) / $row['total_hours']);
+        $diff = round($row['total_hours'] - $hours);
+        $class = ($diff > 10) ? 'success' : (($diff > 0) ? 'warning' : 'danger');
+
+        $html .= ' / ';
+        $html .= str_replace(['%title', '%text'], [_('Estimated time'), $row['total_hours']], $span);
+        $html .= ' - ';
+        $html .= str_replace(['%title', '%text'], [_('Percent worked'), $percent.'%'], $span);
+        $html .= ' ';
+        $html .= str_replace(['%title', '%text', '%label'], [_('Hours to complete estimation'), round($diff), $class], $label);
+
+        return $html;
+    }
+
+    public static function progressBar($row)
+    {
+        $bar = '<div class="progress-bar progress-bar-%class" role="progressbar" aria-valuenow="%percent" aria-valuemin="0" aria-valuemax="100" style="width: %percent%;"></div>';
+
+        if (empty($row['percent_hours'])) {
+            return str_replace('%percent', $row['percent'], $bar);
+        }
+
+        if ($row['percent_hours'] > 100) {
+            $row['percent_hours'] = 100;
+        }
+
+        $diff = abs($row['percent'] - $row['percent_hours']);
+
+        if ($row['percent_hours'] < $row['percent']) {
+            return str_replace('%percent', $row['percent_hours'], $bar)
+                .str_replace(['%percent', '%class'], [$diff, 'danger'], $bar);
+        }
+
+        $class = ($diff > 20) ? 'success' : 'warning';
+
+        return str_replace('%percent', $row['percent'], $bar)
+            .str_replace(['%percent', '%class'], [$diff, $class], $bar);
+    }
 }

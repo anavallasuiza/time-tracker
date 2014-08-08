@@ -174,7 +174,7 @@ var $addForm = $('#facts-form-add'),
         saveFact($(this));
     });
 
-    $factsTable.tooltip({
+    $('body').tooltip({
         selector: '[data-toggle="tooltip"]'
     });
 
@@ -303,6 +303,8 @@ var $addForm = $('#facts-form-add'),
             $headerTimer.find('h2').text($addForm.find('select[name="activity"] option:selected').text());
         }
     });
+
+    $('.bootstrap-switch').bootstrapSwitch();
 
     loadTimes();
 })(jQuery);

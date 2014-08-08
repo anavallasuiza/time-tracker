@@ -4,7 +4,8 @@ namespace App\Controllers\Forms;
 use FormManager\Form;
 use FormManager\Inputs\Input;
 
-class User {
+class User
+{
     public function login ()
     {
         $form = new Form;

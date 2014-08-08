@@ -4,9 +4,7 @@
 
     <h1><?= sprintf(_('Tag %s'), $tag->name); ?></h1>
 
-    <div class="form-group">
-        <?= $form['name']; ?>
-    </div>
+    <?= $form['name']; ?>
 
     <div class="form-group text-center">
         <a href="<?= url('/edit/'); ?>" class="btn btn-info">

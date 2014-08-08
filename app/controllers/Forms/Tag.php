@@ -1,25 +1,18 @@
 <?php
 namespace App\Controllers\Forms;
 
-use FormManager\Form;
 use FormManager\Inputs\Input;
+use FormManager\Fields\Field;
 
-class Tag {
+class Tag
+{
     public function edit ()
     {
-        $form = new Form;
-
-        $form->add([
+        return (new Base())->add([
             'id' => Input::hidden(),
-            'name' => Input::text()->required()->attr([
-                'placeholder' => _('Tag name')
+            'name' => Field::text()->required()->attr([
+                'placeholder' => _('Name')
             ])
-        ]);
-
-        foreach ($form as $input) {
-            $input->class('form-control');
-        }
-
-        return $form;
+        ])->wrapperInputs();
     }
 }

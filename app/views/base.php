@@ -17,6 +17,7 @@
         <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" />
         <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/lumen/bootstrap.min.css" />
         <link rel="stylesheet" type="text/css" href="//eternicode.github.io/bootstrap-datepicker/bootstrap-datepicker/css/datepicker3.css" />
+        <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.0.2/css/bootstrap3/bootstrap-switch.min.css" />
         <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Press+Start+2P" />
         <link rel="stylesheet" type="text/css" href="<?= asset('css/styles.css'); ?>" />
     </head>
@@ -29,8 +30,8 @@
         </div>
 
         <?php if ($flash = Session::get('flash-message')) { ?>
-        <div class="alert alert-<?= $flash['status']; ?>">
-            <div class="container center">
+        <div class="container center">
+            <div class="alert alert-<?= $flash['status']; ?>">
                 <?= $flash['message']; ?>
                 <?php Session::forget('flash-message'); ?>
             </div>
@@ -41,9 +42,19 @@
             <?= $body; ?>
         </div>
 
-        <footer class="text-center panel-body">
+        <footer id="footer" class="text-center">
             <div class="container">
-                <a href="https://github.com/anavallasuiza/time-tracker" class="text-muted"><?= _('View on Github'); ?></a>
+                <div class="well">
+                    <a href="<?= url('/stats'); ?>" class="label label-default"><?= _('Stats'); ?></a>
+                    <a href="<?= url('/edit'); ?>" class="label label-default"><?= _('Edit'); ?></a>
+                    <a href="<?= url('/sync'); ?>" class="label label-default"><?= _('Sync'); ?></a>
+                    <a href="<?= url('/git-update'); ?>" class="label label-default"><?= _('Update environment'); ?></a>
+
+                    <p><a href="https://github.com/anavallasuiza/time-tracker" class="text-muted">
+                        <i class="fa fa-github"></i>
+                        <?= _('View on Github'); ?>
+                    </a></p>
+                </div>
             </div>
         </footer>
 
@@ -52,6 +63,7 @@
         <script src="//eternicode.github.io/bootstrap-datepicker/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/floatthead/1.2.8/jquery.floatThead.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.0.2/js/bootstrap-switch.min.js"></script>
         <script src="//igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"></script>
 
         <script>

@@ -9,17 +9,21 @@
 
 <?php foreach ($group['rows'] as $row) { ?>
 <h4 class="text-muted">
-    <?php if ($row['selected']) { ?>
-    <a href="<?= \App\Libs\Utils::url($group['filter'], null); ?>" class="fa fa-times text-muted"></a>
-    <?php } ?>
+    <div class="clearfix">
+        <div class="pull-right">
+            <?= \App\Libs\Utils::progressText($row); ?>
+        </div>
 
-    <a href="<?= \App\Libs\Utils::url($group['filter'], $row['id']); ?>"><?= $row['name']; ?></a>
-    (<?= \App\Libs\Utils::minutes2hour($row['time']); ?> - <?= $row['percent']; ?>%)
+        <?php if ($row['selected']) { ?>
+        <a href="<?= \App\Libs\Utils::url($group['filter'], null); ?>" class="fa fa-times text-muted"></a>
+        <?php } ?>
+
+        <a href="<?= \App\Libs\Utils::url($group['filter'], $row['id']); ?>"><?= $row['name']; ?></a>
+    </div>
 </h4>
 
 <div class="progress">
-    <div class="progress-bar" role="progressbar" aria-valuenow="<?= $row['percent']; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?= $row['percent']; ?>%;">
-    </div>
+    <?= \App\Libs\Utils::progressBar($row); ?>
 </div>
 <?php } ?>
 <?php } ?>

@@ -116,6 +116,7 @@ class Home extends Base {
                     'id' => $fact->activities->id,
                     'name' => $fact->activities->name,
                     'time' => $fact->total_time,
+                    'total_hours' => $fact->activities->total_hours,
                     'selected' => ($filters['activity'] === $fact->activities->id)
                 ];
             }
@@ -128,6 +129,7 @@ class Home extends Base {
                         'id' => $tag->id,
                         'name' => $tag->name,
                         'time' => $fact->total_time,
+                        'total_hours' => 0,
                         'selected' => ($filters['tag'] === $tag->id)
                     ];
                 }
@@ -144,6 +146,7 @@ class Home extends Base {
                     'id' => $fact->users->id,
                     'name' => $fact->users->name,
                     'time' => $fact->total_time,
+                    'total_hours' => 0,
                     'selected' => ($filters['user'] === $fact->users->id)
                 ];
             }
@@ -160,6 +163,12 @@ class Home extends Base {
 
             array_walk($contents, function (&$value) use ($max) {
                 $value['percent'] = round(($value['time'] * 100) / $max);
+
+                if (empty($value['total_hours'])) {
+                    $value['percent_hours'] = 0;
+                } else {
+                    $value['percent_hours'] = round(($value['total_hours'] * 60 * 100) / $max);
+                }
             });
 
             usort($contents, function ($a, $b) {

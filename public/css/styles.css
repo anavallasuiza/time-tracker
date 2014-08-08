@@ -40,6 +40,10 @@
     font-family: 'Press Start 2P', System, Terminal, Fixedsys;
 }
 
+#footer, #footer p {
+    margin-top: 20px;
+}
+
 .facts-table thead {
     background: white;
 }
@@ -115,6 +119,17 @@
     text-align: center;
     font-weight: 700;
     font-size: 18px;
+}
+
+.bootstrap-switch {
+    width: 100%;
+    border: 1px solid #e7e7e7;  
+}
+
+.bootstrap-switch .bootstrap-switch-handle-on,
+.bootstrap-switch .bootstrap-switch-handle-off,
+.bootstrap-switch .bootstrap-switch-label {
+    line-height: 26px;
 }
 
 @media (max-width: 768px) {

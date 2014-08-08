@@ -6,7 +6,8 @@ use App\Libs;
 use FormManager\Form;
 use FormManager\Inputs\Input;
 
-class Fact {
+class Fact
+{
     private function getForm()
     {
         $form = new Form;

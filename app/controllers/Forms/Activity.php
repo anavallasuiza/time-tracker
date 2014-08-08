@@ -1,30 +1,27 @@
 <?php
 namespace App\Controllers\Forms;
 
-use FormManager\Form;
 use FormManager\Inputs\Input;
+use FormManager\Fields\Field;
 
-class Activity {
+class Activity
+{
     public function edit ()
     {
-        $form = new Form;
-
-        $form->add([
+        return (new Base())->add([
             'id' => Input::hidden(),
-            'name' => Input::text()->required()->attr([
+            'name' => Field::text()->required()->attr([
                 'placeholder' => _('Activity name (exactly as defined in Basecamp)')
             ]),
-            'archived' => Input::checkbox()->attr([
+            'archived' => Field::checkbox()->attr([
+                'class' => 'bootstrap-switch',
+                'placeholder' => _('Archived'),
                 'value' => 1
+            ]),
+            'total_hours' => Field::text()->disabled()->attr([
+                'class' => 'text-center',
+                'placeholder' => _('Estimated hours')
             ])
-        ]);
-
-        foreach ($form as $input) {
-            if ($input->attr('type') !== 'checkbox') {
-                $input->class('form-control');
-            }
-        }
-
-        return $form;
+        ])->wrapperInputs();
     }
 }
