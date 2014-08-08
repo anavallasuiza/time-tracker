@@ -49,7 +49,7 @@
                     <a href="<?= url('/edit'); ?>" class="label label-default"><?= _('Edit'); ?></a>
                     <a href="<?= url('/sync'); ?>" class="label label-default"><?= _('Sync'); ?></a>
 
-                    <?php if ($this->user->admin) { ?>
+                    <?php if ($user->admin) { ?>
                     <a href="<?= url('/git-update'); ?>" class="label label-default"><?= _('Update environment'); ?></a>
                     <?php } ?>
 
