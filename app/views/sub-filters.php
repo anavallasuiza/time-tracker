@@ -3,8 +3,6 @@
     <input type="hidden" name="sort" value="<?= $sort; ?>" />
     <?php } ?>
 
-    <?php if ($user->admin) { ?>
-
     <div class="col-sm-2 form-group">
         <select name="user" class="form-control filter">
             <option value=""><?= _('All Users'); ?></option>
@@ -13,14 +11,6 @@
             <?php } ?>
         </select>
     </div>
-
-    <?php } else {?>
-
-    <div class="col-sm-2 form-group">
-        <input type="text" class="form-control" value="<?= $user->name; ?>" readonly disabled />
-    </div>
-
-    <?php } ?>
 
     <div class="col-sm-3 form-group">
         <select name="activity" class="form-control filter">

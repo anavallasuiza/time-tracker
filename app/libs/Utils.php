@@ -84,7 +84,7 @@ class Utils
 
     public static function minutes2hour($minutes)
     {
-        return sprintf('%01d:%02d', floor($minutes / 60), ($minutes % 60));
+        return round($minutes / 60);
     }
 
     public static function startEndTime($start, $end, $total)
@@ -150,7 +150,7 @@ class Utils
 
         $time = self::minutes2hour($row['time']);
 
-        $html = str_replace(['%title', '%text'], [_('Worked time'), $time], $span);
+        $html = str_replace(['%title', '%text'], [_('Worked time'), $time.'h'], $span);
         $html .= ' - ';
         $html .= str_replace(['%title', '%text'], [_('Percent over all activities'), $row['percent'].'%'], $span);
 
@@ -166,11 +166,11 @@ class Utils
         $class = ($diff > 10) ? 'success' : (($diff > 0) ? 'warning' : 'danger');
 
         $html .= ' / ';
-        $html .= str_replace(['%title', '%text'], [_('Estimated time'), $row['total_hours']], $span);
+        $html .= str_replace(['%title', '%text'], [_('Estimated time'), $row['total_hours'].'h'], $span);
         $html .= ' - ';
         $html .= str_replace(['%title', '%text'], [_('Percent worked'), $percent.'%'], $span);
         $html .= ' ';
-        $html .= str_replace(['%title', '%text', '%label'], [_('Hours to complete estimation'), round($diff), $class], $label);
+        $html .= str_replace(['%title', '%text', '%label'], [_('Hours to complete estimation'), round($diff).'h', $class], $label);
 
         return $html;
     }

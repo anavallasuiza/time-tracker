@@ -40,7 +40,7 @@ class Base extends \Controller {
         if ($this->user->admin) {
             $users = Models\Users::orderBy('name', 'ASC')->get();
         } else {
-            $users = [];
+            $users = Models\Users::where('id', '=', $this->user->id)->get();
         }
 
         $activities = Models\Activities::where('archived', '=', 0)

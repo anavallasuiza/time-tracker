@@ -50,8 +50,14 @@ class Home extends Base {
             return $action;
         }
 
+        if (empty($this->user->admin)) {
+            $user = $this->user->id;
+        } else {
+            $user = Input::get('user');
+        }
+
         list($facts, $filters) = Models\Facts::filter([
-            'user' => Input::get('user'),
+            'user' => $user,
             'activity' => Input::get('activity'),
             'tag' => Input::get('tag'),
             'first' => Input::get('first'),
@@ -106,8 +112,6 @@ class Home extends Base {
 
         $activities = $tags = $users = [];
 
-        $add_users = $this->user->admin && ($filters['activity'] || $filters['tag']);
-
         foreach ($facts as $fact) {
             if (array_key_exists($fact->activities->id, $activities)) {
                 $activities[$fact->activities->id]['time'] += $fact->total_time;
@@ -141,7 +145,7 @@ class Home extends Base {
 
             if (array_key_exists($fact->users->id, $users)) {
                 $users[$fact->users->id]['time'] += $fact->total_time;
-            } else {
+            } elseif ($this->user->admin || ($this->user->id === $fact->users->id)) {
                 $users[$fact->users->id] = [
                     'id' => $fact->users->id,
                     'name' => $fact->users->name,
