@@ -19,6 +19,7 @@ class CreateTimeTables extends Migration {
             $table->increments('id');
             $table->string('name');
             $table->integer('total_hours');
+            $table->boolean('archived');
 
             $table->timestamps();
         });

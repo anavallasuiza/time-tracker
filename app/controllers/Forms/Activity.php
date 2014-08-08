@@ -13,11 +13,16 @@ class Activity {
             'id' => Input::hidden(),
             'name' => Input::text()->required()->attr([
                 'placeholder' => _('Activity name (exactly as defined in Basecamp)')
+            ]),
+            'archived' => Input::checkbox()->attr([
+                'value' => 1
             ])
         ]);
 
         foreach ($form as $input) {
-            $input->class('form-control');
+            if ($input->attr('type') !== 'checkbox') {
+                $input->class('form-control');
+            }
         }
 
         return $form;

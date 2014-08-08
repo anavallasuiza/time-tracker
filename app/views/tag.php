@@ -9,7 +9,12 @@
     </div>
 
     <div class="form-group text-center">
-        <button type="submit" name="action" value="tag" class="btn btn-success">
+        <a href="<?= url('/edit/'); ?>" class="btn btn-info">
+            <i class="fa fa-undo"></i>
+            <?= _('Back'); ?>
+        </a>
+
+        <button type="submit" name="action" value="tag<?= empty($tag->id) ? 'Add' : 'Edit'; ?>" class="btn btn-success">
             <i class="glyphicon glyphicon-floppy-disk"></i>
             <?= _('Save'); ?>
         </button>

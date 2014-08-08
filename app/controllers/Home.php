@@ -72,11 +72,7 @@ class Home extends Base {
             $facts = $facts->paginate($rows);
         }
 
-        View::share([
-            'users' => ($this->user->admin ? Models\Users::orderBy('name', 'ASC')->get() : []),
-            'activities' => Models\Activities::orderBy('name', 'ASC')->get(),
-            'tags' => Models\Tags::orderBy('name', 'ASC')->get()
-        ]);
+        $this->share();
 
         return View::make('base')->nest('body', 'index', [
             'facts' => $facts,
@@ -171,11 +167,7 @@ class Home extends Base {
             });
         }
 
-        View::share([
-            'users' => ($this->user->admin ? Models\Users::orderBy('name', 'ASC')->get() : []),
-            'activities' => Models\Activities::orderBy('name', 'ASC')->get(),
-            'tags' => Models\Tags::orderBy('name', 'ASC')->get()
-        ]);
+        $this->share();
 
         return View::make('base')->nest('body', 'stats', [
             'filters' => $filters,
@@ -207,7 +199,32 @@ class Home extends Base {
         ]);
     }
 
-    public function activity($id)
+    public function activityAdd()
+    {
+        $form = (new Forms\Activity)->edit();
+
+        if (is_object($action = $this->action(__FUNCTION__, $form))) {
+            return $action;
+        }
+
+        $activity = new \stdClass();
+        $activity->name = _('New Activity');
+        $activity->total_hours = 0;
+
+        $tags = Models\Tags::orderBy('name', 'ASC')->get();
+
+        foreach ($tags as $tag) {
+            $tag->estimations = [];
+        }
+
+        return View::make('base')->nest('body', 'activity', [
+            'form' => $form,
+            'activity' => $activity,
+            'tags' => $tags
+        ]);
+    }
+
+    public function activityEdit($id)
     {
         $form = (new Forms\Activity)->edit();
 
@@ -217,7 +234,9 @@ class Home extends Base {
 
         $activity = Models\Activities::where('id', '=', (int)$id)->firstOrFail();
 
-        $form->load($activity);
+        if ($action !== false) {
+            $form->load($activity);
+        }
 
         $tags = Models\Tags::orderBy('name', 'ASC')->with(['estimations' => function ($query) use ($activity) {
             $query->where('id_activities', '=', $activity->id);
@@ -230,7 +249,24 @@ class Home extends Base {
         ]);
     }
 
-    public function tag($id)
+    public function tagAdd()
+    {
+        $form = (new Forms\Tag)->edit();
+
+        if (is_object($action = $this->action(__FUNCTION__, $form))) {
+            return $action;
+        }
+
+        $tag = new \stdClass();
+        $tag->name = _('New Activity');
+
+        return View::make('base')->nest('body', 'tag', [
+            'form' => $form,
+            'tag' => $tag
+        ]);
+    }
+
+    public function tagEdit($id)
     {
         $form = (new Forms\Tag)->edit();
 
@@ -240,7 +276,9 @@ class Home extends Base {
 
         $tag = Models\Tags::where('id', '=', (int)$id)->firstOrFail();
 
-        $form->load($tag);
+        if ($action !== false) {
+            $form->load($tag);
+        }
 
         return View::make('base')->nest('body', 'tag', [
             'form' => $form,

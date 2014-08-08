@@ -13,8 +13,17 @@
 
         <div class="col-lg-2 col-xs-4">
             <div class="form-group">
-                <input type="text" name="total_hours" value="<?= $activity->total_hours; ?>" class="form-control text-center" readonly />
+                <input type="text" name="total_hours" value="<?= sprintf(_('Estimated %s hours'), $activity->total_hours); ?>" class="form-control text-center" readonly />
             </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="checkbox">
+            <label>
+                <?= $form['archived']; ?>
+                <?= _('This activity is archived'); ?>
+            </label>
         </div>
     </div>
 
@@ -41,7 +50,12 @@
     </div>
 
     <div class="form-group text-center">
-        <button type="submit" name="action" value="activity" class="btn btn-success">
+        <a href="<?= url('/edit/'); ?>" class="btn btn-info">
+            <i class="fa fa-undo"></i>
+            <?= _('Back'); ?>
+        </a>
+
+        <button type="submit" name="action" value="activity<?= empty($activity->id) ? 'Add' : 'Edit'; ?>" class="btn btn-success">
             <i class="glyphicon glyphicon-floppy-disk"></i>
             <?= _('Save'); ?>
         </button>

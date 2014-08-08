@@ -64,14 +64,14 @@ class Facts extends \Eloquent {
         }
 
         if (isset($tag) && (int)$tag) {
-            $facts->join('facts_tags', 'facts_tags.id_facts', '=', 'facts.id')
-                ->where('facts_tags.id_tags', '=', (int)$tag);
-        }
-
-        if (isset($tag) && (int)$tag && isset($tag_unique) && $tag_unique) {
-            $facts->with(['tags' => function($query) use ($tag) {
-                $query->where('tags.id', '=', (int)$tag);
-            }]);
+            if (isset($tag_unique) && $tag_unique) {
+                $facts->with(['tags' => function($query) use ($tag) {
+                    $query->where('tags.id', '=', (int)$tag);
+                }]);
+            } else {
+                $facts->join('facts_tags', 'facts_tags.id_facts', '=', 'facts.id')
+                    ->where('facts_tags.id_tags', '=', (int)$tag);
+            }
         } else {
             $facts->with(['tags']);
         }

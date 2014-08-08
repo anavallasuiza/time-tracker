@@ -1,7 +1,8 @@
 <?php
 namespace App\Controllers;
 
-use App\Libs;
+use View;
+use App\Libs, App\Models;
 
 class Base extends \Controller {
     public function __construct()
@@ -32,5 +33,24 @@ class Base extends \Controller {
 
             return is_object($response) ? $response : false;
         }
+    }
+
+    protected function share()
+    {
+        if ($this->user->admin) {
+            $users = Models\Users::orderBy('name', 'ASC')->get();
+        } else {
+            $users = [];
+        }
+
+        $activities = Models\Activities::where('archived', '=', 0)
+            ->orderBy('name', 'ASC')
+            ->get();
+
+        View::share([
+            'users' => $users,
+            'activities' => $activities,
+            'tags' => Models\Tags::orderBy('name', 'ASC')->get()
+        ]);
     }
 }

@@ -121,7 +121,66 @@ class Home extends Base {
         ]);
     }
 
-    public function activity($form)
+    public function activityAdd($form)
+    {
+        if (!($data = $this->check(__FUNCTION__, $form))) {
+            return false;
+        }
+
+        $exists = Models\Activities::where('name', '=', $data['name'])->first();
+
+        if ($exists) {
+            Session::flash('flash-message', [
+                'status' => 'danger',
+                'message' => sprintf(_('Activity %s already exists'), $data['name'])
+            ]);
+
+            return false;
+        }
+
+        $activity = Models\Activities::create([
+            'name' => $data['name'],
+            'archived' => $data['archived']
+        ]);
+
+        $tags = Models\Tags::orderBy('name', 'ASC')->get();
+        $form = Input::get('tags');
+
+        $total = 0;
+
+        foreach ($tags as $tag) {
+            if (empty((int)($hours = $form[$tag->id]))) {
+                continue;
+            }
+
+            $total += $hours;
+
+            Models\Estimations::create([
+                'hours' => $hours,
+                'id_activities' => $activity->id,
+                'id_tags' => $tag->id
+            ]);
+        }
+
+        $activity->total_hours = $total;
+        $activity->save();
+
+        Models\Logs::create([
+            'description' => sprintf(_('Added activity %s'), $activity->name),
+            'date' => date('Y-m-d H:i:s'),
+            'id_activities' => $activity->id,
+            'id_users' => $this->user->id
+        ]);
+
+        Session::flash('flash-message', [
+            'status' => 'success',
+            'message' => _('Activity created successfully')
+        ]);
+
+        return Redirect::to('/activity/'.$activity->id);
+    }
+
+    public function activityEdit($form)
     {
         if (!($data = $this->check(__FUNCTION__, $form))) {
             return false;
@@ -151,11 +210,12 @@ class Home extends Base {
         }
 
         $activity->name = $data['name'];
+        $activity->archived = $data['archived'];
         $activity->total_hours = $total;
         $activity->save();
 
         Models\Logs::create([
-            'description' => _('Updated activity'),
+            'description' => sprintf(_('Updated activity %s'), $activity->name),
             'date' => date('Y-m-d H:i:s'),
             'id_activities' => $activity->id,
             'id_users' => $this->user->id
@@ -169,7 +229,43 @@ class Home extends Base {
         return Redirect::back();
     }
 
-    public function tag($form)
+    public function tagAdd($form)
+    {
+        if (!($data = $this->check(__FUNCTION__, $form))) {
+            return false;
+        }
+
+        $exists = Models\Tags::where('name', '=', $data['name'])->first();
+
+        if ($exists) {
+            Session::flash('flash-message', [
+                'status' => 'danger',
+                'message' => sprintf(_('Tag %s already exists'), $data['name'])
+            ]);
+
+            return false;
+        }
+
+        $tag = Models\Tags::create([
+            'name' => $data['name']
+        ]);
+
+        Models\Logs::create([
+            'description' => sprintf(_('Created tag %s'), $tag->name),
+            'date' => date('Y-m-d H:i:s'),
+            'id_tags' => $tag->id,
+            'id_users' => $this->user->id
+        ]);
+
+        Session::flash('flash-message', [
+            'status' => 'success',
+            'message' => _('Tag created successfully')
+        ]);
+
+        return Redirect::to('/tag/'.$tag->id);
+    }
+
+    public function tagEdit($form)
     {
         if (!($data = $this->check(__FUNCTION__, $form))) {
             return false;
@@ -180,7 +276,7 @@ class Home extends Base {
         $tag->save();
 
         Models\Logs::create([
-            'description' => _('Updated tag'),
+            'description' => sprintf(_('Updated tag %s'), $tag->name),
             'date' => date('Y-m-d H:i:s'),
             'id_tags' => $tag->id,
             'id_users' => $this->user->id

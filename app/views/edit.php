@@ -11,6 +11,8 @@
             <a href="<?= url('activity', $activity->id); ?>" class="list-group-item"><?= $activity->name; ?></a>
             <?php } ?>
         </div>
+
+        <a href="<?= url('activity'); ?>" class="btn btn-success btn-block"><?= _('Add new activity'); ?></a>
     </div>
 
     <div class="col-xs-6">
@@ -25,5 +27,7 @@
             <a href="<?= url('tag', $tag->id); ?>" class="list-group-item"><?= $tag->name; ?></a>
             <?php } ?>
         </div>
+
+        <a href="<?= url('tag'); ?>" class="btn btn-success btn-block"><?= _('Add new tag'); ?></a>
     </div>
 </div>
