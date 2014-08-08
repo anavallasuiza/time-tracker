@@ -48,7 +48,10 @@
                     <a href="<?= url('/stats'); ?>" class="label label-default"><?= _('Stats'); ?></a>
                     <a href="<?= url('/edit'); ?>" class="label label-default"><?= _('Edit'); ?></a>
                     <a href="<?= url('/sync'); ?>" class="label label-default"><?= _('Sync'); ?></a>
+
+                    <?php if ($this->user->admin) { ?>
                     <a href="<?= url('/git-update'); ?>" class="label label-default"><?= _('Update environment'); ?></a>
+                    <?php } ?>
 
                     <p><a href="https://github.com/anavallasuiza/time-tracker" class="text-muted">
                         <i class="fa fa-github"></i>
