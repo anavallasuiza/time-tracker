@@ -34,9 +34,9 @@
 
         <div class="col-sm-2 text-center form-group">
             <input type="hidden" name="id" value="" />
-            <input type="hidden" name="action" value="edit" />
+            <input type="hidden" name="action" value="factEdit" />
 
-            <button type="submit" name="action" value="edit" class="btn btn-success">
+            <button type="submit" name="action" value="factEdit" class="btn btn-success">
                 <i class="glyphicon glyphicon-floppy-disk" title="<?= _('Save'); ?>"></i>
             </button>
         </div>

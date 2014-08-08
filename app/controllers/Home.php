@@ -1,7 +1,8 @@
 <?php
 namespace App\Controllers;
 
-use App\Models, App\Libs, View, Redirect, Input, Session;
+use Config, Input, Redirect, Response, Session, View;
+use App\Models, App\Libs;
 
 class Home extends Base {
     public function login()
@@ -10,7 +11,7 @@ class Home extends Base {
             return Redirect::to('/');
         }
 
-        if (\Config::get('auth')['method'] !== 'html') {
+        if (Config::get('auth')['method'] !== 'html') {
             return Redirect::to('/401');
         }
 
@@ -27,25 +28,25 @@ class Home extends Base {
 
     public function error401()
     {
-        if (\Config::get('auth')['method'] === 'basic') {
+        if (Config::get('auth')['method'] === 'basic') {
             return View::make('base')->nest('body', 'error401');
         }
 
-        return \Response::make(View::make('base')->nest('body', 'error401'), 401);
+        return Response::make(View::make('base')->nest('body', 'error401'), 401);
     }
 
     public function error404()
     {
-        return \Response::make(View::make('base')->nest('body', 'error404'), 404);
+        return Response::make(View::make('base')->nest('body', 'error404'), 404);
     }
 
     public function index()
     {
-        if (is_object($action = $this->action('add', (new Forms\Fact)->add()))) {
+        if (is_object($action = $this->action('factAdd', (new Forms\Fact)->add()))) {
             return $action;
         }
 
-        if (is_object($action = $this->action('edit', (new Forms\Fact)->edit()))) {
+        if (is_object($action = $this->action('factEdit', (new Forms\Fact)->edit()))) {
             return $action;
         }
 
@@ -60,7 +61,7 @@ class Home extends Base {
         ]);
 
         if (Input::get('export') === 'csv') {
-            return $this->csvDownload($facts->get());
+            return \App\Actions\Home::csvDownload($facts->get());
         }
 
         $rows = in_array((int)Input::get('rows'), [-1, 20, 50, 100], true) ? (int)Input::get('rows') : 20;
@@ -118,7 +119,8 @@ class Home extends Base {
                 $activities[$fact->activities->id] = [
                     'id' => $fact->activities->id,
                     'name' => $fact->activities->name,
-                    'time' => $fact->total_time
+                    'time' => $fact->total_time,
+                    'selected' => ($filters['activity'] === $fact->activities->id)
                 ];
             }
 
@@ -129,7 +131,8 @@ class Home extends Base {
                     $tags[$tag->id] = [
                         'id' => $tag->id,
                         'name' => $tag->name,
-                        'time' => $fact->total_time
+                        'time' => $fact->total_time,
+                        'selected' => ($filters['tag'] === $tag->id)
                     ];
                 }
             }
@@ -144,7 +147,8 @@ class Home extends Base {
                 $users[$fact->users->id] = [
                     'id' => $fact->users->id,
                     'name' => $fact->users->name,
-                    'time' => $fact->total_time
+                    'time' => $fact->total_time,
+                    'selected' => ($filters['user'] === $fact->users->id)
                 ];
             }
         }
@@ -195,6 +199,55 @@ class Home extends Base {
         ]);
     }
 
+    public function edit()
+    {
+        return View::make('base')->nest('body', 'edit', [
+            'activities' => Models\Activities::orderBy('name', 'ASC')->get(),
+            'tags' => Models\Tags::orderBy('name', 'ASC')->get()
+        ]);
+    }
+
+    public function activity($id)
+    {
+        $form = (new Forms\Activity)->edit();
+
+        if (is_object($action = $this->action(__FUNCTION__, $form))) {
+            return $action;
+        }
+
+        $activity = Models\Activities::where('id', '=', (int)$id)->firstOrFail();
+
+        $form->load($activity);
+
+        $tags = Models\Tags::orderBy('name', 'ASC')->with(['estimations' => function ($query) use ($activity) {
+            $query->where('id_activities', '=', $activity->id);
+        }])->get();
+
+        return View::make('base')->nest('body', 'activity', [
+            'form' => $form,
+            'activity' => $activity,
+            'tags' => $tags
+        ]);
+    }
+
+    public function tag($id)
+    {
+        $form = (new Forms\Tag)->edit();
+
+        if (is_object($action = $this->action(__FUNCTION__, $form))) {
+            return $action;
+        }
+
+        $tag = Models\Tags::where('id', '=', (int)$id)->firstOrFail();
+
+        $form->load($tag);
+
+        return View::make('base')->nest('body', 'tag', [
+            'form' => $form,
+            'tag' => $tag
+        ]);
+    }
+
     public function sync()
     {
         if (is_object($action = $this->action(__FUNCTION__))) {
@@ -222,76 +275,16 @@ class Home extends Base {
 
     public function csvDownload($facts)
     {
-        $date_format = $this->user->admin ? 'd/m/Y H:i' : 'd/m/Y';
-
-        $output = '"'._('User').'","'._('Activity').'","'._('Description').'","'._('Tags').'","'._('Start time').'","'._('End time').'","'._('Total time').'"';
-
-        foreach ($facts as $fact) {
-            $output .= "\n".'"'.$fact->users->name.'"'
-                .',"'.str_replace('"', "'", $fact->activities->name).'"'
-                .',"'.str_replace('"', "'", $fact->description).'"'
-                .',"'.str_replace('"', "'", implode(', ', array_column(json_decode(json_encode($fact->tags), true), 'name'))).'"'
-                .',"'.$fact->start_time->format($date_format).'"'
-                .',"'.$fact->end_time->format($date_format).'"'
-                .',"'.$fact->start_time->diff($fact->end_time)->format('%H:%I').'"';
-        }
-
-        return \Response::make($output, 200, [
-            'Content-Type' => 'application/octet-stream',
-            'Content-Transfer-Encoding' => 'binary',
-            'Content-Disposition' => 'attachment; filename="'._('time-tracking.csv').'"'
-        ]);
+        return $this->action(__FUNCTION__);
     }
 
-    public function dumpSQL()
+    public function sqlDownload()
     {
         if (empty($this->user->admin)) {
             return Redirect::to('/401');
         }
 
-        $config = \Config::get('database.connections.mysql');
-        $file = storage_path().'/work/dump.sql';
-
-        try {
-            (new \Ifsnop\Mysqldump\Mysqldump(
-                $config['database'],
-                $config['username'],
-                $config['password'],
-                'localhost',
-                'mysql',
-                ['add-drop-table' => true]
-            ))->start($file);
-        } catch (\Exception $e) {
-            return Redirect::to('/')->with('flash-message', [
-                'message' => (_('SQL Dump could not be created').': '.$e->getMessage()),
-                'status' => 'danger'
-            ]);
-        }
-
-        $output = file_get_contents($file);
-
-        unlink($file);
-
-        preg_match_all('/INSERT INTO `users` VALUES ([^;]+);/i', $output, $users);
-        preg_match_all('/\([^\)]+\)/', $users[1][0], $users);
-
-        foreach ($users[0] as $user) {
-            $clean = str_getcsv(str_replace(['(', ')'], '', $user), ',', "'");
-
-            $clean[2] = uniqid();
-            $clean[3] = sha1(microtime());
-
-            $output = str_replace($user, "('".implode("','", $clean)."')", $output);
-        }
-
-        $output = "SET FOREIGN_KEY_CHECKS=0;\n\n"
-            .$output."\n\nSET FOREIGN_KEY_CHECKS=1;";
-
-        return \Response::make($output, 200, [
-            'Content-Type' => 'application/octet-stream',
-            'Content-Transfer-Encoding' => 'binary',
-            'Content-Disposition' => 'attachment; filename="'._('time-tracking.sql').'"'
-        ]);
+        return $this->action(__FUNCTION__);
     }
 
     public function gitUpdate()

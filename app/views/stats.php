@@ -9,6 +9,10 @@
 
 <?php foreach ($group['rows'] as $row) { ?>
 <h4 class="text-muted">
+    <?php if ($row['selected']) { ?>
+    <a href="<?= \App\Libs\Utils::url($group['filter'], null); ?>" class="fa fa-times text-muted"></a>
+    <?php } ?>
+
     <a href="<?= \App\Libs\Utils::url($group['filter'], $row['id']); ?>"><?= $row['name']; ?></a>
     (<?= \App\Libs\Utils::minutes2hour($row['time']); ?> - <?= $row['percent']; ?>%)
 </h4>

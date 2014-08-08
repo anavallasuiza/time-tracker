@@ -1,12 +1,5 @@
 <nav class="navbar navbar-default navbar-static">
     <div class="navbar-header">
-        <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".js-navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </button>
-
         <a href="<?= url('/'); ?>" class="navbar-brand"><img src="<?= asset('images/logo-50.png'); ?>" alt="<?= _('A Navalla Suíza'); ?>" /></a>
     </div>
 

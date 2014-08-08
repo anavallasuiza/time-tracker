@@ -9,4 +9,9 @@ class Tags extends \Eloquent {
     {
         return $this->belongsToMany('App\Models\Facts', 'facts_tags', 'id_tags', 'id_facts');
     }
+
+    public function estimations()
+    {
+        return $this->hasMany('App\Models\Estimations', 'id_tags', 'id');
+    }
 }

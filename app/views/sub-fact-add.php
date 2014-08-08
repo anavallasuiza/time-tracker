@@ -34,7 +34,7 @@
 
         <div class="col-sm-2 text-center form-group">
             <input type="hidden" name="id" value="" />
-            <input type="hidden" name="action" value="add" />
+            <input type="hidden" name="action" value="factAdd" />
 
             <button type="button" data-action="play" class="btn btn-primary">
                 <i class="glyphicon glyphicon-play" title="<?= _('Start'); ?>"></i>
@@ -44,7 +44,7 @@
                 <i class="glyphicon glyphicon-refresh" title="<?= _('Refresh'); ?>"></i>
             </button>
 
-            <button type="submit" name="action" value="add" class="btn btn-success">
+            <button type="submit" name="action" value="factAdd" class="btn btn-success">
                 <i class="glyphicon glyphicon-floppy-disk" title="<?= _('Stop and save'); ?>"></i>
             </button>
         </div>

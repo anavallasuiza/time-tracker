@@ -18,8 +18,22 @@ class CreateTimeTables extends Migration {
 
             $table->increments('id');
             $table->string('name');
+            $table->integer('total_hours');
 
             $table->timestamps();
+        });
+
+        Schema::create('estimations', function($table)
+        {
+            $table->engine = 'InnoDB';
+
+            $table->increments('id');
+            $table->integer('hours');
+
+            $table->timestamps();
+
+            $table->integer('id_activities')->unsigned();
+            $table->integer('id_tags')->unsigned();
         });
 
         Schema::create('facts', function($table)
@@ -63,7 +77,9 @@ class CreateTimeTables extends Migration {
             $table->timestamp('date');
             $table->string('description');
 
-            $table->integer('id_facts')->unsigned();
+            $table->integer('id_activities')->nullable()->unsigned();
+            $table->integer('id_facts')->nullable()->unsigned();
+            $table->integer('id_tags')->nullable()->unsigned();
             $table->integer('id_users')->unsigned();
         });
 
@@ -96,6 +112,17 @@ class CreateTimeTables extends Migration {
             $table->timestamps();
         });
 
+        Schema::table('estimations', function($table)
+        {
+            $table->foreign('id_activities')
+                ->references('id')
+                ->on('activities');
+
+            $table->foreign('id_tags')
+                ->references('id')
+                ->on('tags');
+        });
+
         Schema::table('facts', function($table)
         {
             $table->foreign('id_activities')
@@ -109,9 +136,17 @@ class CreateTimeTables extends Migration {
 
         Schema::table('logs', function($table)
         {
+            $table->foreign('id_activities')
+                ->references('id')
+                ->on('activities');
+
             $table->foreign('id_facts')
                 ->references('id')
                 ->on('facts');
+
+            $table->foreign('id_logs')
+                ->references('id')
+                ->on('logs');
 
             $table->foreign('id_users')
                 ->references('id')

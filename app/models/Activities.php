@@ -7,6 +7,11 @@ class Activities extends \Eloquent {
 
     public function facts()
     {
-        return $this->hasMany('App\Models\Facts', 'id_facts', 'id');
+        return $this->hasMany('App\Models\Facts', 'id_activities', 'id');
+    }
+
+    public function estimations()
+    {
+        return $this->hasMany('App\Models\Estimations', 'id_activities', 'id');
     }
 }

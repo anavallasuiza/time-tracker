@@ -20,7 +20,9 @@
         </div>
 
         <div class="col-xs-4 column-actions">
-            <a href="#" class="glyphicon glyphicon-pencil" title="<?= _('Edit'); ?>" data-action="edit"><span><?= _('Edit'); ?></span></a>
+            <a href="#" class="glyphicon glyphicon-pencil" title="<?= _('Edit'); ?>" data-action="edit">
+                <span><?= _('Edit'); ?></span>
+            </a>
         </div>
     </td>
 </tr>

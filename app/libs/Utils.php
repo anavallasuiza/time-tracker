@@ -1,7 +1,7 @@
 <?php
 namespace App\Libs;
 
-use Request, Response, Session;
+use Input, Request, Response, Session;
 
 class Utils
 {
@@ -46,14 +46,18 @@ class Utils
 
     public static function checkTags(array $data, array $fake = [])
     {
+        $inputs = Input::all();
+
         foreach ($fake as $name) {
-            if (!array_key_exists($name, $data) || $data[$name]) {
+            if (!array_key_exists($name, $inputs) || $inputs[$name]) {
                 return true;
             }
         }
 
         foreach ($data as $value) {
-            if (strstr($value, '<')) {
+            if (is_array($value) && self::checkTags($value, $fake)) {
+                return true;
+            } elseif (is_string($value) && strstr($value, '<')) {
                 return true;
             }
         }
@@ -119,20 +123,15 @@ class Utils
 
     public static function url($key, $value)
     {
-        $url = getenv('REQUEST_URI');
+        parse_str(parse_url(getenv('REQUEST_URI'), PHP_URL_QUERY), $query);
 
         if ($value === null) {
-            return preg_replace('#([\?&])'.preg_quote($key, '#').'=[^&]*#', '', $url);
-        }
-
-        $sep = strstr($url, '?') ? '&' : '?';
-        $value = urlencode($value);
-
-        if (preg_match('#[\?&]'.preg_quote($key, '#').'=[^&]*#', $url)) {
-            return preg_replace('#([\?&])'.preg_quote($key, '#').'=[^&]*#', '$1'.$key.'='.$value, $url);
+            unset($query[$key]);
         } else {
-            return $url.$sep.$key.'='.$value;
+            $query[$key] = $value;
         }
+
+        return '?'.http_build_query($query);
     }
 
     public static function object2array($object)

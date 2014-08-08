@@ -82,7 +82,7 @@ var $addForm = $('#facts-form-add'),
 
                 var action = $form.find('input[name="action"]').val();
 
-                if (action === 'add') {
+                if (action === 'factAdd') {
                     var $original = $factsTable.find('tbody > tr:first').clone();
                     $factsTable.find('tbody').prepend($original);
                 } else {
@@ -93,7 +93,7 @@ var $addForm = $('#facts-form-add'),
                     $original.replaceWith(response).find('[data-toggle="tooltip"]').tooltip();
                 });
 
-                if (action === 'add') {
+                if (action === 'factAdd') {
                     $tr = $original;
                 }
 
@@ -283,7 +283,7 @@ var $addForm = $('#facts-form-add'),
             $form = $this.closest('form'),
             action = $form.find('input[name="action"]').val();
 
-        if ((action !== 'add') && !HOUR) {
+        if ((action !== 'factAdd') && !HOUR) {
             return;
         }
 

@@ -21,8 +21,11 @@ Route::group(['before' => 'auth'], function()
     Route::any('/', 'App\Controllers\Home@index');
     Route::get('/stats', 'App\Controllers\Home@stats');
     Route::any('/sync', 'App\Controllers\Home@sync');
+    Route::any('/edit', 'App\Controllers\Home@edit');
+    Route::any('/activity/{id}', 'App\Controllers\Home@activity');
+    Route::any('/tag/{id}', 'App\Controllers\Home@tag');
     Route::get('/fact-tr/{id}', 'App\Controllers\Home@factTr');
-    Route::get('/dump-sql', 'App\Controllers\Home@dumpSQL');
+    Route::get('/dump-sql', 'App\Controllers\Home@sqlDownload');
     Route::any('/git-update', 'App\Controllers\Home@gitUpdate');
 });
 
