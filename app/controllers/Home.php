@@ -50,21 +50,12 @@ class Home extends Base {
             return $action;
         }
 
-        if (empty($this->user->admin)) {
-            $user = $this->user->id;
-        } else {
-            $user = Input::get('user');
-        }
+        $filters = Libs\Utils::filters();
+        $facts = Models\Facts::with(['activities'])
+            ->with(['tags'])
+            ->with(['users']);
 
-        list($facts, $filters) = Models\Facts::filter([
-            'user' => $user,
-            'activity' => Input::get('activity'),
-            'tag' => Input::get('tag'),
-            'first' => Input::get('first'),
-            'last' => Input::get('last'),
-            'description' => Input::get('description'),
-            'sort' => Input::get('sort')
-        ]);
+        $facts = Models\Facts::filter($facts, $filters);
 
         if (Input::get('export') === 'csv') {
             return \App\Actions\Home::csvDownload($facts->get());
@@ -97,63 +88,110 @@ class Home extends Base {
             $first = date('d/m/Y', strtotime('-1 month'));
         }
 
-        list($facts, $filters) = Models\Facts::filter([
-            'user' => Input::get('user'),
-            'activity' => Input::get('activity'),
-            'tag' => Input::get('tag'),
-            'tag_unique' => true,
-            'first' => $first,
-            'last' => Input::get('last'),
-            'description' => Input::get('description'),
-            'sort' => Input::get('sort')
+        $filters = Libs\Utils::filters([
+            'first' => $first
         ]);
 
+        $facts = Models\Facts::select('id_activities')->groupBy('id_activities');
+        $facts = Models\Facts::filter($facts, $filters)->get();
+
+        $ids = Libs\Utils::objectColumn($facts, 'id_activities') ?: [0];
+
+        $newFilters = $filters;
+
+        if (empty($filters['times'])) {
+            $newFilters = $filters;
+            $newFilters['first'] = false;
+        }
+
+        $facts = Models\Facts::whereIn('id_activities', $ids);
+        $facts = Models\Facts::filter($facts, $newFilters)
+            ->with(['activities'])
+            ->with(['users']);
+
+        if ($filters['tag']) {
+            $facts->with(['tags' => function ($query) use ($filters) {
+                $query->where('tags.id', '=', $filters['tag']);
+            }]);
+        } else {
+            $facts->with(['tags']);
+        }
+
         $facts = $facts->get();
+
+        $tmp = Models\Estimations::whereIn('id_activities', $ids);
+
+        if ($filters['tag']) {
+            $tmp->where('id_tags', '=', $filters['tag']);
+        }
+
+        $tmp = $tmp->get();
+        $estimations = [];
+
+        foreach ($tmp as $st) {
+            foreach (['activities', 'tags'] as $c) {
+                if (empty($estimations[$c][$st->{'id_'.$c}])) {
+                    $estimations[$c][$st->{'id_'.$c}] = 0;
+                }
+
+                $estimations[$c][$st->{'id_'.$c}] += $st->hours;
+            }
+        }
+
+        unset($tmp, $c, $st);
 
         $activities = $tags = $users = [];
 
         foreach ($facts as $fact) {
-            if (array_key_exists($fact->activities->id, $activities)) {
-                $activities[$fact->activities->id]['time'] += $fact->total_time;
-            } else {
+            if (!array_key_exists($fact->activities->id, $activities)) {
                 $activities[$fact->activities->id] = [
                     'id' => $fact->activities->id,
                     'name' => $fact->activities->name,
-                    'time' => $fact->total_time,
-                    'total_hours' => $fact->activities->total_hours,
-                    'selected' => ($filters['activity'] === $fact->activities->id)
+                    'time' => 0,
+                    'total_hours' => 0,
+                    'selected' => ($filters['activity'] == $fact->activities->id)
                 ];
             }
 
+            if (isset($estimations['activities'][$fact->activities->id])) {
+                $activities[$fact->activities->id]['total_hours'] = $estimations['activities'][$fact->activities->id];
+            }
+
+            $activities[$fact->activities->id]['time'] += $fact->total_time;
+
             foreach ($fact->tags as $tag) {
-                if (array_key_exists($tag->id, $tags)) {
-                    $tags[$tag->id]['time'] += $fact->total_time;
-                } else {
+                if (!array_key_exists($tag->id, $tags)) {
                     $tags[$tag->id] = [
                         'id' => $tag->id,
                         'name' => $tag->name,
-                        'time' => $fact->total_time,
+                        'time' => 0,
                         'total_hours' => 0,
-                        'selected' => ($filters['tag'] === $tag->id)
+                        'selected' => ($filters['tag'] == $tag->id)
                     ];
                 }
+
+                if (isset($estimations['tags'][$tag->id])) {
+                    $tags[$tag->id]['total_hours'] = $estimations['tags'][$tag->id];
+                }
+
+                $tags[$tag->id]['time'] += $fact->total_time;
             }
 
-            if (empty($add_users)) {
+            if (empty($this->user->admin) && ($fact->users->id !== $this->user->id)) {
                 continue;
             }
 
-            if (array_key_exists($fact->users->id, $users)) {
-                $users[$fact->users->id]['time'] += $fact->total_time;
-            } elseif ($this->user->admin || ($this->user->id === $fact->users->id)) {
+            if (!array_key_exists($fact->users->id, $users)) {
                 $users[$fact->users->id] = [
                     'id' => $fact->users->id,
                     'name' => $fact->users->name,
-                    'time' => $fact->total_time,
+                    'time' => 0,
                     'total_hours' => 0,
-                    'selected' => ($filters['user'] === $fact->users->id)
+                    'selected' => ($filters['user'] == $fact->users->id)
                 ];
             }
+
+            $users[$fact->users->id]['time'] += $fact->total_time;
         }
 
         foreach (['activities', 'tags', 'users'] as $stats) {

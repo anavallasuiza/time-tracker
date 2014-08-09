@@ -352,7 +352,15 @@ class Home extends Base {
             return _('GIT command not exists');
         }
 
-        $Shell->exec('git pull -u origin master');
+        $update = Input::get('update');
+
+        if ($update === 'repository') {
+            $Shell->exec('git pull -u origin master');
+        } elseif ($update === 'composer') {
+            $Shell->exec('export COMPOSER_HOME="'.base_path().'"; composer update');
+        } else {
+            return Redirect::to('/401');
+        }
 
         $log = $Shell->getLog();
         $log = end($log);

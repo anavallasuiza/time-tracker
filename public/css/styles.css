@@ -132,6 +132,10 @@
     line-height: 26px;
 }
 
+.progress-bar[aria-valuenow="0"] {
+    min-width: 0;
+}
+
 @media (max-width: 768px) {
     .dropdown-menu-large {
         margin-left: 0 ;

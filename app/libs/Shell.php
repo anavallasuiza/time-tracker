@@ -4,6 +4,7 @@ namespace App\Libs;
 class Shell
 {
     private $log = array();
+    private $base;
 
     public function __construct()
     {
@@ -12,11 +13,13 @@ class Shell
 
     public function cd($path = null)
     {
-        return $this->exec('cd '.escapeshellarg($path ?: base_path()));
+        $this->base = $path ?: base_path();
     }
 
     public function exec($cmd, $escape = false)
     {
+        $cd = 'cd "'.escapeshellcmd($this->base).'";';
+
         if ($escape) {
             $cmd = escapeshellcmd($cmd);
         }
@@ -27,7 +30,7 @@ class Shell
             unlink($error);
         }
 
-        $response = shell_exec($cmd.' 2> '.$error);
+        $response = shell_exec($cd.$cmd.' 2> '.$error);
 
         $this->log[] = [
             'command' => $cmd,

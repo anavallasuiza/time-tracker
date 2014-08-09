@@ -144,6 +144,79 @@ class Utils
         return array_column(self::object2array($object), $column);
     }
 
+    public static function filters(array $filters = [])
+    {
+        $fields = ['user', 'activity', 'tag', 'first', 'last', 'description', 'sort', 'times'];
+
+        foreach ($fields as $field) {
+            if (!isset($filters[$field])) {
+                $filters[$field] = Input::get($field);
+            }
+        }
+
+        extract($filters);
+
+        $I = \Auth::user();
+        $filters = [];
+
+        if (isset($user) && (int)$user && ($I->admin || ($I->id === $user))) {
+            $filters['user'] = (int)$user;
+        } else {
+            $filters['user'] = false;
+        }
+
+        if (isset($activity) && (int)$activity) {
+            $filters['activity'] = (int)$activity;
+        } else {
+            $filters['activity'] = false;
+        }
+
+        if (isset($tag) && (int)$tag) {
+            $filters['tag'] = (int)$tag;
+        } else {
+            $filters['tag'] = false;
+        }
+
+        if (isset($first) && $first) {
+            $filters['first'] = self::checkdate($first, 'd/m/Y');
+        } else {
+            $filters['first'] = false;
+        }
+
+        if (isset($last) && $last) {
+            $filters['last'] = self::checkdate($last, 'd/m/Y');
+        } else {
+            $filters['last'] = false;
+        }
+
+        if (isset($description) && $description) {
+            $filters['description'] = $description;
+        } else {
+            $filters['description'] = false;
+        }
+
+        if (isset($times) && in_array($times, ['dates'], true)) {
+            $filters['times'] = $times;
+        } else {
+            $filters['times'] = false;
+        }
+
+        $sort = empty($sort) ? 'end-desc' : $sort;
+
+        list($sort_field, $sort_mode) = explode('-', $sort);
+
+        $valid = in_array($sort_field, ['start', 'end', 'total'], true);
+        $valid = $valid && in_array($sort_mode, ['asc', 'desc'], true);
+
+        if ($valid) {
+            $filters['sort'] = $sort;
+        } else {
+            $filters['sort'] = 'end-desc';
+        }
+
+        return $filters;
+    }
+
     public static function progressText($row)
     {
         $span = '<span data-toggle="tooltip" data-placement="top" title="%title">%text</span>';
@@ -163,7 +236,7 @@ class Utils
         $hours = round($row['time'] / 60);
         $percent = round(($hours * 100) / $row['total_hours']);
         $diff = round($row['total_hours'] - $hours);
-        $class = ($diff > 10) ? 'success' : (($diff > 0) ? 'warning' : 'danger');
+        $class = ($percent < 85) ? 'success' : (($percent < 100) ? 'warning' : 'danger');
 
         $html .= ' / ';
         $html .= str_replace(['%title', '%text'], [_('Estimated time'), $row['total_hours'].'h'], $span);
@@ -177,26 +250,31 @@ class Utils
 
     public static function progressBar($row)
     {
-        $bar = '<div class="progress-bar progress-bar-%class" role="progressbar" aria-valuenow="%percent" aria-valuemin="0" aria-valuemax="100" style="width: %percent%;"></div>';
+        $bar = '<div class="progress-bar %class" role="progressbar" aria-valuenow="%percent" aria-valuemin="0" aria-valuemax="100" style="width: %percent%;"></div>';
 
         if (empty($row['percent_hours'])) {
-            return str_replace('%percent', $row['percent'], $bar);
-        }
-
-        if ($row['percent_hours'] > 100) {
-            $row['percent_hours'] = 100;
+            return str_replace(['%percent', '%class'], [$row['percent'], ''], $bar);
         }
 
         $diff = abs($row['percent'] - $row['percent_hours']);
 
         if ($row['percent_hours'] < $row['percent']) {
-            return str_replace('%percent', $row['percent_hours'], $bar)
-                .str_replace(['%percent', '%class'], [$diff, 'danger'], $bar);
+            return str_replace(['%percent', '%class'], [$row['percent_hours'], ''], $bar)
+                .str_replace(['%percent', '%class'], [$diff, 'progress-bar-danger'], $bar);
         }
 
-        $class = ($diff > 20) ? 'success' : 'warning';
+        $hours = round($row['time'] / 60);
 
-        return str_replace('%percent', $row['percent'], $bar)
+        if ($row['percent'] == 100) {
+            $max = max([$hours, $row['total_hours']]);
+            $row['percent'] = round(($hours * 100) / $max);
+            $diff = 100 - $row['percent'];
+        }
+
+        $percent = round(($hours * 100) / $row['total_hours']);
+        $class = 'progress-bar-'.(($percent < 85) ? 'success' : 'warning');
+
+        return str_replace(['%percent', '%class'], [$row['percent'], ''], $bar)
             .str_replace(['%percent', '%class'], [$diff, $class], $bar);
     }
 }

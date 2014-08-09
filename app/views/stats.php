@@ -2,6 +2,25 @@
     'filters' => $filters
 ])->render(); ?>
 
+<ul class="nav nav-tabs" role="tablist">
+    <li class="dropdown active">
+        <a role="button" data-toggle="dropdown" href="#">
+            <?= $filters['times'] ? _('Times relatives to dates') : _('Times relatives to projects'); ?>
+            <span class="caret"></span>
+        </a>
+
+        <ul class="dropdown-menu" role="menu">
+            <li role="presentation">
+                <a role="menuitem" tabindex="-1" href="<?= \App\Libs\Utils::url('times', null); ?>"><?= _('Times relatives to projects'); ?></a>
+            </li>
+
+            <li role="presentation">
+                <a role="menuitem" tabindex="-1" href="<?= \App\Libs\Utils::url('times', 'dates'); ?>"><?= _('Times relatives to dates'); ?></a>
+            </li>
+        </ul>
+    </li>
+</ul>
+
 <?php foreach ($stats as $group) { ?>
 <?php if (empty($group['rows'])) continue; ?>
 

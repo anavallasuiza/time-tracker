@@ -45,12 +45,16 @@
         <footer id="footer" class="text-center">
             <div class="container">
                 <div class="well">
+                    <?php if ($user) { ?>
+
                     <a href="<?= url('/stats'); ?>" class="label label-default"><?= _('Stats'); ?></a>
                     <a href="<?= url('/edit'); ?>" class="label label-default"><?= _('Edit'); ?></a>
                     <a href="<?= url('/sync'); ?>" class="label label-default"><?= _('Sync'); ?></a>
 
                     <?php if ($user->admin) { ?>
                     <a href="<?= url('/git-update'); ?>" class="label label-default"><?= _('Update environment'); ?></a>
+                    <?php } ?>
+
                     <?php } ?>
 
                     <p><a href="https://github.com/anavallasuiza/time-tracker" class="text-muted">
