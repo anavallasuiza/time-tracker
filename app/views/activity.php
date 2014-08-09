@@ -18,6 +18,10 @@
         </div>
     </div>
 
+    <div class="alert alert-warning">
+        <?= sprintf(_('Take care %s this activity. There are users using automated tools based in Basecamp projects names. Name used to this activity must be exactly as Basecamp project name or duplicated projects will be created.'), empty($activity->id) ? 'creating' : 'editing'); ?>
+    </div>
+
     <div class="panel panel-default">
         <div class="panel-heading">
             <h2 class="panel-title"><?= _('Times by tag'); ?></h2>
