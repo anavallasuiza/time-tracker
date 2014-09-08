@@ -20,9 +20,11 @@
         </div>
 
         <div class="col-xs-4 column-actions">
+            <?php if ($user->admin || ($user->id === $fact->users->id)) { ?>
             <a href="#" class="glyphicon glyphicon-pencil" title="<?= _('Edit'); ?>" data-action="edit">
                 <span><?= _('Edit'); ?></span>
             </a>
+            <?php } ?>
         </div>
     </td>
 </tr>
