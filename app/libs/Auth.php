@@ -1,7 +1,7 @@
 <?php
 namespace App\Libs;
 
-use Config, Request, Response, Redirect;
+use Config, Input, Request, Response, Redirect;
 
 class Auth extends \Auth
 {
@@ -25,7 +25,9 @@ class Auth extends \Auth
 
     private static function loginHtml()
     {
-        return self::loginUserPassword(\Input::get('user'), \Input::get('password'));
+        if (Input::get('action') === 'login') {
+            return self::loginUserPassword(Input::get('user'), Input::get('password'));
+        }
     }
 
     private static function loginBasic()
@@ -69,7 +71,7 @@ class Auth extends \Auth
 
     private static function loginApi()
     {
-        if (empty($user = \Input::get('user')) || empty($secret = \Input::get('secret'))) {
+        if (empty($user = Input::get('user')) || empty($secret = Input::get('secret'))) {
             return self::unauthorized();
         }
 

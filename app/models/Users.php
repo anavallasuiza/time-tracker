@@ -11,6 +11,8 @@ class Users extends Eloquent implements UserInterface, RemindableInterface {
     protected $guarded = ['id'];
     protected $dates = [];
 
+    public $timestamps = false;
+
     /**
      * Get the unique identifier for the user.
      *

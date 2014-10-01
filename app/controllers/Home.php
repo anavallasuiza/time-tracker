@@ -42,6 +42,10 @@ class Home extends Base {
 
     public function index()
     {
+        if (empty($this->user)) {
+            return Redirect::to('/login');
+        }
+
         if (is_object($action = $this->action('factAdd', (new Forms\Fact)->add()))) {
             return $action;
         }
@@ -82,6 +86,10 @@ class Home extends Base {
 
     public function stats()
     {
+        if (empty($this->user)) {
+            return Redirect::to('/login');
+        }
+
         $first = Input::get('first');
 
         if (empty($first)) {
@@ -244,14 +252,29 @@ class Home extends Base {
 
     public function edit()
     {
+        if (empty($this->user)) {
+            return Redirect::to('/login');
+        }
+
+        if ($this->user->admin) {
+            $users = Models\Users::orderBy('name', 'ASC')->get();
+        } else {
+            $users = [];
+        }
+
         return View::make('base')->nest('body', 'edit', [
             'activities' => Models\Activities::orderBy('name', 'ASC')->get(),
-            'tags' => Models\Tags::orderBy('name', 'ASC')->get()
+            'tags' => Models\Tags::orderBy('name', 'ASC')->get(),
+            'users' => $users
         ]);
     }
 
     public function activityAdd()
     {
+        if (empty($this->user)) {
+            return Redirect::to('/login');
+        }
+
         $form = (new Forms\Activity)->edit();
 
         if (is_object($action = $this->action(__FUNCTION__, $form))) {
@@ -259,7 +282,7 @@ class Home extends Base {
         }
 
         $activity = new \stdClass();
-        $activity->name = _('New Activity');
+        $activity->name = _('New');
         $activity->total_hours = 0;
 
         $tags = Models\Tags::orderBy('name', 'ASC')->get();
@@ -277,6 +300,10 @@ class Home extends Base {
 
     public function activityEdit($id)
     {
+        if (empty($this->user)) {
+            return Redirect::to('/login');
+        }
+
         $form = (new Forms\Activity)->edit();
 
         if (is_object($action = $this->action(__FUNCTION__, $form))) {
@@ -302,6 +329,10 @@ class Home extends Base {
 
     public function tagAdd()
     {
+        if (empty($this->user)) {
+            return Redirect::to('/login');
+        }
+
         $form = (new Forms\Tag)->edit();
 
         if (is_object($action = $this->action(__FUNCTION__, $form))) {
@@ -309,7 +340,7 @@ class Home extends Base {
         }
 
         $tag = new \stdClass();
-        $tag->name = _('New Activity');
+        $tag->name = _('New');
 
         return View::make('base')->nest('body', 'tag', [
             'form' => $form,
@@ -319,6 +350,10 @@ class Home extends Base {
 
     public function tagEdit($id)
     {
+        if (empty($this->user)) {
+            return Redirect::to('/login');
+        }
+
         $form = (new Forms\Tag)->edit();
 
         if (is_object($action = $this->action(__FUNCTION__, $form))) {
@@ -337,8 +372,74 @@ class Home extends Base {
         ]);
     }
 
+    public function userAdd()
+    {
+        if (empty($this->user)) {
+            return Redirect::to('/login');
+        }
+
+        if (empty($this->user->admin)) {
+            return Redirect::to('/401');
+        }
+
+        $form = (new Forms\User)->edit();
+
+        if (is_object($action = $this->action(__FUNCTION__, $form))) {
+            return $action;
+        }
+
+        $user = new \stdClass();
+        $user->name = _('New');
+
+        $form['enabled']->attr('checked', 'checked');
+        $form['api_key']->val(hash('sha256', uniqid()));
+
+        return View::make('base')->nest('body', 'user', [
+            'form' => $form,
+            'user' => $user
+        ]);
+    }
+
+    public function userEdit($id)
+    {
+        if (empty($this->user)) {
+            return Redirect::to('/login');
+        }
+
+        if (empty($this->user->admin) && ($this->user->id !== $id)) {
+            return Redirect::to('/401');
+        }
+
+        $form = (new Forms\User)->edit();
+
+        if (is_object($action = $this->action(__FUNCTION__, $form))) {
+            return $action;
+        }
+
+        $user = Models\Users::where('id', '=', (int)$id)->firstOrFail();
+
+        unset($user->password);
+
+        if ($action !== false) {
+            $form->load($user);
+        }
+
+        if ($this->user->id === $id) {
+            unset($form['enabled']);
+        }
+
+        return View::make('base')->nest('body', 'user', [
+            'form' => $form,
+            'user' => $user
+        ]);
+    }
+
     public function sync()
     {
+        if (empty($this->user)) {
+            return Redirect::to('/login');
+        }
+
         if (is_object($action = $this->action(__FUNCTION__))) {
             return $action;
         }
@@ -351,6 +452,10 @@ class Home extends Base {
 
     public function factTr($id)
     {
+        if (empty($this->user)) {
+            return Redirect::to('/login');
+        }
+
         $fact = Models\Facts::where('id', '=', (int)$id);
 
         if (empty($this->user->admin)) {
@@ -364,11 +469,19 @@ class Home extends Base {
 
     public function csvDownload($facts)
     {
+        if (empty($this->user)) {
+            return Redirect::to('/login');
+        }
+
         return $this->action(__FUNCTION__);
     }
 
     public function sqlDownload()
     {
+        if (empty($this->user)) {
+            return Redirect::to('/login');
+        }
+
         if (empty($this->user->admin)) {
             return Redirect::to('/401');
         }
@@ -378,6 +491,10 @@ class Home extends Base {
 
     public function gitUpdate()
     {
+        if (empty($this->user)) {
+            return Redirect::to('/login');
+        }
+
         if (empty($this->user->admin)) {
             return Redirect::to('/401');
         }

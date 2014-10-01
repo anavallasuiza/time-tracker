@@ -48,8 +48,8 @@ class Base extends Form
         $input->label($input->attr('placeholder'));
         $input->addClass('form-control');
 
-        $input->render(function ($input, $label, $labelError) {
-            return '<div class="form-group">'.$label.$input.'</div>';
+        $input->render(function ($field) {
+            return '<div class="form-group">'.$field->label.$field->input.'</div>';
         });
     }
 
@@ -72,9 +72,9 @@ class Base extends Form
         $input->attr('data-on-text', _('Yes'));
         $input->attr('data-off-text', _('No'));
 
-        $input->render(function ($input, $label, $labelError) {
-            return '<div class="form-group">'.$label
-                .'<div>'.$input.'</div></div>';
+        $input->render(function ($field) {
+            return '<div class="form-group">'.$field->label
+                .'<div>'.$field->input.'</div></div>';
         });
     }
 }

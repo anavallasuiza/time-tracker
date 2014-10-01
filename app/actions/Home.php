@@ -290,6 +290,109 @@ class Home extends Base {
         return Redirect::back();
     }
 
+    public function userAdd($form)
+    {
+        if (!($data = $this->check(__FUNCTION__, $form))) {
+            return false;
+        }
+
+        if (empty($this->user->admin)) {
+            return Redirect::to('/401');
+        }
+
+        if (empty($data['password'])) {
+            throw new \ErrorException(_('Password is required.'));
+        }
+
+        if ($data['password'] !== $data['password_repeat']) {
+            throw new \ErrorException(_('Passwords must be equals.'));
+        }
+
+        $exists = Models\Users::where('user', '=', $data['user'])->first();
+
+        if (count($exists)) {
+            throw new \ErrorException(sprintf(_('%s user can\'t be used, it\'s already registered :('), $data['user']));
+        }
+
+        $user = Models\Users::create([
+            'name' => $data['name'],
+            'user' => $data['user'],
+            'email' => $data['email'],
+            'api_key' => $data['api_key'],
+            'store_hours' => ($data['store_hours'] ?: 0),
+            'enabled' => $data['enabled'],
+            'password' => \Hash::make($data['password'])
+        ]);
+
+        Models\Logs::create([
+            'description' => sprintf(_('Updated user %s'), $user->name),
+            'date' => date('Y-m-d H:i:s'),
+            'id_users' => $this->user->id
+        ]);
+
+        Session::flash('flash-message', [
+            'status' => 'success',
+            'message' => _('User updated successfully')
+        ]);
+
+        return Redirect::to('/user/'.$user->id);
+    }
+
+    public function userEdit($form)
+    {
+        if (!($data = $this->check(__FUNCTION__, $form))) {
+            return false;
+        }
+
+        if (empty($this->user->admin) && ($this->user->id !== $data['id'])) {
+            return Redirect::to('/401');
+        }
+
+        if ($data['password'] !== $data['password_repeat']) {
+            throw new \ErrorException(_('Passwords must be equals.'));
+        }
+
+        $user = Models\Users::where('id', '=', $data['id'])->firstOrFail();
+
+        $exists = Models\Users::
+            where('user', '=', $data['user'])
+            ->where('id', '!=', $data['id'])
+            ->first();
+
+        if (count($exists)) {
+            throw new \ErrorException(sprintf(_('%s user can\'t be used, it\'s already registered :('), $data['user']));
+        }
+
+        $user->name = $data['name'];
+        $user->user = $data['user'];
+        $user->email = $data['email'];
+        $user->api_key = $data['api_key'];
+        $user->store_hours = $data['store_hours'] ?: 0;
+
+        if ($data['id'] !== $this->user->id) {
+            $user->enabled = $data['enabled'];
+        }
+
+        if ($data['password']) {
+            $user->password = \Hash::make($data['password']);
+        }
+
+        $user->save();
+
+        Models\Logs::create([
+            'description' => sprintf(_('Updated user %s'), $user->name),
+            'date' => date('Y-m-d H:i:s'),
+            'id_users' => $this->user->id
+        ]);
+
+        Session::flash('flash-message', [
+            'status' => 'success',
+            'message' => _('User updated successfully')
+        ]);
+
+        return Redirect::back();
+    }
+
     public function sync()
     {
         set_time_limit(0);

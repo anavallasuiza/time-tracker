@@ -1,13 +1,13 @@
 <?php
 namespace App\Controllers;
 
-use View;
+use Redirect, View;
 use App\Libs, App\Models;
 
 class Base extends \Controller {
     public function __construct()
     {
-        \View::share('user', $this->user = Libs\Auth::user());
+        View::share('user', $this->user = Libs\Auth::user());
     }
 
     public function action($action, \FormManager\Form $form = null, array $params = [])
