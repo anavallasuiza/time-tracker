@@ -48,6 +48,7 @@
                     <?php if ($user) { ?>
 
                     <a href="<?= url('/stats'); ?>" class="label label-default"><?= _('Stats'); ?></a>
+                    <a href="<?= url('/stats/calendar'); ?>" class="label label-default"><?= _('Calendar'); ?></a>
                     <a href="<?= url('/edit'); ?>" class="label label-default"><?= _('Edit'); ?></a>
                     <a href="<?= url('/sync'); ?>" class="label label-default"><?= _('Sync'); ?></a>
 

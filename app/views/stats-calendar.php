@@ -2,12 +2,18 @@
     'filters' => $filters
 ])->render(); ?>
 
-<table class="table">
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h2 class="panel-title"><?= _('Total hours worked every day'); ?></h2>
+    </div>
+</div>
+
+<table class="table calendar">
     <?php foreach ($calendar as $week => $days) { ?>
     <tr>
         <?php foreach ($days as $hours) { ?>
         <th>
-            <?= date('j/n', $hours['time']); ?>
+            <?= date('j M', $hours['time']); ?>
         </th>
         <?php } ?>
     </tr>

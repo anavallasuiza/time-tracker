@@ -88,6 +88,20 @@
     padding-left: 4px;
 }
 
+.calendar.table {
+    text-align: center;
+}
+
+.calendar.table th {
+    text-align: center;
+    background: #EEE;
+}
+
+.calendar.table a {
+    text-decoration: none;
+    font-size: 1.1em;
+}
+
 .floatThead-container {
     z-index: 1 !important;
 }
