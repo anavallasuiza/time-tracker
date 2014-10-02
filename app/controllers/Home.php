@@ -272,8 +272,12 @@ class Home extends Base {
             'last' => $last
         ]);
 
+        $filters['first'] = new \Datetime(date('Y-m-d', strtotime('previous monday', $filters['first']->getTimestamp())));
+        $filters['last'] = new \Datetime(date('Y-m-d', strtotime('last sunday', $filters['last']->getTimestamp())));
+
         $facts = Models\Facts::orderBy('id');
         $facts = Models\Facts::filter($facts, $filters)->get();
+
         $days = [];
 
         foreach ($facts as $fact) {
@@ -286,15 +290,14 @@ class Home extends Base {
             $days[$day] += $fact->total_time;
         }
 
-        $start = new \Datetime(date('Y-m-d', strtotime('previous monday', $filters['first']->getTimestamp())));
-        $end = strtotime('last sunday', $filters['last']->getTimestamp());
-
         $calendar = [];
 
-        while ($start->getTimestamp() <= $end) {
-            $week = $start->format('W');
-            $day = $start->format('N');
-            $current = $start->format('Y-m-d');
+        $first = new \Datetime($filters['first']->format('Y-m-d'));
+
+        while ($first <= $filters['last']) {
+            $week = $first->format('W');
+            $day = $first->format('N');
+            $current = $first->format('Y-m-d');
 
             if (empty($calendar[$week])) {
                 $calendar[$week] = [];
@@ -302,7 +305,7 @@ class Home extends Base {
 
             if (empty($calendar[$week][$day])) {
                 $calendar[$week][$day] = [
-                    'time' => $start->getTimestamp(),
+                    'time' => $first->getTimestamp(),
                     'hours' => 0
                 ];
             }
@@ -311,7 +314,7 @@ class Home extends Base {
                 $calendar[$week][$day]['hours'] += $days[$current];
             }
 
-            $start->modify('+1 day');
+            $first->modify('+1 day');
         }
 
         $this->share();
