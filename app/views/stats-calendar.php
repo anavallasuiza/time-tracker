@@ -13,7 +13,7 @@
     <tr>
         <?php foreach ($days as $hours) { ?>
         <th>
-            <?= date('j M', $hours['time']); ?>
+            <?= date('D j M', $hours['time']); ?>
         </th>
         <?php } ?>
     </tr>
@@ -21,6 +21,7 @@
     <tr>
         <?php foreach ($days as $hours) { ?>
         <td>
+            <?php if ($hours['hours'] > 0) { ?>
             <a href="<?= url('/').'?'.http_build_query([
                 'user' => $filters['user'],
                 'activity' => $filters['activity'],
@@ -28,6 +29,9 @@
                 'first' => date('d/m/Y', $hours['time']),
                 'last' => date('d/m/Y', $hours['time'])
             ]); ?>"><?= \App\Libs\Utils::minutes2hour($hours['hours']); ?></a>
+            <?php } else { ?>
+            <span class="text-muted">0</span>
+            <?php } ?>
         </td>
         <?php } ?>
     </tr>
