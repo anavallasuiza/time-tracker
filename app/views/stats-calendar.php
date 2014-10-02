@@ -21,7 +21,13 @@
     <tr>
         <?php foreach ($days as $hours) { ?>
         <td>
-            <a href="<?= url('/').'?'.getenv('QUERY_STRING'); ?>"><?= \App\Libs\Utils::minutes2hour($hours['hours']); ?></a>
+            <a href="<?= url('/').'?'.http_build_query([
+                'user' => $filters['user'],
+                'activity' => $filters['activity'],
+                'tag' => $filters['tag'],
+                'first' => date('d/m/Y', $hours['time']),
+                'last' => date('d/m/Y', $hours['time'])
+            ]); ?>"><?= \App\Libs\Utils::minutes2hour($hours['hours']); ?></a>
         </td>
         <?php } ?>
     </tr>
