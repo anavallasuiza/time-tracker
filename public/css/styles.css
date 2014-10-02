@@ -94,12 +94,17 @@
 
 .calendar.table th {
     text-align: center;
-    background: #EEE;
+    background: #F2F2F2;
+    border-bottom: 1px solid #e7e7e7;
+}
+
+.calendar.table td {
+    font-size: 1.2em;
+    padding: 10px;
 }
 
 .calendar.table a {
     text-decoration: none;
-    font-size: 1.1em;
 }
 
 .floatThead-container {
