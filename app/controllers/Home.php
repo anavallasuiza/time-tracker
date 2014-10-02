@@ -272,8 +272,13 @@ class Home extends Base {
             'last' => $last
         ]);
 
-        $filters['first'] = new \Datetime(date('Y-m-d', strtotime('previous monday', $filters['first']->getTimestamp())));
-        $filters['last'] = new \Datetime(date('Y-m-d', strtotime('next sunday', $filters['last']->getTimestamp())));
+        if ((int)$filters['first']->format('N') !== 1) {
+            $filters['first'] = new \Datetime(date('Y-m-d', strtotime('previous monday', $filters['first']->getTimestamp())));
+        }
+
+        if ((int)$filters['last']->format('N') !== 7) {
+            $filters['last'] = new \Datetime(date('Y-m-d', strtotime('next sunday', $filters['last']->getTimestamp())));
+        }
 
         $facts = Models\Facts::orderBy('id');
         $facts = Models\Facts::filter($facts, $filters)->get();
