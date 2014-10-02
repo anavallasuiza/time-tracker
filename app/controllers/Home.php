@@ -273,7 +273,7 @@ class Home extends Base {
         ]);
 
         $filters['first'] = new \Datetime(date('Y-m-d', strtotime('previous monday', $filters['first']->getTimestamp())));
-        $filters['last'] = new \Datetime(date('Y-m-d', strtotime('last sunday', $filters['last']->getTimestamp())));
+        $filters['last'] = new \Datetime(date('Y-m-d', strtotime('next sunday', $filters['last']->getTimestamp())));
 
         $facts = Models\Facts::orderBy('id');
         $facts = Models\Facts::filter($facts, $filters)->get();
