@@ -20,6 +20,7 @@ Route::group(['before' => 'auth'], function()
 {
     Route::any('/', 'App\Controllers\Home@index');
     Route::get('/stats', 'App\Controllers\Home@stats');
+    Route::get('/stats/calendar', 'App\Controllers\Home@statsCalendar');
     Route::any('/sync', 'App\Controllers\Home@sync');
     Route::any('/edit', 'App\Controllers\Home@edit');
     Route::any('/activity/', 'App\Controllers\Home@activityAdd');

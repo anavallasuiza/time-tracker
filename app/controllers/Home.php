@@ -250,6 +250,78 @@ class Home extends Base {
         ]);
     }
 
+    public function statsCalendar()
+    {
+        if (empty($this->user)) {
+            return Redirect::to('/login');
+        }
+
+        $first = Input::get('first');
+        $last = Input::get('last');
+
+        if (empty($first)) {
+            $first = date('d/m/Y', strtotime('-1 month'));
+        }
+
+        if (empty($last)) {
+            $last = date('d/m/Y');
+        }
+
+        $filters = Libs\Utils::filters([
+            'first' => $first,
+            'last' => $last
+        ]);
+
+        $facts = Models\Facts::orderBy('id');
+        $facts = Models\Facts::filter($facts, $filters)->get();
+        $days = [];
+
+        foreach ($facts as $fact) {
+            $day = $fact->start_time->format('Y-m-d');
+
+            if (empty($days[$day])) {
+                $days[$day] = 0;
+            }
+
+            $days[$day] += $fact->total_time;
+        }
+
+        $start = new \Datetime(date('Y-m-d', strtotime('previous monday', $filters['first']->getTimestamp())));
+        $end = strtotime('last sunday', $filters['last']->getTimestamp());
+
+        $calendar = [];
+
+        while ($start->getTimestamp() <= $end) {
+            $week = $start->format('W');
+            $day = $start->format('N');
+            $current = $start->format('Y-m-d');
+
+            if (empty($calendar[$week])) {
+                $calendar[$week] = [];
+            }
+
+            if (empty($calendar[$week][$day])) {
+                $calendar[$week][$day] = [
+                    'time' => $start->getTimestamp(),
+                    'hours' => 0
+                ];
+            }
+
+            if (isset($days[$current])) {
+                $calendar[$week][$day]['hours'] += $days[$current];
+            }
+
+            $start->modify('+1 day');
+        }
+
+        $this->share();
+
+        return View::make('base')->nest('body', 'stats-calendar', [
+            'filters' => $filters,
+            'calendar' => $calendar
+        ]);
+    }
+
     public function edit()
     {
         if (empty($this->user)) {
