@@ -483,6 +483,60 @@ class Home extends Base {
         return $log['success'] ? $log['response'] : $log['error'];
     }
 
+    public function toolsDuplicates()
+    {
+        if (empty($this->user)) {
+            return Redirect::to('/login');
+        }
+
+        if (empty($this->user->admin)) {
+            return Redirect::to('/401');
+        }
+
+        $facts = Models\Facts::where('remote_id', '>', 0)->with(['users'])->get();
+        $checked = Input::get('checked');
+        $duplicates = $delete = $times = [];
+
+        foreach ($facts as $fact) {
+            $md5 = md5($fact->id_users.$fact->id_activities.$fact->remote_id.$fact->hostname.$fact->total_time);
+
+            if (!array_key_exists($md5, $duplicates)) {
+                $duplicates[$md5] = [];
+            }
+
+            $duplicates[$md5][] = $fact;
+        }
+
+        foreach ($duplicates as $duplicate) {
+            if (count($duplicate) === 1) {
+                continue;
+            }
+
+            foreach ($duplicate as $row) {
+                if (in_array($row->id, $checked)) {
+                    $delete[] = $row->id;
+                }
+            }
+        }
+
+        if ($delete) {
+            Models\Facts::destroy($delete);
+        }
+
+        Models\Logs::create([
+            'description' => sprintf(_('Deleted %s duplicated facts'), count($delete)),
+            'date' => date('Y-m-d H:i:s'),
+            'id_users' => $this->user->id
+        ]);
+
+        Session::flash('flash-message', [
+            'status' => 'success',
+            'message' => _('Facts removed successfully')
+        ]);
+
+        return Redirect::back();
+    }
+
     public function csvDownload($facts)
     {
         $date_format = $this->user->admin ? 'd/m/Y H:i' : 'd/m/Y';

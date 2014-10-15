@@ -588,4 +588,54 @@ class Home extends Base {
             'response' => $action
         ]);
     }
+
+    public function toolsDuplicates()
+    {
+        if (empty($this->user)) {
+            return Redirect::to('/login');
+        }
+
+        if (empty($this->user->admin)) {
+            return Redirect::to('/401');
+        }
+
+        if (is_object($action = $this->action(__FUNCTION__))) {
+            return $action;
+        }
+
+        $facts = Models\Facts::where('remote_id', '>', 0)->with(['users'])->get();
+        $duplicates = [];
+
+        foreach ($facts as $fact) {
+            $md5 = md5($fact->id_users.$fact->id_activities.$fact->remote_id.$fact->hostname.$fact->total_time);
+
+            if (!array_key_exists($md5, $duplicates)) {
+                $duplicates[$md5] = [];
+            }
+
+            $duplicates[$md5][] = $fact;
+        }
+
+        foreach ($duplicates as &$duplicate) {
+            if (count($duplicate) === 1) {
+                $duplicate = null;
+                continue;
+            }
+
+            $first = array_shift($duplicate);
+            $first->checked = false;
+
+            foreach ($duplicate as &$row) {
+                $row->checked = true;
+            }
+
+            array_unshift($duplicate, $first);
+        }
+
+        return View::make('base')->nest('body', 'tools-duplicates', [
+            'facts' => array_values(array_filter($duplicates)),
+            'action' => Input::get('action'),
+            'response' => $action
+        ]);
+    }
 }

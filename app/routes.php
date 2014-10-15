@@ -32,6 +32,7 @@ Route::group(['before' => 'auth'], function()
     Route::get('/fact-tr/{id}', 'App\Controllers\Home@factTr');
     Route::get('/dump-sql', 'App\Controllers\Home@sqlDownload');
     Route::any('/git-update', 'App\Controllers\Home@gitUpdate');
+    Route::any('/tools-duplicates', 'App\Controllers\Home@toolsDuplicates');
 });
 
 Route::group(['prefix' => 'api', 'before' => 'auth.api'], function()
