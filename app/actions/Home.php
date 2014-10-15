@@ -493,8 +493,18 @@ class Home extends Base {
             return Redirect::to('/401');
         }
 
-        $facts = Models\Facts::where('remote_id', '>', 0)->with(['users'])->get();
         $checked = Input::get('checked');
+
+        if (empty($checked)) {
+            Session::flash('flash-message', [
+                'status' => 'warning',
+                'message' => _('No facts selected')
+            ]);
+
+            return Redirect::back();
+        }
+
+        $facts = Models\Facts::where('remote_id', '>', 0)->with(['users'])->get();
         $duplicates = $delete = $times = [];
 
         foreach ($facts as $fact) {
