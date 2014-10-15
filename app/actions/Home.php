@@ -504,7 +504,7 @@ class Home extends Base {
             return Redirect::back();
         }
 
-        $facts = Models\Facts::where('remote_id', '>', 0)->with(['users'])->get();
+        $facts = Models\Facts::where('remote_id', '>', 0)->get();
         $duplicates = $delete = $times = [];
 
         foreach ($facts as $fact) {
