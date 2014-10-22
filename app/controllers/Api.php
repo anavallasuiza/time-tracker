@@ -37,7 +37,7 @@ class Api extends \Controller {
         $facts = Models\Facts
             ::where('id_users', '=', $this->user()->id)
             ->where('hostname', '=', $hostname)
-            ->where('start_time', '>=', date('Y-m-d H:i:s', strtotime(self::FACTS_TIME_LIMIT)))
+            ->where('start_time', '>=', date('Y-m-d 00:00:00', strtotime(self::FACTS_TIME_LIMIT)))
             ->withTrashed();
 
         return Response::json([
@@ -65,7 +65,7 @@ class Api extends \Controller {
         $facts = Models\Facts
             ::where('id_users', '=', $this->user()->id)
             ->where('hostname', '=', $hostname)
-            ->where('start_time', '>=', date('Y-m-d H:i:s', strtotime(self::FACTS_TIME_LIMIT)))
+            ->where('start_time', '>=', date('Y-m-d 00:00:00', strtotime(self::FACTS_TIME_LIMIT)))
             ->get();
 
         $ids = array_column($facts->toArray(), 'id');
