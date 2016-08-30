@@ -1,12 +1,4 @@
-/app/config/local/
-/app/config/prod/
-/bootstrap/compiled.php
 /vendor
-/public/.htaccess
-composer.phar
-composer.lock
-.env.*.php
-.env.php
-.DS_Store
-Thumbs.db
-*.sql
+/node_modules
+Homestead.yaml
+.env
