@@ -2,6 +2,11 @@
 
 return [
 
+    /**
+     * TODO: Refactor App\Libs\Auth and remove this.
+     */
+    'method' => 'html',
+
     /*
     |--------------------------------------------------------------------------
     | Default Authentication Driver
@@ -28,7 +33,7 @@ return [
     |
     */
 
-    'model' => App\User::class,
+    'model' => App\Models\Users::class,
 
     /*
     |--------------------------------------------------------------------------

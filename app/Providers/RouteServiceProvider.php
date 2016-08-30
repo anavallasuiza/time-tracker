@@ -24,7 +24,13 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot(Router $router)
     {
-        //
+        $router->filter('auth', function () {
+            return (($response = \App\Libs\Auth::login()) === true) ? null : $response;
+        });
+
+        $router->filter('auth.api', function () {
+            return (($response = \App\Libs\Auth::login('api')) === true) ? null : $response;
+        });
 
         parent::boot($router);
     }
