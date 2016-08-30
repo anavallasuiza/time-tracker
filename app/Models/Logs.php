@@ -1,7 +1,9 @@
 <?php
 namespace App\Models;
 
-class Logs extends \Eloquent {
+use Illuminate\Database\Eloquent\Model;
+
+class Logs extends Model {
     protected $table = 'logs';
     protected $guarded = ['id'];
 

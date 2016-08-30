@@ -1,7 +1,9 @@
 <?php
 namespace App\Models;
 
-class Estimations extends \Eloquent {
+use Illuminate\Database\Eloquent\Model;
+
+class Estimations extends Model {
     protected $table = 'estimations';
     protected $guarded = ['id'];
 

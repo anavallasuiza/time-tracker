@@ -1,9 +1,16 @@
 <?php
 namespace App\Models;
 
-class Activities extends \Eloquent {
+use Illuminate\Database\Eloquent\Model;
+
+class Activities extends Model {
     protected $table = 'activities';
     protected $guarded = ['id'];
+
+    public function client()
+    {
+        return $this->belongsTo(Clients::class, 'id_clients');
+    }
 
     public function facts()
     {
