@@ -22,6 +22,8 @@ Route::group(['before' => 'auth'], function()
     Route::get('/dump-sql', 'Home@sqlDownload');
     Route::any('/git-update', 'Home@gitUpdate');
     Route::any('/tools-duplicates', 'Home@toolsDuplicates');
+    Route::get('/notifications', 'Home@notifications');
+    Route::post('/notifications/{id}/read', 'Home@notificationRead');
 });
 
 Route::group(['prefix' => 'api', 'before' => 'auth.api'], function()
