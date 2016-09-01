@@ -40,6 +40,13 @@
     font-family: 'Press Start 2P', System, Terminal, Fixedsys;
 }
 
+.page-header .btn-notifications {
+    display: inline-block;
+    margin: 30px 16px 13px;
+    line-height: 15px;
+    font-size: 18px;
+}
+
 #footer, #footer p {
     margin-top: 20px;
 }
@@ -142,7 +149,7 @@
 
 .bootstrap-switch {
     width: 100%;
-    border: 1px solid #e7e7e7;  
+    border: 1px solid #e7e7e7;
 }
 
 .bootstrap-switch .bootstrap-switch-handle-on,

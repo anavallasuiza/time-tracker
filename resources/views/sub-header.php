@@ -1,6 +1,11 @@
 <nav class="navbar navbar-default navbar-static">
     <div class="navbar-header">
         <a href="<?= url('/'); ?>" class="navbar-brand"><img src="<?= asset('images/logo-50.png'); ?>" alt="<?= _('A Navalla Suíza'); ?>" /></a>
+        <?php if (! $unreadNotifications->isEmpty()) { ?>
+        <a href="<?= url('/notifications'); ?>" class="btn-notifications" aria-label="Notifications">
+            <span class="glyphicon glyphicon-exclamation-sign text-warning" aria-hidden="true"></span>
+        </a>
+        <?php } ?>
     </div>
 
     <?php if (Request::is('/')) { ?>
@@ -9,7 +14,7 @@
             <li class="dropdown dropdown-large">
                 <a href="#" id="header-timer" class="dropdown-toggle" data-toggle="dropdown">
                     <h1>00:00</h1>
-                    <h2>----</h2>                    
+                    <h2>----</h2>
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-large">
