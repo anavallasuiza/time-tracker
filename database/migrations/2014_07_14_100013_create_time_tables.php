@@ -139,7 +139,6 @@ class CreateTimeTables extends Migration {
         {
             $table->index('id_activities');
             $table->index('id_facts');
-            $table->index('id_logs');
             $table->index('id_users');
         });
 
