@@ -15,8 +15,6 @@ class Users extends Eloquent implements AuthenticatableContract, CanResetPasswor
     protected $guarded = ['id'];
     protected $dates = [];
 
-    public $timestamps = false;
-
     public function facts()
     {
         return $this->hasMany('App\Models\Facts', 'id_users', 'id');
