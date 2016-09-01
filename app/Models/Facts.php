@@ -3,6 +3,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * App\Models\Facts
+ *
+ * @property-read \App\Models\Activities $activities
+ * @property-read \App\Models\Users $users
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Tags[] $tags
+ * @property-read mixed $start_time
+ * @property-read mixed $end_time
+ * @mixin \Eloquent
+ */
 class Facts extends \Eloquent {
     use SoftDeletes;
 

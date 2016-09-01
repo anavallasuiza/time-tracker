@@ -1,6 +1,13 @@
 <?php
 namespace App\Models;
 
+/**
+ * App\Models\Activities
+ *
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Facts[] $facts
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Estimations[] $estimations
+ * @mixin \Eloquent
+ */
 class Activities extends \Eloquent {
     protected $table = 'activities';
     protected $guarded = ['id'];

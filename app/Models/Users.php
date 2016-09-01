@@ -7,6 +7,12 @@ use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
+/**
+ * App\Models\Users
+ *
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Facts[] $facts
+ * @mixin \Eloquent
+ */
 class Users extends Eloquent implements AuthenticatableContract, CanResetPasswordContract {
     use Authenticatable, CanResetPassword;
 

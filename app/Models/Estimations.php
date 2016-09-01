@@ -1,6 +1,13 @@
 <?php
 namespace App\Models;
 
+/**
+ * App\Models\Estimations
+ *
+ * @property-read \App\Models\Activities $activities
+ * @property-read \App\Models\Tags $tags
+ * @mixin \Eloquent
+ */
 class Estimations extends \Eloquent {
     protected $table = 'estimations';
     protected $guarded = ['id'];
