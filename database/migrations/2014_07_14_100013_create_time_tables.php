@@ -47,8 +47,8 @@ class CreateTimeTables extends Migration {
             $table->timestamp('end_time');
             $table->integer('total_time');
 
-            $table->text('description');
-            $table->string('hostname');
+            $table->text('description')->nullable();
+            $table->string('hostname')->nullable();
 
             $table->integer('remote_id')->unsigned();
 

@@ -1,4 +1,5 @@
 /vendor
 /node_modules
+/storage/debugbar
 Homestead.yaml
 .env
