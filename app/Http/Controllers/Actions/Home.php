@@ -140,7 +140,7 @@ class Home extends Base {
 
         $activity = Models\Activities::create([
             'name' => $data['name'],
-            'archived' => $data['archived']
+            'archived' => is_null($data['archived']) ? false : $data['archived']
         ]);
 
         $tags = Models\Tags::orderBy('name', 'ASC')->get();
