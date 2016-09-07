@@ -638,4 +638,27 @@ class Home extends Base {
             'response' => $action
         ]);
     }
+
+    public function notifications()
+    {
+        $notifications = Models\Notifications::whereRead(false)
+            ->orderBy('created_at', 'DESC')
+            ->get();
+
+        return View::make('base')->nest('body', 'notifications', [
+            'notifications' => $notifications
+        ]);
+    }
+
+    public function notificationRead($id)
+    {
+        $notification = Models\Notifications::find($id);
+
+        if (! empty($notification)) {
+            $notification->read = true;
+            $notification->save();
+        }
+
+        return Redirect::to('/notifications');
+    }
 }

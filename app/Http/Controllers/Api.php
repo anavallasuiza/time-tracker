@@ -112,12 +112,23 @@ class Api extends Controller {
             return $response;
         }
 
-        $tag = Models\Tags::create([
-            'name' => $name
-        ]);
+        $existentModel = Models\Tags::where('name', $name)
+            ->first();
+
+        if (empty($existentModel)) {
+            Models\Notifications::create([
+                'title' => 'API Error',
+                'description' => sprintf('Trying to create an unexistent tag "%s" by the user identified as "%s"', $name, $this->user()->user),
+                'read' => false
+            ]);
+
+            $tagId = null;
+        } else {
+            $tagId = $existentModel->id;
+        }
 
         return Response::json([
-            'id' => $tag->id
+            'id' => $tagId
         ]);
     }
 
@@ -133,12 +144,23 @@ class Api extends Controller {
             return $response;
         }
 
-        $activity = Models\Activities::create([
-            'name' => $name
-        ]);
+        $existentModel = Models\Activities::where('name', $name)
+            ->first();
+
+        if (empty($existentModel)) {
+            Models\Notifications::create([
+                'title' => 'API Error',
+                'description' => sprintf('Trying to create an unexistent activity "%s" by the user identified as "%s"', $name, $this->user()->user),
+                'read' => false
+            ]);
+
+            $activityId = null;
+        } else {
+            $activityId = $existentModel->id;
+        }
 
         return Response::json([
-            'id' => $activity->id
+            'id' => $activityId
         ]);
     }
 

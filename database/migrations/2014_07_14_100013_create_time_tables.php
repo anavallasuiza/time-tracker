@@ -27,7 +27,7 @@ class CreateTimeTables extends Migration {
         Schema::create('estimations', function($table)
         {
             $table->engine = 'InnoDB';
-
+            $table->softDeletes();
             $table->increments('id');
             $table->integer('hours');
 
@@ -139,7 +139,6 @@ class CreateTimeTables extends Migration {
         {
             $table->index('id_activities');
             $table->index('id_facts');
-            $table->index('id_logs');
             $table->index('id_users');
         });
 
