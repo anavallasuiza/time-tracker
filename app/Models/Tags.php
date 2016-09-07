@@ -3,6 +3,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\Tags
+ *
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Facts[] $facts
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Estimations[] $estimations
+ * @mixin \Eloquent
+ */
 class Tags extends Model {
     protected $table = 'tags';
     protected $guarded = ['id'];
