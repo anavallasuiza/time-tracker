@@ -6,6 +6,9 @@ Route::get('/401', ['as' => 'error.401', 'uses' => 'Home@error401']);
 Route::get('/404', ['as' => 'error.404', 'uses' => 'Home@error404']);
 
 Route::group(['before' => 'auth'], function () {
+    Route::get('/logout', ['as' => 'logout', 'uses' => 'Auth\AuthController@getLogout']);
+
+
     Route::any('/', ['as' => 'index', 'uses' => 'Home@index']);
 
     Route::get('/stats', ['as' => 'stats.index', 'uses' => 'Home@stats']);

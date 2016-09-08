@@ -56,18 +56,16 @@
         <footer id="footer" class="text-center">
             <div class="container">
                 <div class="well">
-                    <?php if ($user) { ?>
-
-                    <a href="<?php echo url('/stats'); ?>" class="label label-default"><?php echo _('Stats'); ?></a>
-                    <a href="<?php echo url('/stats/calendar'); ?>" class="label label-default"><?php echo _('Calendar'); ?></a>
-                    <a href="<?php echo url('/edit'); ?>" class="label label-default"><?php echo _('Edit'); ?></a>
-                    <a href="<?php echo url('/sync'); ?>" class="label label-default"><?php echo _('Sync'); ?></a>
-
-                    <?php if ($user->admin) { ?>
-                    <a href="<?php echo url('/git-update'); ?>" class="label label-default"><?php echo _('Update environment'); ?></a>
-                    <?php } ?>
-
-                    <?php } ?>
+                    <?php if ($user): ?>
+                        <a href="<?php echo url('/stats'); ?>" class="label label-default"><?php echo _('Stats'); ?></a>
+                        <a href="<?php echo url('/stats/calendar'); ?>" class="label label-default"><?php echo _('Calendar'); ?></a>
+                        <a href="<?php echo url('/edit'); ?>" class="label label-default"><?php echo _('Edit'); ?></a>
+                        <a href="<?php echo url('/sync'); ?>" class="label label-default"><?php echo _('Sync'); ?></a>
+                        <?php if ($user->admin): ?>
+                            <a href="<?php echo url('/git-update'); ?>" class="label label-default"><?php echo _('Update environment'); ?></a>
+                        <?php endif; ?>
+                        <a href="<?php echo url(route('logout')); ?>" class="label label-danger"><i class="fa fa-w fa-sign-out"></i> <?php echo _('Logout'); ?></a>
+                    <?php endif; ?>
 
                     <p><a href="https://github.com/anavallasuiza/time-tracker" class="text-muted">
                         <i class="fa fa-github"></i>
