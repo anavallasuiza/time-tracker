@@ -88,6 +88,12 @@ class Facts extends Model {
             $facts->where('description', 'LIKE', '%'.$description.'%');
         }
 
+        if ($client) {
+            $facts->whereHas('activities', function ($query) use ($client) {
+                $query->where('activities.id_clients', '=', $client);
+            });
+        }
+
         list($sort_field, $sort_mode) = explode('-', $sort);
 
         $facts->orderBy($sort_field.'_time', $sort_mode);
