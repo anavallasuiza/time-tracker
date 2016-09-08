@@ -10,6 +10,20 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Database\Models\Fact[] $facts
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Database\Models\Estimation[] $estimations
  * @mixin \Eloquent
+ * @property integer $id
+ * @property string $name
+ * @property integer $total_hours
+ * @property boolean $archived
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @property integer $id_clients
+ * @method static \Illuminate\Database\Query\Builder|\App\Database\Models\Activity whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Database\Models\Activity whereName($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Database\Models\Activity whereTotalHours($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Database\Models\Activity whereArchived($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Database\Models\Activity whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Database\Models\Activity whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Database\Models\Activity whereIdClients($value)
  */
 class Activity extends Model {
     protected $table = 'activities';

@@ -9,6 +9,14 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Database\Models\Fact[] $facts
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Database\Models\Estimation[] $estimations
  * @mixin \Eloquent
+ * @property integer $id
+ * @property string $name
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @method static \Illuminate\Database\Query\Builder|\App\Database\Models\Tag whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Database\Models\Tag whereName($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Database\Models\Tag whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Database\Models\Tag whereUpdatedAt($value)
  */
 class Tag extends Model {
     protected $table = 'tags';

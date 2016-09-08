@@ -13,6 +13,28 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read mixed $start_time
  * @property-read mixed $end_time
  * @mixin \Eloquent
+ * @property integer $id
+ * @property integer $total_time
+ * @property string $description
+ * @property string $hostname
+ * @property integer $remote_id
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @property \Carbon\Carbon $deleted_at
+ * @property integer $id_activities
+ * @property integer $id_users
+ * @method static \Illuminate\Database\Query\Builder|\App\Database\Models\Fact whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Database\Models\Fact whereStartTime($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Database\Models\Fact whereEndTime($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Database\Models\Fact whereTotalTime($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Database\Models\Fact whereDescription($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Database\Models\Fact whereHostname($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Database\Models\Fact whereRemoteId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Database\Models\Fact whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Database\Models\Fact whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Database\Models\Fact whereDeletedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Database\Models\Fact whereIdActivities($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Database\Models\Fact whereIdUsers($value)
  */
 class Fact extends Model {
     use SoftDeletes;
