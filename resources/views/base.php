@@ -37,7 +37,18 @@
             </div>
         </div>
         <?php } ?>
-
+        <?php if (isset($errors) && count($errors) > 0) { ?>
+            <div class="container center">
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <ul>
+                        <?php foreach ($errors->all() as $error):?>
+                        <li><?php echo _($error);?></li>
+                        <?php endforeach;?>
+                    </ul>
+                </div>
+            </div>
+        <?php } ?>
         <div class="container">
             <?= $body; ?>
         </div>
