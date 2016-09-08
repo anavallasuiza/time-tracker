@@ -3,6 +3,7 @@
 Route::any('/login', ['as' => 'login', 'uses' => 'Home@login']);
 
 Route::get('/401', ['as' => 'error.401', 'uses' => 'Home@error401']);
+Route::get('/500', ['as' => 'error.401', 'uses' => 'Home@error500']);
 Route::get('/404', ['as' => 'error.404', 'uses' => 'Home@error404']);
 
 Route::group(['before' => 'auth'], function () {
