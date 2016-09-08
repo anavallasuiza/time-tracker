@@ -261,7 +261,8 @@ class Home extends Base {
                     'filter' => 'user',
                     'rows' => $users
                 ],
-            ]
+            ],
+            'clients' => $this->clientsRepo->getClients()
         ]);
     }
 

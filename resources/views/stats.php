@@ -1,5 +1,6 @@
 <?= View::make('sub-filters')->with([
-    'filters' => $filters
+    'filters' => $filters,
+    'clients' => $clients
 ])->render(); ?>
 
 <ul class="nav nav-tabs" role="tablist">
