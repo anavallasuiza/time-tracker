@@ -75,7 +75,7 @@ class Auth extends \Auth
             return self::unauthorized();
         }
 
-        $user = \App\Models\Users::where('user', '=', $user)->where('api_key', '=', $secret)->first();
+        $user = \App\Database\Models\User::where('user', '=', $user)->where('api_key', '=', $secret)->first();
 
         if (empty($user)) {
             return self::unauthorized(_('User or password is not correct'), '/401');

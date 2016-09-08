@@ -4,13 +4,13 @@
 namespace App\View\Composers;
 
 
-use App\Models\Notifications;
+use App\Database\Models\Notification;
 
 class SubHeaderViewComposer
 {
     public function compose($view)
     {
-        $unreadNotifications = Notifications::whereRead(false)
+        $unreadNotifications = Notification::whereRead(false)
             ->get();
 
         $view->with('unreadNotifications', $unreadNotifications);

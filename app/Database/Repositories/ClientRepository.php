@@ -4,14 +4,14 @@ namespace App\Database\Repositories;
 
 use ANavallaSuiza\Laravel\Database\Repository\Eloquent\Repository;
 use App\Exceptions\ModelException;
-use App\Models\Clients;
+use App\Database\Models\Client;
 use Illuminate\Database\Eloquent\Collection;
 
 class ClientRepository extends Repository
 {
 
     /**
-     * @return Clients
+     * @return Client
      */
     public function getModel()
     {
@@ -28,7 +28,7 @@ class ClientRepository extends Repository
 
     public function persist(array $input)
     {
-        $client = new Clients();
+        $client = new Client();
         $client->name = $input['name'];
         if (!$client->save()) {
             throw new ModelException(_('Impossible to add the client'));
@@ -38,7 +38,7 @@ class ClientRepository extends Repository
 
     /**
      * @param $clientId
-     * @return Clients
+     * @return Client
      */
     public function getClient($clientId)
     {

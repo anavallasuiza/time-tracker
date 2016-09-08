@@ -2,7 +2,7 @@
 namespace App\Http\Controllers;
 
 use Redirect, View;
-use App\Libs, App\Models;
+use App\Libs, App\Database\Models;
 
 class Base extends Controller {
     public function __construct()
@@ -38,19 +38,19 @@ class Base extends Controller {
     protected function share()
     {
         if ($this->user->admin) {
-            $users = Models\Users::orderBy('name', 'ASC')->get();
+            $users = Models\User::orderBy('name', 'ASC')->get();
         } else {
-            $users = Models\Users::where('id', '=', $this->user->id)->get();
+            $users = Models\User::where('id', '=', $this->user->id)->get();
         }
 
-        $activities = Models\Activities::where('archived', '=', 0)
+        $activities = Models\Activity::where('archived', '=', 0)
             ->orderBy('name', 'ASC')
             ->get();
 
         View::share([
             'users' => $users,
             'activities' => $activities,
-            'tags' => Models\Tags::orderBy('name', 'ASC')->get()
+            'tags' => Models\Tag::orderBy('name', 'ASC')->get()
         ]);
     }
 }

@@ -3,7 +3,7 @@ namespace App\Http\Controllers\Actions;
 
 use Exception;
 use Config, DB, Input, Redirect, Response, Session;
-use App\Libs, App\Models;
+use App\Libs, App\Database\Models;
 
 class Home extends Base {
     public function login($form)
@@ -29,7 +29,7 @@ class Home extends Base {
 
         list($start, $end, $total) = Libs\Utils::startEndTime(Input::get('start'), Input::get('end'), Input::get('time'));
 
-        $overwrite = Models\Facts::where('id_users', '=', $this->user->id)
+        $overwrite = Models\Fact::where('id_users', '=', $this->user->id)
             ->where('start_time', '<', $start)
             ->where('end_time', '>', $end)
             ->first();
@@ -39,7 +39,7 @@ class Home extends Base {
         }
 
         try {
-            $fact = Models\Facts::create([
+            $fact = Models\Fact::create([
                 'start_time' => $start,
                 'end_time' => $end,
                 'total_time' => $total,
@@ -60,7 +60,7 @@ class Home extends Base {
             'id_tags' => (int)Input::get('tag')
         ]);
 
-        Models\Logs::create([
+        Models\Log::create([
             'description' => _('Created fact'),
             'date' => date('Y-m-d H:i:s'),
             'id_facts' => $fact->id,
@@ -78,7 +78,7 @@ class Home extends Base {
             return false;
         }
 
-        $fact = Models\Facts::where('id', '=', Input::get('id'));
+        $fact = Models\Fact::where('id', '=', Input::get('id'));
 
         if (empty($this->user->admin)) {
             $fact->where('id_users', '=', $this->user->id);
@@ -109,7 +109,7 @@ class Home extends Base {
             'id_tags' => (int)Input::get('tag')
         ]);
 
-        Models\Logs::create([
+        Models\Log::create([
             'description' => _('Updated fact'),
             'date' => date('Y-m-d H:i:s'),
             'id_facts' => $fact->id,
@@ -127,7 +127,7 @@ class Home extends Base {
             return false;
         }
 
-        $exists = Models\Activities::where('name', '=', $data['name'])->first();
+        $exists = Models\Activity::where('name', '=', $data['name'])->first();
 
         if ($exists) {
             Session::flash('flash-message', [
@@ -138,13 +138,13 @@ class Home extends Base {
             return false;
         }
 
-        $activity = Models\Activities::create([
+        $activity = Models\Activity::create([
             'name' => $data['name'],
             'archived' => is_null($data['archived']) ? false : $data['archived'],
             'id_clients' => isset($data['id_clients']) && $data['id_clients']!=-1?$data['id_clients']:null
         ]);
 
-        $tags = Models\Tags::orderBy('name', 'ASC')->get();
+        $tags = Models\Tag::orderBy('name', 'ASC')->get();
         $form = Input::get('tags');
 
         $total = 0;
@@ -156,7 +156,7 @@ class Home extends Base {
 
             $total += $hours;
 
-            Models\Estimations::create([
+            Models\Estimation::create([
                 'hours' => $hours,
                 'id_activities' => $activity->id,
                 'id_tags' => $tag->id
@@ -166,7 +166,7 @@ class Home extends Base {
         $activity->total_hours = $total;
         $activity->save();
 
-        Models\Logs::create([
+        Models\Log::create([
             'description' => sprintf(_('Added activity %s'), $activity->name),
             'date' => date('Y-m-d H:i:s'),
             'id_activities' => $activity->id,
@@ -187,11 +187,11 @@ class Home extends Base {
             return false;
         }
 
-        $activity = Models\Activities::where('id', '=', $data['id'])->firstOrFail();
+        $activity = Models\Activity::where('id', '=', $data['id'])->firstOrFail();
 
-        Models\Estimations::where('id_activities', '=', $activity->id)->delete();
+        Models\Estimation::where('id_activities', '=', $activity->id)->delete();
 
-        $tags = Models\Tags::orderBy('name', 'ASC')->get();
+        $tags = Models\Tag::orderBy('name', 'ASC')->get();
         $form = Input::get('tags');
 
         $total = 0;
@@ -203,7 +203,7 @@ class Home extends Base {
 
             $total += $hours;
 
-            Models\Estimations::create([
+            Models\Estimation::create([
                 'hours' => $hours,
                 'id_activities' => $activity->id,
                 'id_tags' => $tag->id
@@ -220,7 +220,7 @@ class Home extends Base {
         }
         $activity->save();
 
-        Models\Logs::create([
+        Models\Log::create([
             'description' => sprintf(_('Updated activity %s'), $activity->name),
             'date' => date('Y-m-d H:i:s'),
             'id_activities' => $activity->id,
@@ -241,7 +241,7 @@ class Home extends Base {
             return false;
         }
 
-        $exists = Models\Tags::where('name', '=', $data['name'])->first();
+        $exists = Models\Tag::where('name', '=', $data['name'])->first();
 
         if ($exists) {
             Session::flash('flash-message', [
@@ -252,11 +252,11 @@ class Home extends Base {
             return false;
         }
 
-        $tag = Models\Tags::create([
+        $tag = Models\Tag::create([
             'name' => $data['name']
         ]);
 
-        Models\Logs::create([
+        Models\Log::create([
             'description' => sprintf(_('Created tag %s'), $tag->name),
             'date' => date('Y-m-d H:i:s'),
             'id_tags' => $tag->id,
@@ -277,11 +277,11 @@ class Home extends Base {
             return false;
         }
 
-        $tag = Models\Tags::where('id', '=', $data['id'])->firstOrFail();
+        $tag = Models\Tag::where('id', '=', $data['id'])->firstOrFail();
         $tag->name = $data['name'];
         $tag->save();
 
-        Models\Logs::create([
+        Models\Log::create([
             'description' => sprintf(_('Updated tag %s'), $tag->name),
             'date' => date('Y-m-d H:i:s'),
             'id_tags' => $tag->id,
@@ -314,13 +314,13 @@ class Home extends Base {
             throw new \ErrorException(_('Passwords must be equals.'));
         }
 
-        $exists = Models\Users::where('user', '=', $data['user'])->first();
+        $exists = Models\User::where('user', '=', $data['user'])->first();
 
         if (count($exists)) {
             throw new \ErrorException(sprintf(_('%s user can\'t be used, it\'s already registered :('), $data['user']));
         }
 
-        $user = Models\Users::create([
+        $user = Models\User::create([
             'name' => $data['name'],
             'user' => $data['user'],
             'email' => $data['email'],
@@ -330,7 +330,7 @@ class Home extends Base {
             'password' => \Hash::make($data['password'])
         ]);
 
-        Models\Logs::create([
+        Models\Log::create([
             'description' => sprintf(_('Updated user %s'), $user->name),
             'date' => date('Y-m-d H:i:s'),
             'id_users' => $this->user->id
@@ -358,9 +358,9 @@ class Home extends Base {
             throw new \ErrorException(_('Passwords must be equals.'));
         }
 
-        $user = Models\Users::where('id', '=', $data['id'])->firstOrFail();
+        $user = Models\User::where('id', '=', $data['id'])->firstOrFail();
 
-        $exists = Models\Users::
+        $exists = Models\User::
             where('user', '=', $data['user'])
             ->where('id', '!=', $data['id'])
             ->first();
@@ -385,7 +385,7 @@ class Home extends Base {
 
         $user->save();
 
-        Models\Logs::create([
+        Models\Log::create([
             'description' => sprintf(_('Updated user %s'), $user->name),
             'date' => date('Y-m-d H:i:s'),
             'id_users' => $this->user->id
@@ -510,7 +510,7 @@ class Home extends Base {
             return Redirect::back();
         }
 
-        $facts = Models\Facts::where('remote_id', '>', 0)->get();
+        $facts = Models\Fact::where('remote_id', '>', 0)->get();
         $duplicates = $delete = $times = [];
 
         foreach ($facts as $fact) {
@@ -536,10 +536,10 @@ class Home extends Base {
         }
 
         if ($delete) {
-            Models\Facts::destroy($delete);
+            Models\Fact::destroy($delete);
         }
 
-        Models\Logs::create([
+        Models\Log::create([
             'description' => sprintf(_('Deleted %s duplicated facts'), count($delete)),
             'date' => date('Y-m-d H:i:s'),
             'id_users' => $this->user->id

@@ -6,7 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Database\Repositories\ClientRepository;
 use App\Http\Requests\ClientRequest;
-use App\Models\Clients;
+use App\Database\Models\Client;
 use ModelManager;
 
 class ClientController extends Base
@@ -18,7 +18,7 @@ class ClientController extends Base
 
     public function __construct()
     {
-        $this->clientsRepo = ModelManager::getRepository(Clients::class);
+        $this->clientsRepo = ModelManager::getRepository(Client::class);
         parent::__construct();
 
     }

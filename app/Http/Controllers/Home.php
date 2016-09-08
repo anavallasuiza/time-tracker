@@ -3,7 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Database\Repositories\ClientRepository;
 use Config, Input, Redirect, Response, Session, View;
-use App\Models, App\Libs;
+use App\Database\Models, App\Libs;
 use ModelManager;
 
 class Home extends Base {
@@ -15,7 +15,7 @@ class Home extends Base {
     public function __construct()
     {
         parent::__construct();
-        $this->clientsRepo = ModelManager::getRepository(Models\Clients::class);
+        $this->clientsRepo = ModelManager::getRepository(Models\Client::class);
     }
 
 
@@ -69,11 +69,11 @@ class Home extends Base {
         }
 
         $filters = Libs\Utils::filters();
-        $facts = Models\Facts::with(['activities'])
+        $facts = Models\Fact::with(['activities'])
             ->with(['tags'])
             ->with(['users']);
 
-        $facts = Models\Facts::filter($facts, $filters);
+        $facts = Models\Fact::filter($facts, $filters);
 
         if (Input::get('export') === 'csv') {
             return \App\Http\Controllers\Actions\Home::csvDownload($facts->get());
@@ -115,8 +115,8 @@ class Home extends Base {
             'first' => $first
         ]);
 
-        $facts = Models\Facts::select('id_activities')->groupBy('id_activities');
-        $facts = Models\Facts::filter($facts, $filters)->get();
+        $facts = Models\Fact::select('id_activities')->groupBy('id_activities');
+        $facts = Models\Fact::filter($facts, $filters)->get();
 
         $ids = Libs\Utils::objectColumn($facts, 'id_activities') ?: [0];
 
@@ -127,8 +127,8 @@ class Home extends Base {
             $newFilters['first'] = false;
         }
 
-        $facts = Models\Facts::whereIn('id_activities', $ids);
-        $facts = Models\Facts::filter($facts, $newFilters)
+        $facts = Models\Fact::whereIn('id_activities', $ids);
+        $facts = Models\Fact::filter($facts, $newFilters)
             ->with(['activities'])
             ->with(['users']);
 
@@ -142,7 +142,7 @@ class Home extends Base {
 
         $facts = $facts->get();
 
-        $tmp = Models\Estimations::whereIn('id_activities', $ids);
+        $tmp = Models\Estimation::whereIn('id_activities', $ids);
 
         if ($filters['tag']) {
             $tmp->where('id_tags', '=', $filters['tag']);
@@ -296,8 +296,8 @@ class Home extends Base {
             $filters['last'] = new \Datetime(date('Y-m-d', strtotime('next sunday', $filters['last']->getTimestamp())));
         }
 
-        $facts = Models\Facts::orderBy('id');
-        $facts = Models\Facts::filter($facts, $filters)->get();
+        $facts = Models\Fact::orderBy('id');
+        $facts = Models\Fact::filter($facts, $filters)->get();
 
         $days = [];
 
@@ -354,14 +354,14 @@ class Home extends Base {
         }
 
         if ($this->user->admin) {
-            $users = Models\Users::orderBy('name', 'ASC')->get();
+            $users = Models\User::orderBy('name', 'ASC')->get();
         } else {
             $users = [];
         }
 
         return View::make('base')->nest('body', 'edit', [
-            'activities' => Models\Activities::orderBy('name', 'ASC')->get(),
-            'tags' => Models\Tags::orderBy('name', 'ASC')->get(),
+            'activities' => Models\Activity::orderBy('name', 'ASC')->get(),
+            'tags' => Models\Tag::orderBy('name', 'ASC')->get(),
             'users' => $users,
             'clients' => $this->clientsRepo->getClients()
         ]);
@@ -392,7 +392,7 @@ class Home extends Base {
         $activity->name = _('New');
         $activity->total_hours = 0;
 
-        $tags = Models\Tags::orderBy('name', 'ASC')->get();
+        $tags = Models\Tag::orderBy('name', 'ASC')->get();
 
         foreach ($tags as $tag) {
             $tag->estimations = [];
@@ -425,13 +425,13 @@ class Home extends Base {
             return $action;
         }
 
-        $activity = Models\Activities::where('id', '=', (int)$id)->firstOrFail();
+        $activity = Models\Activity::where('id', '=', (int)$id)->firstOrFail();
 
         if ($action !== false) {
             $form->load($activity);
         }
 
-        $tags = Models\Tags::orderBy('name', 'ASC')->with(['estimations' => function ($query) use ($activity) {
+        $tags = Models\Tag::orderBy('name', 'ASC')->with(['estimations' => function ($query) use ($activity) {
             $query->where('id_activities', '=', $activity->id);
         }])->get();
 
@@ -475,7 +475,7 @@ class Home extends Base {
             return $action;
         }
 
-        $tag = Models\Tags::where('id', '=', (int)$id)->firstOrFail();
+        $tag = Models\Tag::where('id', '=', (int)$id)->firstOrFail();
 
         if ($action !== false) {
             $form->load($tag);
@@ -531,7 +531,7 @@ class Home extends Base {
             return $action;
         }
 
-        $user = Models\Users::where('id', '=', (int)$id)->firstOrFail();
+        $user = Models\User::where('id', '=', (int)$id)->firstOrFail();
 
         unset($user->password);
 
@@ -571,7 +571,7 @@ class Home extends Base {
             return Redirect::to('/login');
         }
 
-        $fact = Models\Facts::where('id', '=', (int)$id);
+        $fact = Models\Fact::where('id', '=', (int)$id);
 
         if (empty($this->user->admin)) {
             $fact->where('id_users', '=', $this->user->id);
@@ -638,7 +638,7 @@ class Home extends Base {
             return $action;
         }
 
-        $facts = Models\Facts::where('remote_id', '>', 0)->with(['users'])->get();
+        $facts = Models\Fact::where('remote_id', '>', 0)->with(['users'])->get();
         $duplicates = [];
 
         foreach ($facts as $fact) {
@@ -676,7 +676,7 @@ class Home extends Base {
 
     public function notifications()
     {
-        $notifications = Models\Notifications::whereRead(false)
+        $notifications = Models\Notification::whereRead(false)
             ->orderBy('created_at', 'DESC')
             ->get();
 
@@ -687,7 +687,7 @@ class Home extends Base {
 
     public function notificationRead($id)
     {
-        $notification = Models\Notifications::find($id);
+        $notification = Models\Notification::find($id);
 
         if (! empty($notification)) {
             $notification->read = true;

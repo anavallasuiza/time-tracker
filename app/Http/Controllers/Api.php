@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Models, App\Libs, Response, Input;
+use App\Database\Models, App\Libs, Response, Input;
 
 class Api extends Controller {
     const FACTS_TIME_LIMIT = '-1 month';
@@ -20,7 +20,7 @@ class Api extends Controller {
     public function getActivities()
     {
         return Response::json([
-            'data' => Models\Activities::get()
+            'data' => Models\Activity::get()
         ]);
     }
 
@@ -34,7 +34,7 @@ class Api extends Controller {
             return $response;
         }
 
-        $facts = Models\Facts
+        $facts = Models\Fact
             ::where('id_users', '=', $this->user()->id)
             ->where('hostname', '=', $hostname)
             ->where('start_time', '>=', date('Y-m-d 00:00:00', strtotime(self::FACTS_TIME_LIMIT)))
@@ -48,7 +48,7 @@ class Api extends Controller {
     public function getTags()
     {
         return Response::json([
-            'data' => Models\Tags::get()
+            'data' => Models\Tag::get()
         ]);
     }
 
@@ -62,7 +62,7 @@ class Api extends Controller {
             return $response;
         }
 
-        $facts = Models\Facts
+        $facts = Models\Fact
             ::where('id_users', '=', $this->user()->id)
             ->where('hostname', '=', $hostname)
             ->where('start_time', '>=', date('Y-m-d 00:00:00', strtotime(self::FACTS_TIME_LIMIT)))
@@ -112,11 +112,11 @@ class Api extends Controller {
             return $response;
         }
 
-        $existentModel = Models\Tags::where('name', $name)
+        $existentModel = Models\Tag::where('name', $name)
             ->first();
 
         if (empty($existentModel)) {
-            Models\Notifications::create([
+            Models\Notification::create([
                 'title' => 'API Error',
                 'description' => sprintf('Trying to create an unexistent tag "%s" by the user identified as "%s"', $name, $this->user()->user),
                 'read' => false
@@ -144,11 +144,11 @@ class Api extends Controller {
             return $response;
         }
 
-        $existentModel = Models\Activities::where('name', $name)
+        $existentModel = Models\Activity::where('name', $name)
             ->first();
 
         if (empty($existentModel)) {
-            Models\Notifications::create([
+            Models\Notification::create([
                 'title' => 'API Error',
                 'description' => sprintf('Trying to create an unexistent activity "%s" by the user identified as "%s"', $name, $this->user()->user),
                 'read' => false
@@ -227,7 +227,7 @@ class Api extends Controller {
         }
 
         if ($store_hours) {
-            $overwrite = Models\Facts::where('id_users', '=', $this->user()->id)
+            $overwrite = Models\Fact::where('id_users', '=', $this->user()->id)
                 ->where('start_time', '<', $end_time)
                 ->where('end_time', '>', $start_time)
                 ->first();
@@ -243,7 +243,7 @@ class Api extends Controller {
             }
         }
 
-        $fact = Models\Facts::create([
+        $fact = Models\Fact::create([
             'start_time' => $start_time->format('Y/m/d'.($store_hours ? ' H:i:s' : '')),
             'end_time' => $end_time->format('Y/m/d'.($store_hours ? ' H:i:s' : '')),
             'total_time' => $total,
@@ -273,7 +273,7 @@ class Api extends Controller {
             }
         }
 
-        Models\Facts::where([
+        Models\Fact::where([
             'hostname' => $hostname,
             'remote_id' => $remote_id,
             'id_users' => $this->user()->id

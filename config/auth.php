@@ -33,7 +33,7 @@ return [
     |
     */
 
-    'model' => App\Models\Users::class,
+    'model' => App\Database\Models\User::class,
 
     /*
     |--------------------------------------------------------------------------
