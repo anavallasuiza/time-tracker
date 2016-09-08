@@ -1,5 +1,5 @@
 <?php
-namespace App\Models;
+namespace App\Database\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Authenticatable;
@@ -8,12 +8,12 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
 /**
- * App\Models\Users
+ * App\Database\Models\Users
  *
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Facts[] $facts
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Database\Models\Fact[] $facts
  * @mixin \Eloquent
  */
-class Users extends Model implements AuthenticatableContract, CanResetPasswordContract {
+class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
     use Authenticatable, CanResetPassword;
 
     protected $table = 'users';
@@ -23,6 +23,6 @@ class Users extends Model implements AuthenticatableContract, CanResetPasswordCo
 
     public function facts()
     {
-        return $this->hasMany('App\Models\Facts', 'id_users', 'id');
+        return $this->hasMany(Fact::class, 'id_users', 'id');
     }
 }

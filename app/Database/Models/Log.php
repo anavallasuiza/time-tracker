@@ -1,15 +1,15 @@
 <?php
-namespace App\Models;
+namespace App\Database\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * App\Models\Logs
+ * App\Database\Models\Logs
  *
- * @property-read \App\Models\Users $users
+ * @property-read \App\Database\Models\User $users
  * @mixin \Eloquent
  */
-class Logs extends Model {
+class Log extends Model {
     protected $table = 'logs';
     protected $guarded = ['id'];
 
@@ -17,6 +17,6 @@ class Logs extends Model {
 
     public function users()
     {
-        return $this->belongsTo('App\Models\Users', 'id_users');
+        return $this->belongsTo(User::class, 'id_users');
     }
 }

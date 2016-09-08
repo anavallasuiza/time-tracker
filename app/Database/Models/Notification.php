@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Models;
+namespace App\Database\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * App\Models\Notifications
+ * App\Database\Models\Notifications
  *
  * @mixin \Eloquent
  */
-class Notifications extends Model
+class Notification extends Model
 {
     protected $table = 'notifications';
 

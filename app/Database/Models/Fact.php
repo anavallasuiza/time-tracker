@@ -1,20 +1,20 @@
 <?php
-namespace App\Models;
+namespace App\Database\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * App\Models\Facts
+ * App\Database\Models\Facts
  *
- * @property-read \App\Models\Activities $activities
- * @property-read \App\Models\Users $users
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Tags[] $tags
+ * @property-read \App\Database\Models\Activity $activities
+ * @property-read \App\Database\Models\User $users
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Database\Models\Tag[] $tags
  * @property-read mixed $start_time
  * @property-read mixed $end_time
  * @mixin \Eloquent
  */
-class Facts extends Model {
+class Fact extends Model {
     use SoftDeletes;
 
     protected $table = 'facts';
@@ -23,17 +23,17 @@ class Facts extends Model {
 
     public function activities()
     {
-        return $this->belongsTo('App\Models\Activities', 'id_activities');
+        return $this->belongsTo(Activity::class, 'id_activities');
     }
 
     public function users()
     {
-        return $this->belongsTo('App\Models\Users', 'id_users');
+        return $this->belongsTo(User::class, 'id_users');
     }
 
     public function tags()
     {
-        return $this->belongsToMany('App\Models\Tags', 'facts_tags', 'id_facts', 'id_tags');
+        return $this->belongsToMany(Tag::class, 'facts_tags', 'id_facts', 'id_tags');
     }
 
     private function formatDate($date)
