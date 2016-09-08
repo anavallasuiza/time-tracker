@@ -54,6 +54,11 @@ class Home extends Base {
         return Response::make(View::make('base')->nest('body', 'error404'), 404);
     }
 
+    public function error500()
+    {
+        return Response::make(View::make('base')->nest('body', 'error500'), 500);
+    }
+
     public function index()
     {
         if (empty($this->user)) {
