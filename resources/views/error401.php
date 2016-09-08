@@ -1,7 +1,7 @@
-<div class="text-center">
+<div class="jumbotron">
     <h1><?php echo _('Error 401 - Unauthorized'); ?></h1>
 
-    <div class="alert alert-warning">
+    <p>
         <?php echo _('Sorry but you have not authorization to view this site'); ?>
-    </div>
+    </p>
 </div>
