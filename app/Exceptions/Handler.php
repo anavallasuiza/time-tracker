@@ -2,9 +2,16 @@
 
 namespace App\Exceptions;
 
+use ErrorException;
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Response;
+use RuntimeException;
+use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use View;
 
 class Handler extends ExceptionHandler
 {
@@ -39,6 +46,18 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        return parent::render($request, $e);
+        if ($e instanceof ModelNotFoundException) {
+            $e = new NotFoundHttpException($e->getMessage(), $e);
+        }
+
+
+        if($e instanceof NotFoundHttpException)
+        {
+            return Response::make(View::make('base')->nest('body', 'error404'), 404);
+        }elseif($e instanceof RuntimeException || $e instanceof FatalThrowableError || $e instanceof ErrorException){
+            \Log::alert($e->getMessage());
+            return Response::make(View::make('base')->nest('body', 'error500'), 500);
+        }
+
     }
 }
