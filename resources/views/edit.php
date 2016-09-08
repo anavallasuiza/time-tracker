@@ -62,4 +62,30 @@
         <a href="<?= url('user'); ?>" class="btn btn-success btn-block"><?= _('Add new user'); ?></a>
     </div>
     <?php } ?>
+
+    <?php if ($clients) { ?>
+        <div class="col-xs-6 mt-20">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title"><?= _('Clients'); ?></h2>
+                </div>
+            </div>
+
+            <ul class="list-group">
+                <?php foreach ($clients as $client) { ?>
+                    <li class="list-group-item">
+                        <a href="<?= url(route('client.edit', ['id' => $client->id])); ?>" class="text-black">
+                            <?= $client->name; ?>
+                        </a>
+                        <div class="pull-right">
+                            <span class="label label-success" data-toggle="tooltip" data-placement="top" title="<?php echo sprintf(_('%s active activities'), $client->activitiesActives()->count())?>"><?php echo $client->activitiesActives()->count() ?></span>
+                            <span class="label label-default" data-toggle="tooltip" data-placement="top" title="<?php echo sprintf(_('%s archived activities'), $client->activitiesArchived()->count())?>"><?php echo $client->activitiesArchived()->count() ?></span>
+                        </div>
+                    </li>
+                <?php } ?>
+            </ul>
+
+            <a href="<?= url(route('client.add')); ?>" class="btn btn-success btn-block"><?= _('Add new client'); ?></a>
+        </div>
+    <?php } ?>
 </div>

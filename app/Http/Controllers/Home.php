@@ -1,8 +1,10 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Database\Repositories\ClientRepository;
 use Config, Input, Redirect, Response, Session, View;
 use App\Models, App\Libs;
+use ModelManager;
 
 class Home extends Base {
     public function login()
@@ -332,6 +334,9 @@ class Home extends Base {
 
     public function edit()
     {
+        /** @var ClientRepository $clientsRepo */
+        $clientsRepo = ModelManager::getRepository(Models\Clients::class);
+
         if (empty($this->user)) {
             return Redirect::to('/login');
         }
@@ -345,7 +350,8 @@ class Home extends Base {
         return View::make('base')->nest('body', 'edit', [
             'activities' => Models\Activities::orderBy('name', 'ASC')->get(),
             'tags' => Models\Tags::orderBy('name', 'ASC')->get(),
-            'users' => $users
+            'users' => $users,
+            'clients' => $clientsRepo->getClients()
         ]);
     }
 

@@ -178,3 +178,7 @@
         display: none;
     }
 }
+
+.text-black, a.text-black:hover {
+    color: #555555;
+}
