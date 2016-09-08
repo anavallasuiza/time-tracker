@@ -1,8 +1,8 @@
 <nav class="navbar navbar-default navbar-static">
     <div class="navbar-header">
-        <a href="<?= url('/'); ?>" class="navbar-brand"><img src="<?= asset('images/logo-50.png'); ?>" alt="<?= _('A Navalla Suíza'); ?>" /></a>
+        <a href="<?php echo url('/'); ?>" class="navbar-brand"><img src="<?php echo asset('images/logo-50.png'); ?>" alt="<?php echo _('A Navalla Suíza'); ?>" /></a>
         <?php if (! $unreadNotifications->isEmpty()) { ?>
-        <a href="<?= url('/notifications'); ?>" class="btn-notifications" aria-label="Notifications">
+        <a href="<?php echo url('/notifications'); ?>" class="btn-notifications" aria-label="Notifications">
             <span class="glyphicon glyphicon-exclamation-sign text-warning" aria-hidden="true"></span>
         </a>
         <?php } ?>
@@ -18,7 +18,7 @@
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-large">
-                    <?= View::make('sub-fact-add')->render(); ?>
+                    <?php echo View::make('sub-fact-add')->render(); ?>
                 </div>
             </li>
         </ul>

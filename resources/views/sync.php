@@ -1,21 +1,21 @@
-<form class="text-center well submit-wait" data-message="<?= _('Please wait...'); ?>" method="post">
-    <?= Form::token(); ?>
-    <a href="<?= url('/'); ?>" class="btn btn-info"><?= _('Back'); ?></a>
+<form class="text-center well submit-wait" data-message="<?php echo _('Please wait...'); ?>" method="post">
+    <?php echo Form::token(); ?>
+    <a href="<?php echo url('/'); ?>" class="btn btn-info"><?php echo _('Back'); ?></a>
 
     <button type="submit" name="action" value="sync" class="btn btn-success">
         <i class="glyphicon glyphicon-refresh"></i>
-        <?= _('Syncronize database'); ?>
+        <?php echo _('Syncronize database'); ?>
     </button>
 </form>
 
 <?php if ($action) { ?>
 
 <?php foreach ($response as $name => $log) { ?>
-<h2><?= $name; ?></h2>
+<h2><?php echo $name; ?></h2>
 
 <?php foreach ($log as $row) { ?>
-<div class="alert alert-<?= $row['status']; ?>">
-    <?= $row['message']; ?>
+<div class="alert alert-<?php echo $row['status']; ?>">
+    <?php echo $row['message']; ?>
 </div>
 <?php } ?>
 

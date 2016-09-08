@@ -1,16 +1,16 @@
 <div class="row">
     <div class="col-sm-offset-3 col-sm-6">
-        <h1 class="text-center"><?= _('Login'); ?></h1>
+        <h1 class="text-center"><?php echo _('Login'); ?></h1>
 
         <form method="post">
-            <?= Form::token(); ?>
+            <?php echo Form::token(); ?>
 
             <div class="form-group">
-                <?= $form['user']; ?>
+                <?php echo $form['user']; ?>
             </div>
 
             <div class="form-group">
-                <?= $form['password']; ?>
+                <?php echo $form['password']; ?>
             </div>
 
             <div class="hidden">
@@ -24,10 +24,10 @@
             </div>
 
             <div class="form-group clearfix">
-                <input type="hidden" name="referer" value="<?= urlencode(getenv('HTTP_REFERER')); ?>" />
+                <input type="hidden" name="referer" value="<?php echo urlencode(getenv('HTTP_REFERER')); ?>" />
 
                 <button type="submit" class="btn btn-danger btn-lg pull-right" name="action" value="login">
-                    <?= _('Login'); ?>
+                    <?php echo _('Login'); ?>
                 </button>
             </div>
         </form>

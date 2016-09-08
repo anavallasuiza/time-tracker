@@ -1,4 +1,4 @@
-<?= View::make('sub-filters')->with([
+<?php echo View::make('sub-filters')->with([
     'filters' => $filters,
     'sort' => $sort,
     'clients'=>$clients
@@ -7,18 +7,18 @@
 <table class="table table-hover facts-table">
     <thead>
         <tr>
-            <th class="column-user"><?= _('User'); ?></th>
-            <th class="column-activity"><?= _('Activity'); ?></th>
-            <th class="column-tag"><?= _('Tags'); ?></th>
-            <th class="column-activity"><?= _('Client'); ?></th>
+            <th class="column-user"><?php echo _('User'); ?></th>
+            <th class="column-activity"><?php echo _('Activity'); ?></th>
+            <th class="column-tag"><?php echo _('Tags'); ?></th>
+            <th class="column-activity"><?php echo _('Client'); ?></th>
             <th class="text-center column-start">
-                <a href="<?= \App\Libs\Utils::url('sort', ($sort === 'start-desc') ? 'start-asc' : 'start-desc'); ?>"><?= _('Start time'); ?></a>
+                <a href="<?php echo \App\Libs\Utils::url('sort', ($sort === 'start-desc') ? 'start-asc' : 'start-desc'); ?>"><?php echo _('Start time'); ?></a>
             </th>
             <th class="text-center column-end">
-                <a href="<?= \App\Libs\Utils::url('sort', ($sort === 'end-desc') ? 'end-asc' : 'end-desc'); ?>"><?= _('End time'); ?></a>
+                <a href="<?php echo \App\Libs\Utils::url('sort', ($sort === 'end-desc') ? 'end-asc' : 'end-desc'); ?>"><?php echo _('End time'); ?></a>
             </th>
             <th class="text-center column-time">
-                <a href="<?= \App\Libs\Utils::url('sort', ($sort === 'total-desc') ? 'total-asc' : 'total-desc'); ?>"><?= _('Total time'); ?></a>
+                <a href="<?php echo \App\Libs\Utils::url('sort', ($sort === 'total-desc') ? 'total-asc' : 'total-desc'); ?>"><?php echo _('Total time'); ?></a>
             </th>
         </tr>
     </thead>
@@ -33,12 +33,12 @@
 
     <tfoot>
         <tr>
-            <td colspan="7"><strong class="pull-right"><?= sprintf(_('Total time: %s'), $total_time); ?></strong></td>
+            <td colspan="7"><strong class="pull-right"><?php echo sprintf(_('Total time: %s'), $total_time); ?></strong></td>
         </tr>
     </tfoot>
 </table>
 
-<?= View::make('sub-fact-edit')->with([
+<?php echo View::make('sub-fact-edit')->with([
     'activities' => $activities,
     'tags' => $tags
 ])->render(); ?>
@@ -80,5 +80,5 @@
 </div>
 
 <script>
-var HOUR = <?= $user->store_hours ? 'true' : 'false'; ?>;
+var HOUR = <?php echo $user->store_hours ? 'true' : 'false'; ?>;
 </script>

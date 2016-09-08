@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
 
-        <title><?= _('ANS Time Tracker'); ?></title>
+        <title><?php echo _('ANS Time Tracker'); ?></title>
 
         <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=yes">
 
@@ -19,20 +19,20 @@
         <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.1/css/bootstrap-datepicker3.css" />
         <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.0.2/css/bootstrap3/bootstrap-switch.min.css" />
         <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Press+Start+2P" />
-        <link rel="stylesheet" type="text/css" href="<?= asset('css/styles.css'); ?>" />
+        <link rel="stylesheet" type="text/css" href="<?php echo asset('css/styles.css'); ?>" />
     </head>
 
     <body>
         <div class="page-header">
             <div class="container">
-                <?= View::make('sub-header')->render(); ?>
+                <?php echo View::make('sub-header')->render(); ?>
             </div>
         </div>
 
         <?php if ($flash = Session::get('flash-message')) { ?>
         <div class="container center">
-            <div class="alert alert-<?= $flash['status']; ?>">
-                <?= $flash['message']; ?>
+            <div class="alert alert-<?php echo $flash['status']; ?>">
+                <?php echo $flash['message']; ?>
                 <?php Session::forget('flash-message'); ?>
             </div>
         </div>
@@ -50,7 +50,7 @@
             </div>
         <?php } ?>
         <div class="container">
-            <?= $body; ?>
+            <?php echo $body; ?>
         </div>
 
         <footer id="footer" class="text-center">
@@ -58,20 +58,20 @@
                 <div class="well">
                     <?php if ($user) { ?>
 
-                    <a href="<?= url('/stats'); ?>" class="label label-default"><?= _('Stats'); ?></a>
-                    <a href="<?= url('/stats/calendar'); ?>" class="label label-default"><?= _('Calendar'); ?></a>
-                    <a href="<?= url('/edit'); ?>" class="label label-default"><?= _('Edit'); ?></a>
-                    <a href="<?= url('/sync'); ?>" class="label label-default"><?= _('Sync'); ?></a>
+                    <a href="<?php echo url('/stats'); ?>" class="label label-default"><?php echo _('Stats'); ?></a>
+                    <a href="<?php echo url('/stats/calendar'); ?>" class="label label-default"><?php echo _('Calendar'); ?></a>
+                    <a href="<?php echo url('/edit'); ?>" class="label label-default"><?php echo _('Edit'); ?></a>
+                    <a href="<?php echo url('/sync'); ?>" class="label label-default"><?php echo _('Sync'); ?></a>
 
                     <?php if ($user->admin) { ?>
-                    <a href="<?= url('/git-update'); ?>" class="label label-default"><?= _('Update environment'); ?></a>
+                    <a href="<?php echo url('/git-update'); ?>" class="label label-default"><?php echo _('Update environment'); ?></a>
                     <?php } ?>
 
                     <?php } ?>
 
                     <p><a href="https://github.com/anavallasuiza/time-tracker" class="text-muted">
                         <i class="fa fa-github"></i>
-                        <?= _('View on Github'); ?>
+                        <?php echo _('View on Github'); ?>
                     </a></p>
                 </div>
             </div>
@@ -86,9 +86,9 @@
         <script src="//igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"></script>
 
         <script>
-        var BASE_WWW = '<?= URL::to('/'); ?>';
+        var BASE_WWW = '<?php echo URL::to('/'); ?>';
         </script>
 
-        <script src="<?= asset('js/scripts.js'); ?>" type="text/javascript"></script>
+        <script src="<?php echo asset('js/scripts.js'); ?>" type="text/javascript"></script>
     </body>
 </html>

@@ -1,4 +1,4 @@
-<?= View::make('sub-filters')->with([
+<?php echo View::make('sub-filters')->with([
     'filters' => $filters,
     'clients' => $clients
 ])->render(); ?>
@@ -6,17 +6,17 @@
 <ul class="nav nav-tabs" role="tablist">
     <li class="dropdown active">
         <a role="button" data-toggle="dropdown" href="#">
-            <?= $filters['times'] ? _('Times relatives to dates') : _('Times relatives to projects'); ?>
+            <?php echo $filters['times'] ? _('Times relatives to dates') : _('Times relatives to projects'); ?>
             <span class="caret"></span>
         </a>
 
         <ul class="dropdown-menu" role="menu">
             <li role="presentation">
-                <a role="menuitem" tabindex="-1" href="<?= \App\Libs\Utils::url('times', null); ?>"><?= _('Times relatives to projects'); ?></a>
+                <a role="menuitem" tabindex="-1" href="<?php echo \App\Libs\Utils::url('times', null); ?>"><?php echo _('Times relatives to projects'); ?></a>
             </li>
 
             <li role="presentation">
-                <a role="menuitem" tabindex="-1" href="<?= \App\Libs\Utils::url('times', 'dates'); ?>"><?= _('Times relatives to dates'); ?></a>
+                <a role="menuitem" tabindex="-1" href="<?php echo \App\Libs\Utils::url('times', 'dates'); ?>"><?php echo _('Times relatives to dates'); ?></a>
             </li>
         </ul>
     </li>
@@ -25,25 +25,25 @@
 <?php foreach ($stats as $group) { ?>
 <?php if (empty($group['rows'])) continue; ?>
 
-<h2><?= $group['title']; ?></h2>
+<h2><?php echo $group['title']; ?></h2>
 
 <?php foreach ($group['rows'] as $row) { ?>
 <h4 class="text-muted">
     <div class="clearfix">
         <div class="pull-right">
-            <?= \App\Libs\Utils::progressText($row); ?>
+            <?php echo \App\Libs\Utils::progressText($row); ?>
         </div>
 
         <?php if ($row['selected']) { ?>
-        <a href="<?= \App\Libs\Utils::url($group['filter'], null); ?>" class="fa fa-times text-muted"></a>
+        <a href="<?php echo \App\Libs\Utils::url($group['filter'], null); ?>" class="fa fa-times text-muted"></a>
         <?php } ?>
 
-        <a href="<?= \App\Libs\Utils::url($group['filter'], $row['id']); ?>"><?= $row['name']; ?></a>
+        <a href="<?php echo \App\Libs\Utils::url($group['filter'], $row['id']); ?>"><?php echo $row['name']; ?></a>
     </div>
 </h4>
 
 <div class="progress">
-    <?= \App\Libs\Utils::progressBar($row); ?>
+    <?php echo \App\Libs\Utils::progressBar($row); ?>
 </div>
 <?php } ?>
 <?php } ?>

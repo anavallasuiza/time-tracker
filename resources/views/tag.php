@@ -1,24 +1,24 @@
 <form method="post">
-    <?= Form::token(); ?>
-    <?= $form['id']; ?>
+    <?php echo Form::token(); ?>
+    <?php echo $form['id']; ?>
 
-    <h1><?= sprintf(_('Tag %s'), $tag->name); ?></h1>
+    <h1><?php echo sprintf(_('Tag %s'), $tag->name); ?></h1>
 
-    <?= $form['name']; ?>
+    <?php echo $form['name']; ?>
 
     <div class="alert alert-warning">
-        <?= sprintf(_('Take care %s this tag. There are users using automated tools based in predefined tags. Name used to this tag must be exactly as their have previously defined or old tags names will be created again.'), empty($tag->id) ? 'creating' : 'editing'); ?>
+        <?php echo sprintf(_('Take care %s this tag. There are users using automated tools based in predefined tags. Name used to this tag must be exactly as their have previously defined or old tags names will be created again.'), empty($tag->id) ? 'creating' : 'editing'); ?>
     </div>
 
     <div class="form-group text-center">
-        <a href="<?= url('/edit/'); ?>" class="btn btn-info">
+        <a href="<?php echo url('/edit/'); ?>" class="btn btn-info">
             <i class="fa fa-undo"></i>
-            <?= _('Back'); ?>
+            <?php echo _('Back'); ?>
         </a>
 
-        <button type="submit" name="action" value="tag<?= empty($tag->id) ? 'Add' : 'Edit'; ?>" class="btn btn-success">
+        <button type="submit" name="action" value="tag<?php echo empty($tag->id) ? 'Add' : 'Edit'; ?>" class="btn btn-success">
             <i class="glyphicon glyphicon-floppy-disk"></i>
-            <?= _('Save'); ?>
+            <?php echo _('Save'); ?>
         </button>
     </div>
 </form>
