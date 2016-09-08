@@ -32,7 +32,7 @@ class Clients extends Model implements HasCustomRepository
      */
     public function activitiesActives()
     {
-        return $this->activities->where('archived',0);
+        return $this->activities()->where('archived',0)->get();
     }
 
     /**
@@ -40,7 +40,7 @@ class Clients extends Model implements HasCustomRepository
      */
     public function activitiesArchived()
     {
-        return $this->activities->where('archived',1);
+        return $this->activities()->where('archived',1)->get();
     }
 
 }
