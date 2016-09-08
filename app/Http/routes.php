@@ -35,18 +35,18 @@ Route::group(['before' => 'auth'], function () {
     Route::any('/user/', ['as' => 'user.add', 'uses' => 'Home@userAdd']);
     Route::any('/user/{id}', ['as' => 'user.edit', 'uses' => 'Home@userEdit']);
 
-    Route::get('client', [
+    Route::get('/client', [
         'as' => 'client.add',
         'uses' => 'ClientController@add'
     ]);
-    Route::post('client', [
+    Route::post('/client', [
         'uses' => 'ClientController@postAdd'
     ]);
-    Route::get('client/{id}', [
+    Route::get('/client/{id}', [
         'as' => 'client.edit',
         'uses' => 'ClientController@edit'
     ]);
-    Route::post('client/{id}', [
+    Route::post('/client/{id}', [
         'as' => 'client.edit',
         'uses' => 'ClientController@postEdit'
     ]);
@@ -62,7 +62,7 @@ Route::group(['before' => 'auth'], function () {
     Route::post('/notifications/{id}/read', ['as' => 'notifications.read', 'uses' => 'Home@notificationRead']);
 });
 
-Route::group(['prefix' => 'api', 'before' => 'auth.api'], function () {
+Route::group(['prefix' => 'api/', 'before' => 'auth.api'], function () {
     Route::get('activities', ['as' => 'api.activities', 'uses' => 'Api@getActivities']);
     Route::get('facts', ['as' => 'api.facts', 'uses' => 'Api@getFacts']);
     Route::get('tags', ['as' => 'api.tags', 'uses' => 'Api@getTags']);
