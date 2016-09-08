@@ -37,4 +37,13 @@ class Activities extends Model {
     {
         return $this->archived==0?false:true;
     }
+
+    /**
+     * @return bool
+     */
+    public function hasClient()
+    {
+        return !empty($this->id_clients);
+    }
+
 }
