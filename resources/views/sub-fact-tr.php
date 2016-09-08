@@ -7,9 +7,11 @@
     <td class="column-activity"><a href="?activity=<?= $fact->activities->id; ?>"><?= $fact->activities->name; ?></a></td>
     <?php } ?>
 
-    <td class="column-tag"><?=
-        implode(', ', array_column($fact->tags->toArray(), 'name'));
-    ?></td>
+    <td class="column-tag">
+    <?php foreach ($fact->tags as $tag):?>
+        <a href="?tag=<?= $tag->id; ?>" class="label label-default"><?php echo $tag->name?></a>
+    <?php  endforeach;?>
+    </td>
     <?php if($fact->activities->hasClient()): ?>
         <td><a href="?client=<?= $fact->activities->client->id; ?>"><?= $fact->activities->client->name; ?></a></td>
     <?php else:?>
