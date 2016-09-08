@@ -140,7 +140,7 @@ class Home extends Base {
 
         $activity = Models\Activities::create([
             'name' => $data['name'],
-            'archived' => is_null($data['archived']) ? false : $data['archived']
+            'archived' => is_null($data['archived']) ? false : $data['archived'],
             'id_clients' => isset($data['id_clients']) && $data['id_clients']!=-1?$data['id_clients']:null
         ]);
 
