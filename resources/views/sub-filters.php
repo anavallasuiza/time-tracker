@@ -26,6 +26,7 @@
                 <?php } ?>
             </select>
         </div>
+        <?php if(isset($clients)):?>
         <div class="col-sm-3 form-group">
             <select name="client" class="form-control filter">
                 <option value=""><?= _('All clients'); ?></option>
@@ -35,6 +36,7 @@
                 <?php } ?>
             </select>
         </div>
+        <?php endif;?>
     </div>
 
 
