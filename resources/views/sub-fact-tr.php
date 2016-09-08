@@ -7,14 +7,20 @@
     <td class="column-activity"><a href="?activity=<?= $fact->activities->id; ?>"><?= $fact->activities->name; ?></a></td>
     <?php } ?>
 
-    <td class="column-tag"><?=
-        implode(', ', array_column($fact->tags->toArray(), 'name'));
-    ?></td>
-
+    <td class="column-tag">
+    <?php foreach ($fact->tags as $tag):?>
+        <a href="?tag=<?= $tag->id; ?>" class="label label-default"><?php echo $tag->name?></a>
+    <?php  endforeach;?>
+    </td>
+    <?php if($fact->activities->hasClient()): ?>
+        <td><a href="?client=<?= $fact->activities->client->id; ?>"><?= $fact->activities->client->name; ?></a></td>
+    <?php else:?>
+        <td> <?php echo _('No client')?></td>
+    <?php endif;?>
     <td class="text-center column-start"><?= $fact->start_time->format($user->dateFormat); ?></td>
     <td class="text-center column-end"><?= $fact->end_time->format($user->dateFormat); ?></td>
 
-    <td class="text-center column-time">
+    <td class="text-right column-time">
         <div class="col-xs-8">
             <?= date('H:i', mktime(0, $fact->total_time)); ?>
         </div>

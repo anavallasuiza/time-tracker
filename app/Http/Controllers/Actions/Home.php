@@ -141,6 +141,7 @@ class Home extends Base {
         $activity = Models\Activities::create([
             'name' => $data['name'],
             'archived' => is_null($data['archived']) ? false : $data['archived']
+            'id_clients' => isset($data['id_clients']) && $data['id_clients']!=-1?$data['id_clients']:null
         ]);
 
         $tags = Models\Tags::orderBy('name', 'ASC')->get();
@@ -212,6 +213,11 @@ class Home extends Base {
         $activity->name = $data['name'];
         $activity->archived = $data['archived'];
         $activity->total_hours = $total;
+
+        if(isset($data['id_clients']))
+        {
+            $activity->id_clients = $data['id_clients']!=-1?$data['id_clients']:null;
+        }
         $activity->save();
 
         Models\Logs::create([

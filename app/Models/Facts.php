@@ -1,6 +1,7 @@
 <?php
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read mixed $end_time
  * @mixin \Eloquent
  */
-class Facts extends \Eloquent {
+class Facts extends Model {
     use SoftDeletes;
 
     protected $table = 'facts';
@@ -85,6 +86,17 @@ class Facts extends \Eloquent {
 
         if ($description) {
             $facts->where('description', 'LIKE', '%'.$description.'%');
+        }
+
+        if ($client) {
+            $facts->whereHas('activities', function ($query) use ($client) {
+                if($client==-1)
+                {
+                    $query->whereNull('activities.id_clients');
+                }else{
+                    $query->where('activities.id_clients', '=', $client);
+                }
+            });
         }
 
         list($sort_field, $sort_mode) = explode('-', $sort);

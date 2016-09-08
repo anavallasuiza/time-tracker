@@ -1,10 +1,24 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Database\Repositories\ClientRepository;
 use Config, Input, Redirect, Response, Session, View;
 use App\Models, App\Libs;
+use ModelManager;
 
 class Home extends Base {
+    /**
+     * @var ClientRepository
+     */
+    protected $clientsRepo;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->clientsRepo = ModelManager::getRepository(Models\Clients::class);
+    }
+
+
     public function login()
     {
         if ($this->user) {
@@ -80,7 +94,8 @@ class Home extends Base {
             'total_time' => Libs\Utils::sumHours($facts),
             'rows' => $rows,
             'sort' => $filters['sort'],
-            'filters' => $filters
+            'filters' => $filters,
+            'clients' => $this->clientsRepo->getClients()
         ]);
     }
 
@@ -332,6 +347,7 @@ class Home extends Base {
 
     public function edit()
     {
+
         if (empty($this->user)) {
             return Redirect::to('/login');
         }
@@ -345,7 +361,8 @@ class Home extends Base {
         return View::make('base')->nest('body', 'edit', [
             'activities' => Models\Activities::orderBy('name', 'ASC')->get(),
             'tags' => Models\Tags::orderBy('name', 'ASC')->get(),
-            'users' => $users
+            'users' => $users,
+            'clients' => $this->clientsRepo->getClients()
         ]);
     }
 
@@ -356,6 +373,15 @@ class Home extends Base {
         }
 
         $form = (new Forms\Activity)->edit();
+
+        $clients = $this->clientsRepo->getClients();
+
+        $clientsArray = [-1=>'No client'];
+        foreach ($clients as $client)
+        {
+            $clientsArray[$client->id]=$client->name;
+        }
+        $form['id_clients']->options($clientsArray);
 
         if (is_object($action = $this->action(__FUNCTION__, $form))) {
             return $action;
@@ -385,6 +411,14 @@ class Home extends Base {
         }
 
         $form = (new Forms\Activity)->edit();
+        $clients = $this->clientsRepo->getClients();
+
+        $clientsArray = [-1=>'No client'];
+        foreach ($clients as $client)
+        {
+            $clientsArray[$client->id]=$client->name;
+        }
+        $form['id_clients']->options($clientsArray);
 
         if (is_object($action = $this->action(__FUNCTION__, $form))) {
             return $action;

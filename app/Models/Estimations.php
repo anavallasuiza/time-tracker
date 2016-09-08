@@ -1,6 +1,8 @@
 <?php
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Model;
+
 /**
  * App\Models\Estimations
  *
@@ -8,7 +10,7 @@ namespace App\Models;
  * @property-read \App\Models\Tags $tags
  * @mixin \Eloquent
  */
-class Estimations extends \Eloquent {
+class Estimations extends Model {
     protected $table = 'estimations';
     protected $guarded = ['id'];
 

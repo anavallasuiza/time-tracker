@@ -1,6 +1,7 @@
 <?= View::make('sub-filters')->with([
     'filters' => $filters,
-    'sort' => $sort
+    'sort' => $sort,
+    'clients'=>$clients
 ])->render(); ?>
 
 <table class="table table-hover facts-table">
@@ -9,6 +10,7 @@
             <th class="column-user"><?= _('User'); ?></th>
             <th class="column-activity"><?= _('Activity'); ?></th>
             <th class="column-tag"><?= _('Tags'); ?></th>
+            <th class="column-activity"><?= _('Client'); ?></th>
             <th class="text-center column-start">
                 <a href="<?= \App\Libs\Utils::url('sort', ($sort === 'start-desc') ? 'start-asc' : 'start-desc'); ?>"><?= _('Start time'); ?></a>
             </th>
@@ -31,7 +33,7 @@
 
     <tfoot>
         <tr>
-            <td colspan="6"><strong class="pull-right"><?= sprintf(_('Total time: %s'), $total_time); ?></strong></td>
+            <td colspan="7"><strong class="pull-right"><?= sprintf(_('Total time: %s'), $total_time); ?></strong></td>
         </tr>
     </tfoot>
 </table>

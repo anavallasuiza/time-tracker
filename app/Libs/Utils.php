@@ -146,7 +146,7 @@ class Utils
 
     public static function filters(array $filters = [])
     {
-        $fields = ['user', 'activity', 'tag', 'first', 'last', 'description', 'sort', 'times'];
+        $fields = ['user', 'activity', 'tag', 'first', 'last', 'description', 'sort', 'times','client'];
 
         foreach ($fields as $field) {
             if (!isset($filters[$field])) {
@@ -170,6 +170,13 @@ class Utils
         } else {
             $filters['activity'] = false;
         }
+
+        if (isset($client) && (int)$client) {
+            $filters['client'] = (int)$client;
+        } else {
+            $filters['client'] = false;
+        }
+
 
         if (isset($tag) && (int)$tag) {
             $filters['tag'] = (int)$tag;

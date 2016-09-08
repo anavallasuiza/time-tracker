@@ -18,6 +18,9 @@ class Activity
                 'placeholder' => _('Archived'),
                 'value' => 1
             ]),
+            'id_clients'=> Field::select()->attr([
+                'placeholder' => _('The client of the activity')
+            ]),
             'total_hours' => Field::text()->disabled()->attr([
                 'class' => 'text-center',
                 'placeholder' => _('Estimated hours')
