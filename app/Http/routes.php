@@ -11,13 +11,38 @@ Route::group(['before' => 'auth'], function()
     Route::get('/stats', 'Home@stats');
     Route::get('/stats/calendar', 'Home@statsCalendar');
     Route::any('/sync', 'Home@sync');
-    Route::any('/edit', 'Home@edit');
+    Route::any('/edit',  [
+        'as' => 'edit.show',
+        'uses' => 'Home@edit'
+    ]);
+
     Route::any('/activity/', 'Home@activityAdd');
     Route::any('/activity/{id}', 'Home@activityEdit');
     Route::any('/tag/', 'Home@tagAdd');
     Route::any('/tag/{id}', 'Home@tagEdit');
     Route::any('/user/', 'Home@userAdd');
     Route::any('/user/{id}', 'Home@userEdit');
+
+    Route::get('client', [
+        'as' => 'client.add',
+        'uses' => 'ClientController@add'
+    ]);
+
+    Route::post('client', [
+        'uses' => 'ClientController@postAdd'
+    ]);
+    Route::get('client/{id}', [
+        'as' => 'client.edit',
+        'uses' => 'ClientController@edit'
+    ]);
+    Route::post('client/{id}', [
+        'as' => 'client.edit',
+        'uses' => 'ClientController@postEdit'
+    ]);
+
+
+
+
     Route::get('/fact-tr/{id}', 'Home@factTr');
     Route::get('/dump-sql', 'Home@sqlDownload');
     Route::any('/git-update', 'Home@gitUpdate');
