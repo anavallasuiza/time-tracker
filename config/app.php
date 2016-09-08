@@ -149,6 +149,7 @@ return [
          * Dependencies Service Providers...
          */
         Collective\Html\HtmlServiceProvider::class,
+        ANavallaSuiza\Laravel\Database\Manager\ModelManagerServiceProvider::class,
 
     ],
 
@@ -200,6 +201,8 @@ return [
 
         'Form'      => Collective\Html\FormFacade::class,
         'Html'      => Collective\Html\HtmlFacade::class,
+
+        'ModelManager' => ANavallaSuiza\Laravel\Database\Manager\Facades\ModelManager::class,
     ],
 
 ];
