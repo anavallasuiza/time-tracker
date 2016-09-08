@@ -9,7 +9,8 @@
         "laravel/framework": "5.1.*",
         "form-manager/form-manager": "dev-master#9cbf43e591ea313e2a4bc3697085352f95b8e929",
         "ifsnop/mysqldump-php": "dev-master#baf31f9d070da672a4fec89eb4fc9cd5702344af",
-        "laravelcollective/html": "5.1.*"
+        "laravelcollective/html": "5.1.*",
+        "ablunier/laravel-database": "1.2.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
