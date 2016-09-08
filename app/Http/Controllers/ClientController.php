@@ -51,7 +51,8 @@ class ClientController extends Base
 
         return \View::make('base')->nest('body', 'client', [
             'form' => $form,
-            'formHeader' => $client->name
+            'formHeader' => $client->name,
+            'activities' => $client->activities
         ]);
     }
 

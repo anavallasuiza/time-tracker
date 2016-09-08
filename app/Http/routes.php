@@ -17,7 +17,13 @@ Route::group(['before' => 'auth'], function()
     ]);
 
     Route::any('/activity/', 'Home@activityAdd');
-    Route::any('/activity/{id}', 'Home@activityEdit');
+
+    Route::any('/activity/{id}', [
+        'as' => 'activity.edit',
+        'uses' => 'Home@activityEdit'
+    ]);
+
+
     Route::any('/tag/', 'Home@tagAdd');
     Route::any('/tag/{id}', 'Home@tagEdit');
     Route::any('/user/', 'Home@userAdd');

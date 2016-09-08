@@ -29,4 +29,12 @@ class Activities extends Model {
     {
         return $this->hasMany('App\Models\Estimations', 'id_activities', 'id');
     }
+
+    /**
+     * @return bool
+     */
+    public function isArchived()
+    {
+        return $this->archived==0?false:true;
+    }
 }
