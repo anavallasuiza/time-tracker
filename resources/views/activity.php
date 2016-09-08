@@ -3,6 +3,9 @@
     <?= $form['id']; ?>
 
     <h1><?= sprintf(_('Activity %s'), $activity->name); ?></h1>
+    <div class="alert alert-warning">
+        <?= sprintf(_('Take care %s this activity. There are users using automated tools based in Basecamp projects names. Name used to this activity must be exactly as Basecamp project name or duplicated projects will be created.'), empty($activity->id) ? 'creating' : 'editing'); ?>
+    </div>
 
     <div class="row">
         <div class="col-lg-8 col-sm-6 col-xs-12">
@@ -17,9 +20,16 @@
             <?= $form['total_hours']; ?>
         </div>
     </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="panel-title"><?= _('Client'); ?></h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-sm-12 col-xs-12">
+            <?= $form['id_clients']; ?>
+        </div>
 
-    <div class="alert alert-warning">
-        <?= sprintf(_('Take care %s this activity. There are users using automated tools based in Basecamp projects names. Name used to this activity must be exactly as Basecamp project name or duplicated projects will be created.'), empty($activity->id) ? 'creating' : 'editing'); ?>
     </div>
 
     <div class="panel panel-default">

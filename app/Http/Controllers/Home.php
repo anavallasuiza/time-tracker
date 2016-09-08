@@ -362,6 +362,16 @@ class Home extends Base {
         }
 
         $form = (new Forms\Activity)->edit();
+        /** @var ClientRepository $clientsRepo */
+        $clientsRepo = ModelManager::getRepository(Models\Clients::class);
+        $clients = $clientsRepo->getClients();
+
+        $clientsArray = [-1=>'No client'];
+        foreach ($clients as $client)
+        {
+            $clientsArray[$client->id]=$client->name;
+        }
+        $form['id_clients']->options($clientsArray);
 
         if (is_object($action = $this->action(__FUNCTION__, $form))) {
             return $action;
@@ -391,6 +401,17 @@ class Home extends Base {
         }
 
         $form = (new Forms\Activity)->edit();
+
+        /** @var ClientRepository $clientsRepo */
+        $clientsRepo = ModelManager::getRepository(Models\Clients::class);
+        $clients = $clientsRepo->getClients();
+
+        $clientsArray = [-1=>'No client'];
+        foreach ($clients as $client)
+        {
+            $clientsArray[$client->id]=$client->name;
+        }
+        $form['id_clients']->options($clientsArray);
 
         if (is_object($action = $this->action(__FUNCTION__, $form))) {
             return $action;
