@@ -1,6 +1,7 @@
 <?= View::make('sub-filters')->with([
     'filters' => $filters,
-    'sort' => $sort
+    'sort' => $sort,
+    'clients'=>$clients
 ])->render(); ?>
 
 <table class="table table-hover facts-table">

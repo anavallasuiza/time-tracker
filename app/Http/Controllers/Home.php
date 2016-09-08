@@ -7,6 +7,18 @@ use App\Models, App\Libs;
 use ModelManager;
 
 class Home extends Base {
+    /**
+     * @var ClientRepository
+     */
+    protected $clientsRepo;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->clientsRepo = ModelManager::getRepository(Models\Clients::class);
+    }
+
+
     public function login()
     {
         if ($this->user) {
@@ -82,7 +94,8 @@ class Home extends Base {
             'total_time' => Libs\Utils::sumHours($facts),
             'rows' => $rows,
             'sort' => $filters['sort'],
-            'filters' => $filters
+            'filters' => $filters,
+            'clients' => $this->clientsRepo->getClients()
         ]);
     }
 
@@ -334,8 +347,6 @@ class Home extends Base {
 
     public function edit()
     {
-        /** @var ClientRepository $clientsRepo */
-        $clientsRepo = ModelManager::getRepository(Models\Clients::class);
 
         if (empty($this->user)) {
             return Redirect::to('/login');
@@ -351,7 +362,7 @@ class Home extends Base {
             'activities' => Models\Activities::orderBy('name', 'ASC')->get(),
             'tags' => Models\Tags::orderBy('name', 'ASC')->get(),
             'users' => $users,
-            'clients' => $clientsRepo->getClients()
+            'clients' => $this->clientsRepo->getClients()
         ]);
     }
 
@@ -362,9 +373,8 @@ class Home extends Base {
         }
 
         $form = (new Forms\Activity)->edit();
-        /** @var ClientRepository $clientsRepo */
-        $clientsRepo = ModelManager::getRepository(Models\Clients::class);
-        $clients = $clientsRepo->getClients();
+
+        $clients = $this->clientsRepo->getClients();
 
         $clientsArray = [-1=>'No client'];
         foreach ($clients as $client)
@@ -401,10 +411,7 @@ class Home extends Base {
         }
 
         $form = (new Forms\Activity)->edit();
-
-        /** @var ClientRepository $clientsRepo */
-        $clientsRepo = ModelManager::getRepository(Models\Clients::class);
-        $clients = $clientsRepo->getClients();
+        $clients = $this->clientsRepo->getClients();
 
         $clientsArray = [-1=>'No client'];
         foreach ($clients as $client)

@@ -90,7 +90,12 @@ class Facts extends Model {
 
         if ($client) {
             $facts->whereHas('activities', function ($query) use ($client) {
-                $query->where('activities.id_clients', '=', $client);
+                if($client==-1)
+                {
+                    $query->whereNull('activities.id_clients');
+                }else{
+                    $query->where('activities.id_clients', '=', $client);
+                }
             });
         }
 
