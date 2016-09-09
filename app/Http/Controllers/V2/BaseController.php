@@ -31,6 +31,7 @@ class BaseController extends Controller
     public function __construct( ) {
         $this->loggedUser = Auth::user();
         $this->clientsRepo = ModelManager::getRepository(Client::class);
+        $this->share();
     }
 
 

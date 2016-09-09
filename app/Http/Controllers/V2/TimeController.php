@@ -39,8 +39,6 @@ class TimeController extends BaseController
             $facts = $facts->paginate($rows);
         }
 
-        $this->share();
-
         return view('web.pages.time.index')->with('facts', $facts)
             ->with('total_time', Utils::sumHours($facts))
             ->with('rows', $rows)

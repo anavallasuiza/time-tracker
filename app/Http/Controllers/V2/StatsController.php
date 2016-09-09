@@ -257,7 +257,6 @@ class StatsController extends BaseController
             $first->modify('+1 day');
         }
 
-        $this->share();
 
         return view('web.pages.stats.calendar')
             ->with('filters',$filters)
