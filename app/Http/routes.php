@@ -9,10 +9,16 @@ Route::get('/404', ['as' => 'error.404', 'uses' => 'Home@error404']);
 
 Route::group([
     'middleware' => ['auth'],
-    'prefix' => 'time/',
+    'prefix' => 'v2/',
 ], function () {
-    Route::get('/', ['as' => 'time.index', 'uses' => 'Time\IndexController@index']);
-});
+
+    Route::group([
+        'prefix' => 'time/',
+    ], function () {
+        Route::get('/', ['as' => 'time.index', 'uses' => 'Time\IndexController@index']);
+    });
+}
+);
 
 Route::group(['before' => 'auth'], function () {
     Route::get('/logout', ['as' => 'logout', 'uses' => 'Auth\AuthController@getLogout']);
