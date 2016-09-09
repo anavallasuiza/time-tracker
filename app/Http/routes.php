@@ -32,6 +32,13 @@ Route::group([
         Route::get('/sync', ['as' => 'v2.maintenance.sync', 'uses' => 'V2\MaintenanceController@sync']);
         Route::post('/sync', ['uses' => 'V2\MaintenanceController@doSync']);
     });
+
+    Route::group([
+        'prefix' => 'notifications/',
+    ], function () {
+        Route::get('/', ['as' => 'v2.notifications.index', 'uses' => 'V2\NotificationsController@index']);
+        Route::post('/read/{id}',['as' => 'v2.notifications.read', 'uses' => 'V2\NotificationsController@read']);
+    });
 });
 
 Route::group(['before' => 'auth'], function () {

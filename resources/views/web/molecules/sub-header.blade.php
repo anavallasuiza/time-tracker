@@ -2,7 +2,7 @@
     <div class="navbar-header">
         <a href="<?php echo url('/'); ?>" class="navbar-brand"><img src="<?php echo asset('images/logo-50.png'); ?>" alt="<?php echo _('A Navalla Suíza'); ?>" /></a>
         <?php if (! $unreadNotifications->isEmpty()) { ?>
-        <a href="<?php echo url('/notifications'); ?>" class="btn-notifications" aria-label="Notifications">
+        <a href="<?php echo url(route('v2.notifications.index')); ?>" class="btn-notifications" aria-label="Notifications">
             <span class="glyphicon glyphicon-exclamation-sign text-warning" aria-hidden="true"></span>
         </a>
         <?php } ?>
