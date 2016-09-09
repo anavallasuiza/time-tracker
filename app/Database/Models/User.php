@@ -51,4 +51,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     {
         return $this->hasMany(Fact::class, 'id_users', 'id');
     }
+
+    public function isAdmin()
+    {
+        return $this->admin;
+    }
 }
