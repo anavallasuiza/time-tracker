@@ -61,9 +61,6 @@
                         <a href="<?php echo url(route('v2.stats.calendar')); ?>" class="label label-default"><?php echo _('Calendar'); ?></a>
                         <a href="<?php echo url('/edit'); ?>" class="label label-default"><?php echo _('Edit'); ?></a>
                         <a href="<?php echo url(route('v2.maintenance.sync')); ?>" class="label label-default"><?php echo _('Sync'); ?></a>
-                        <?php if ($user->isAdmin()): ?>
-                            <a href="<?php echo url('/git-update'); ?>" class="label label-default"><?php echo _('Update environment'); ?></a>
-                        <?php endif; ?>
                         <a href="<?php echo url(route('logout')); ?>" class="label label-danger"><i class="fa fa-w fa-sign-out"></i> <?php echo _('Logout'); ?></a>
                     <?php endif; ?>
 
