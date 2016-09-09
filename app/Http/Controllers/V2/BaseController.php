@@ -31,7 +31,6 @@ class BaseController extends Controller
     public function __construct( ) {
         $this->loggedUser = Auth::user();
         $this->clientsRepo = ModelManager::getRepository(Client::class);
-
     }
 
 
@@ -56,11 +55,13 @@ class BaseController extends Controller
             ->orderBy('name', 'ASC')
             ->get();
 
+
+
         View::share([
             'users' => $users,
             'activities' => $activities,
             'user' => $this->getLoggedUser(),
-            'tags' => Tag::orderBy('name', 'ASC')->get()
+            'tags' => Tag::orderBy('name', 'ASC')->get(),
         ]);
     }
 }

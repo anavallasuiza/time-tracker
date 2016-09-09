@@ -1,16 +1,15 @@
 <?php
 
 
-namespace App\Http\Controllers\V2\Time;
+namespace App\Http\Controllers\V2;
 
 use App\Database\Models\Fact;
-use App\Http\Controllers\V2\BaseController;
 use App\Libs\Utils;
 use Illuminate\Support\Collection;
 use Input;
 use Response;
 
-class IndexController extends BaseController
+class TimeController extends BaseController
 {
 
     public function index()

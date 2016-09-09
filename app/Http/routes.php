@@ -15,10 +15,16 @@ Route::group([
     Route::group([
         'prefix' => 'time/',
     ], function () {
-        Route::get('/', ['as' => 'time.index', 'uses' => 'V2\Time\IndexController@index']);
+        Route::get('/', ['as' => 'v2.time.index', 'uses' => 'V2\TimeController@index']);
     });
-}
-);
+
+    Route::group([
+        'prefix' => 'stats/',
+    ], function () {
+        Route::get('/', ['as' => 'v2.stats.index', 'uses' => 'V2\StatsController@index']);
+        Route::get('/calendar', ['as' => 'v2.stats.calendar', 'uses' => 'V2\StatsController@calendar']);
+    });
+});
 
 Route::group(['before' => 'auth'], function () {
     Route::get('/logout', ['as' => 'logout', 'uses' => 'Auth\AuthController@getLogout']);
