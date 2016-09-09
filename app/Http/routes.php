@@ -25,6 +25,13 @@ Route::group([
         Route::get('/', ['as' => 'v2.stats.index', 'uses' => 'V2\StatsController@index']);
         Route::get('/calendar', ['as' => 'v2.stats.calendar', 'uses' => 'V2\StatsController@calendar']);
     });
+
+    Route::group([
+        'prefix' => 'maintenance/',
+    ], function () {
+        Route::get('/sync', ['as' => 'v2.maintenance.sync', 'uses' => 'V2\MaintenanceController@sync']);
+        Route::post('/sync', ['uses' => 'V2\MaintenanceController@doSync']);
+    });
 });
 
 Route::group(['before' => 'auth'], function () {
