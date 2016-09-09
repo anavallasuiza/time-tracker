@@ -15,7 +15,7 @@ Route::group([
     Route::group([
         'prefix' => 'time/',
     ], function () {
-        Route::get('/', ['as' => 'time.index', 'uses' => 'Time\IndexController@index']);
+        Route::get('/', ['as' => 'time.index', 'uses' => 'V2\Time\IndexController@index']);
     });
 }
 );
