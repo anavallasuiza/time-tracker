@@ -25,7 +25,7 @@
     <body>
         <div class="page-header">
             <div class="container">
-                <?php echo View::make('sub-header')->render(); ?>
+               @include('web.molecules.sub-header')
             </div>
         </div>
 
