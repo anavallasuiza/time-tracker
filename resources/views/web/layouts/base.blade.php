@@ -56,9 +56,9 @@
         <footer id="footer" class="text-center">
             <div class="container">
                 <div class="well">
-                    <?php if ($user): ?>
-                        <a href="<?php echo url('/stats'); ?>" class="label label-default"><?php echo _('Stats'); ?></a>
-                        <a href="<?php echo url('/stats/calendar'); ?>" class="label label-default"><?php echo _('Calendar'); ?></a>
+                    <?php if (isset($user)): ?>
+                        <a href="<?php echo url(route('v2.stats.index')); ?>" class="label label-default"><?php echo _('Stats'); ?></a>
+                        <a href="<?php echo url(route('v2.stats.calendar')); ?>" class="label label-default"><?php echo _('Calendar'); ?></a>
                         <a href="<?php echo url('/edit'); ?>" class="label label-default"><?php echo _('Edit'); ?></a>
                         <a href="<?php echo url('/sync'); ?>" class="label label-default"><?php echo _('Sync'); ?></a>
                         <?php if ($user->isAdmin()): ?>
