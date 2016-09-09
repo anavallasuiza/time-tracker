@@ -74,6 +74,7 @@ var $addForm = $('#facts-form-add'),
 
         $.ajax({
             type: 'POST',
+            url: $form.attr('action'),
             data: $form.serialize(),
             success: function (response) {
                 if (typeof response.id === 'undefined') {

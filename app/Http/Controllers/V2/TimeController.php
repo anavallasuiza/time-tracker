@@ -4,10 +4,14 @@
 namespace App\Http\Controllers\V2;
 
 use App\Database\Models\Fact;
+use App\Database\Models\Log;
 use App\Libs\Utils;
+use Exception;
 use Illuminate\Support\Collection;
 use Input;
 use Response;
+use Illuminate\Http\Request;
+use DB;
 
 class TimeController extends BaseController
 {
@@ -72,6 +76,51 @@ class TimeController extends BaseController
             'Content-Type' => 'application/octet-stream',
             'Content-Transfer-Encoding' => 'binary',
             'Content-Disposition' => 'attachment; filename="' . _('time-tracking.csv') . '"'
+        ]);
+    }
+
+    public function updateFact(Request $request)
+    {
+        $fact = Fact::where('id', '=', $request->input('id'));
+
+        if (!$this->getLoggedUser()->isAdmin()) {
+            $fact->where('id_users', '=', $this->getLoggedUser()->id);
+        }
+
+        $fact = $fact->firstOrFail();
+
+        list($start, $end, $total) = Utils::startEndTime($request->input('start'), $request->input('end'),$request->input('time'));
+
+        $fact->start_time = $start;
+        $fact->end_time = $end;
+        $fact->total_time = $total;
+        $fact->description = Input::get('description');
+        $fact->id_activities = (int)Input::get('activity');
+
+        try {
+            $fact->save();
+        } catch (Exception $e) {
+            throw new Exception(sprintf(_('Error updating fact: %s'), $e->getMessage()));
+        }
+
+        DB::table('facts_tags')
+            ->where('id_facts', '=', $fact->id)
+            ->delete();
+
+        DB::table('facts_tags')->insert([
+            'id_facts' => $fact->id,
+            'id_tags' => (int)Input::get('tag')
+        ]);
+
+        Log::create([
+            'description' => _('Updated fact'),
+            'date' => date('Y-m-d H:i:s'),
+            'id_facts' => $fact->id,
+            'id_users' => $this->getLoggedUser()->id
+        ]);
+
+        return Response::json([
+            'id' => $fact->id
         ]);
     }
 }

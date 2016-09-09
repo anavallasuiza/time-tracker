@@ -16,6 +16,7 @@ Route::group([
         'prefix' => 'time/',
     ], function () {
         Route::get('/', ['as' => 'v2.time.index', 'uses' => 'V2\TimeController@index']);
+        Route::post('/fact', ['as' => 'v2.time.fact.edit','uses' => 'V2\TimeController@updateFact']);
     });
 
     Route::group([

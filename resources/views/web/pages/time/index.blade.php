@@ -25,11 +25,9 @@
     </thead>
 
     <tbody>
-        <?php
-        foreach ($facts as $fact) {
-            echo View::make('sub-fact-tr')->with('fact', $fact)->render();
-        }
-        ?>
+        @foreach ($facts as $fact)
+            @include('web.atoms.fact',['fact'=>$fact])
+        @endforeach
     </tbody>
 
     <tfoot>
@@ -38,11 +36,10 @@
         </tr>
     </tfoot>
 </table>
-
-<?php echo View::make('sub-fact-edit')->with([
+@include('web.molecules.facts.edit',[
     'activities' => $activities,
     'tags' => $tags
-])->render(); ?>
+])
 
 <div class="text-center">
     <?php

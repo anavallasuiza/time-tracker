@@ -1,6 +1,7 @@
 <?php
 namespace App\Database\Models;
 
+use DateTime;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -10,8 +11,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read \App\Database\Models\Activity $activities
  * @property-read \App\Database\Models\User $users
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Database\Models\Tag[] $tags
- * @property-read mixed $start_time
- * @property-read mixed $end_time
+ * @property mixed $start_time
+ * @property mixed $end_time
  * @mixin \Eloquent
  * @property integer $id
  * @property integer $total_time
@@ -61,9 +62,9 @@ class Fact extends Model {
     private function formatDate($date)
     {
         try {
-            return new \DateTime($date);
+            return new DateTime($date);
         } catch (\Exception $e) {
-            return new \DateTime('0000-00-00 00:00:00');
+            return new DateTime('0000-00-00 00:00:00');
         }
     }
 
@@ -76,7 +77,6 @@ class Fact extends Model {
     {
         return $this->formatDate($value);
     }
-
 
     public static function filter($facts, $filters)
     {

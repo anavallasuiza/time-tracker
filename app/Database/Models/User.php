@@ -56,4 +56,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     {
         return $this->admin;
     }
+
+    public function getDateFormatConfig()
+    {
+       return 'd/m/Y'.($this->store_hours ? ' H:i' : '');
+    }
 }
