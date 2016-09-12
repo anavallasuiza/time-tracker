@@ -5,12 +5,12 @@ namespace App\Http\Controllers\V2;
 
 use App\Database\Models\Fact;
 use App\Database\Models\Log;
+use App\Http\Requests\FactRequest;
 use App\Libs\Utils;
 use Exception;
 use Illuminate\Support\Collection;
 use Input;
 use Response;
-use Illuminate\Http\Request;
 use DB;
 
 class TimeController extends BaseController
@@ -77,7 +77,7 @@ class TimeController extends BaseController
         ]);
     }
 
-    public function updateFact(Request $request)
+    public function updateFact(FactRequest $request)
     {
         $fact = Fact::where('id', '=', $request->input('id'));
 
@@ -112,6 +112,53 @@ class TimeController extends BaseController
 
         Log::create([
             'description' => _('Updated fact'),
+            'date' => date('Y-m-d H:i:s'),
+            'id_facts' => $fact->id,
+            'id_users' => $this->getLoggedUser()->id
+        ]);
+
+        return Response::json([
+            'id' => $fact->id
+        ]);
+    }
+
+    public function addFact(FactRequest $request)
+    {
+        list($start, $end, $total) = Utils::startEndTime($request->input('start'), $request->input('end'), $request->input('time'));
+
+        $overwrite = Fact::where('id_users', '=', $this->getLoggedUser()->id)
+            ->where('start_time', '<', $start)
+            ->where('end_time', '>', $end)
+            ->first();
+
+        if ($overwrite) {
+            throw new Exception(_('This fact ovewrite on same time other different fact'));
+        }
+
+        try {
+            $fact = Fact::create([
+                'start_time' => $start,
+                'end_time' => $end,
+                'total_time' => $total,
+                'description' => trim($request->input('description')),
+                'id_activities' => (int)$request->input('activity'),
+                'id_users' => $this->getLoggedUser()->id
+            ]);
+        } catch (Exception $e) {
+            throw new Exception(sprintf(_('Error creating fact: %s'), $e->getMessage()));
+        }
+
+        DB::table('facts_tags')
+            ->where('id_facts', '=', $fact->id)
+            ->delete();
+
+        DB::table('facts_tags')->insert([
+            'id_facts' => $fact->id,
+            'id_tags' => (int)$request->input('tag')
+        ]);
+
+        Log::create([
+            'description' => _('Created fact'),
             'date' => date('Y-m-d H:i:s'),
             'id_facts' => $fact->id,
             'id_users' => $this->getLoggedUser()->id
