@@ -84,6 +84,6 @@
         var BASE_WWW = '<?php echo URL::to('/'); ?>';
         </script>
 
-        <script src="<?php echo asset('js/scripts.js'); ?>" type="text/javascript"></script>
+        <script src="<?php echo asset('js/scripts.v2.js'); ?>" type="text/javascript"></script>
     </body>
 </html>
