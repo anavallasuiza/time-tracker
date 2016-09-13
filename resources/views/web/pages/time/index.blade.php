@@ -69,10 +69,6 @@
 
     echo ' | <a href="'.\App\Libs\Utils::url('export', 'csv').'">'._('Export as CSV').'</a>';
 
-    if ($user->admin) {
-        echo ' | <a href="'.url('/dump-sql').'">'._('Dump SQL').'</a>';
-    }
-
     echo '</p>';
     ?>
 </div>
