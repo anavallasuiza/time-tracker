@@ -1,4 +1,4 @@
-@extends('web.layouts.base')
+@extends('web.layouts.dashboard')
 @section('content')
     <form method="post" action="{{$action}}">
     <?php echo Form::token(); ?>

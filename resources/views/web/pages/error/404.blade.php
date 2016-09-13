@@ -1,4 +1,4 @@
-@extends('web.layouts.base')
+@extends('web.layouts.dashboard')
 @section('content')
     <div class="jumbotron">
         <h1><?php echo _('Error 404 - Not Found'); ?></h1>

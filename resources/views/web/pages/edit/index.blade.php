@@ -1,4 +1,4 @@
-@extends('web.layouts.base')
+@extends('web.layouts.dashboard')
 @section('content')
     <div class="row">
     <div class="col-xs-6">

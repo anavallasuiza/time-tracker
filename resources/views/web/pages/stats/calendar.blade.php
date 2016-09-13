@@ -1,4 +1,4 @@
-@extends('web.layouts.base')
+@extends('web.layouts.dashboard')
 @section('content')
     @include('web.molecules.filters.search-filter', [
         'filters' => $filters

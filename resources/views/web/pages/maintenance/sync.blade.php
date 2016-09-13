@@ -1,4 +1,4 @@
-@extends('web.layouts.base')
+@extends('web.layouts.dashboard')
 <h1></h1>
 @section('content')
     <div class="panel panel-default">
