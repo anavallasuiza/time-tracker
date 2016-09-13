@@ -8,6 +8,7 @@ use App\Database\Models\Log;
 use App\Http\Requests\FactRequest;
 use App\Libs\Utils;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Input;
 use Response;
@@ -23,11 +24,11 @@ class TimeController extends BaseController
             ->with(['tags'])
             ->with(['users']);
 
-        /** @var Collection $facts */
+        /** @var Builder $facts */
         $facts = Fact::filter($facts, $filters);
 
         if (Input::get('export') === 'csv') {
-            return $this->downloadCsv($facts);
+            return $this->downloadCsv($facts->get());
         }
 
         $rows = in_array((int)Input::get('rows'), [-1, 20, 50, 100], true) ? (int)Input::get('rows') : 20;
