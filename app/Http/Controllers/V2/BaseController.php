@@ -7,7 +7,10 @@ use App\Database\Models\Activity;
 use App\Database\Models\Client;
 use App\Database\Models\Tag;
 use App\Database\Models\User;
+use App\Database\Repositories\ActivityRepository;
 use App\Database\Repositories\ClientRepository;
+use App\Database\Repositories\TagRepository;
+use App\Database\Repositories\UserRepository;
 use App\Http\Controllers\Controller;
 use Auth;
 use View;
@@ -26,11 +29,27 @@ class BaseController extends Controller
     protected $loggedUser;
 
     /**
+     * @var UserRepository
+     */
+    protected $usersRepo;
+
+    /**
+     * @var TagRepository
+     */
+    protected $tagsRepo;
+
+    /** @var  ActivityRepository */
+    protected $activityRepo;
+
+    /**
      * BaseController constructor.
      */
     public function __construct( ) {
         $this->loggedUser = Auth::user();
         $this->clientsRepo = ModelManager::getRepository(Client::class);
+        $this->usersRepo = ModelManager::getRepository(User::class);
+        $this->tagsRepo = ModelManager::getRepository(Tag::class);
+        $this->activityRepo = ModelManager::getRepository(Activity::class);
         $this->share();
     }
 

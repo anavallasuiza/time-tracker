@@ -21,6 +21,99 @@ Route::group([
     });
 
     Route::group([
+       //'middleware'=>['auth.admin'],
+        'prefix' => 'edit/',
+    ], function () {
+        Route::get('/', ['as' => 'v2.edit.index', 'uses' => 'V2\Admin\EditController@index']);
+
+        Route::group([
+            //'middleware'=>['auth.admin'],
+            'prefix' => 'client/',
+        ],function () {
+
+            Route::get('/{id}', [
+                'as' => 'v2.edit.client.edit',
+                'uses' => 'V2\Admin\ClientController@edit'
+            ]);
+            Route::post('/{id}', [
+                'uses' => 'V2\Admin\ClientController@postEdit'
+            ]);
+            Route::get('/', [
+                'as' => 'v2.edit.client.add',
+                'uses' => 'V2\Admin\ClientController@add'
+            ]);
+            Route::post('/', [
+                'uses' => 'V2\Admin\ClientController@postAdd'
+            ]);
+        });
+
+        Route::group([
+            //'middleware'=>['auth.admin'],
+            'prefix' => 'user/',
+        ],function () {
+
+            Route::get('/{id}', [
+                'as' => 'v2.edit.user.edit',
+                'uses' => 'V2\Admin\UserController@edit'
+            ]);
+            Route::post('/{id}', [
+                'uses' => 'V2\Admin\UserController@postEdit'
+            ]);
+            Route::get('/', [
+                'as' => 'v2.edit.user.add',
+                'uses' => 'V2\Admin\UserController@add'
+            ]);
+            Route::post('/', [
+                'uses' => 'V2\Admin\UserController@postAdd'
+            ]);
+        });
+
+
+        Route::group([
+            //'middleware'=>['auth.admin'],
+            'prefix' => 'tag/',
+        ],function () {
+
+            Route::get('/{id}', [
+                'as' => 'v2.edit.tag.edit',
+                'uses' => 'V2\Admin\TagController@edit'
+            ]);
+            Route::post('/{id}', [
+                'uses' => 'V2\Admin\TagController@postEdit'
+            ]);
+            Route::get('/', [
+                'as' => 'v2.edit.tag.add',
+                'uses' => 'V2\Admin\TagController@add'
+            ]);
+            Route::post('/', [
+                'uses' => 'V2\Admin\TagController@postAdd'
+            ]);
+        });
+
+        Route::group([
+            //'middleware'=>['auth.admin'],
+            'prefix' => 'activity/',
+        ],function () {
+
+            Route::get('/{id}', [
+                'as' => 'v2.edit.activity.edit',
+                'uses' => 'V2\Admin\ActivityController@edit'
+            ]);
+            Route::post('/{id}', [
+                'uses' => 'V2\Admin\ActivityController@postEdit'
+            ]);
+            Route::get('/', [
+                'as' => 'v2.edit.activity.add',
+                'uses' => 'V2\Admin\ActivityController@add'
+            ]);
+            Route::post('/', [
+                'uses' => 'V2\Admin\ActivityController@postAdd'
+            ]);
+        });
+
+    });
+
+    Route::group([
         'prefix' => 'stats/',
     ], function () {
         Route::get('/', ['as' => 'v2.stats.index', 'uses' => 'V2\StatsController@index']);
