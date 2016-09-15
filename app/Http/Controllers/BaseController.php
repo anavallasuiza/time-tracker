@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Http\Controllers\V2;
+namespace App\Http\Controllers;
 
 use App\Database\Models\Activity;
 use App\Database\Models\Client;
@@ -11,7 +11,6 @@ use App\Database\Repositories\ActivityRepository;
 use App\Database\Repositories\ClientRepository;
 use App\Database\Repositories\TagRepository;
 use App\Database\Repositories\UserRepository;
-use App\Http\Controllers\Controller;
 use Auth;
 use View;
 use ModelManager;

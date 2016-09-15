@@ -9,7 +9,7 @@ Route::get('/500', ['as' => 'error.401', 'uses' => 'Home@error500']);
 Route::get('/404', ['as' => 'error.404', 'uses' => 'Home@error404']);
 
 
-Route::get('/', ['as' => 'index', 'uses' => 'V2\IndexController@index']);
+Route::get('/', ['as' => 'index', 'uses' => 'IndexController@index']);
 
 Route::group([
     'middleware' => ['auth'],
@@ -20,16 +20,16 @@ Route::group([
     Route::group([
         'prefix' => 'time/',
     ], function () {
-        Route::get('/', ['as' => 'v2.time.index', 'uses' => 'V2\TimeController@index']);
-        Route::post('/fact/edit', ['as' => 'v2.time.fact.edit','uses' => 'V2\TimeController@updateFact']);
-        Route::post('/fact/add', ['as' => 'v2.time.fact.add','uses' => 'V2\TimeController@addFact']);
+        Route::get('/', ['as' => 'v2.time.index', 'uses' => 'TimeController@index']);
+        Route::post('/fact/edit', ['as' => 'v2.time.fact.edit','uses' => 'TimeController@updateFact']);
+        Route::post('/fact/add', ['as' => 'v2.time.fact.add','uses' => 'TimeController@addFact']);
     });
 
     Route::group([
        //'middleware'=>['auth.admin'],
         'prefix' => 'edit/',
     ], function () {
-        Route::get('/', ['as' => 'v2.edit.index', 'uses' => 'V2\Admin\EditController@index']);
+        Route::get('/', ['as' => 'v2.edit.index', 'uses' => 'Admin\EditController@index']);
 
         Route::group([
             //'middleware'=>['auth.admin'],
@@ -38,17 +38,17 @@ Route::group([
 
             Route::get('/{id}', [
                 'as' => 'v2.edit.client.edit',
-                'uses' => 'V2\Admin\ClientController@edit'
+                'uses' => 'Admin\ClientController@edit'
             ]);
             Route::post('/{id}', [
-                'uses' => 'V2\Admin\ClientController@postEdit'
+                'uses' => 'Admin\ClientController@postEdit'
             ]);
             Route::get('/', [
                 'as' => 'v2.edit.client.add',
-                'uses' => 'V2\Admin\ClientController@add'
+                'uses' => 'Admin\ClientController@add'
             ]);
             Route::post('/', [
-                'uses' => 'V2\Admin\ClientController@postAdd'
+                'uses' => 'Admin\ClientController@postAdd'
             ]);
         });
 
@@ -59,17 +59,17 @@ Route::group([
 
             Route::get('/{id}', [
                 'as' => 'v2.edit.user.edit',
-                'uses' => 'V2\Admin\UserController@edit'
+                'uses' => 'Admin\UserController@edit'
             ]);
             Route::post('/{id}', [
-                'uses' => 'V2\Admin\UserController@postEdit'
+                'uses' => 'Admin\UserController@postEdit'
             ]);
             Route::get('/', [
                 'as' => 'v2.edit.user.add',
-                'uses' => 'V2\Admin\UserController@add'
+                'uses' => 'Admin\UserController@add'
             ]);
             Route::post('/', [
-                'uses' => 'V2\Admin\UserController@postAdd'
+                'uses' => 'Admin\UserController@postAdd'
             ]);
         });
 
@@ -81,17 +81,17 @@ Route::group([
 
             Route::get('/{id}', [
                 'as' => 'v2.edit.tag.edit',
-                'uses' => 'V2\Admin\TagController@edit'
+                'uses' => 'Admin\TagController@edit'
             ]);
             Route::post('/{id}', [
-                'uses' => 'V2\Admin\TagController@postEdit'
+                'uses' => 'Admin\TagController@postEdit'
             ]);
             Route::get('/', [
                 'as' => 'v2.edit.tag.add',
-                'uses' => 'V2\Admin\TagController@add'
+                'uses' => 'Admin\TagController@add'
             ]);
             Route::post('/', [
-                'uses' => 'V2\Admin\TagController@postAdd'
+                'uses' => 'Admin\TagController@postAdd'
             ]);
         });
 
@@ -102,17 +102,17 @@ Route::group([
 
             Route::get('/{id}', [
                 'as' => 'v2.edit.activity.edit',
-                'uses' => 'V2\Admin\ActivityController@edit'
+                'uses' => 'Admin\ActivityController@edit'
             ]);
             Route::post('/{id}', [
-                'uses' => 'V2\Admin\ActivityController@postEdit'
+                'uses' => 'Admin\ActivityController@postEdit'
             ]);
             Route::get('/', [
                 'as' => 'v2.edit.activity.add',
-                'uses' => 'V2\Admin\ActivityController@add'
+                'uses' => 'Admin\ActivityController@add'
             ]);
             Route::post('/', [
-                'uses' => 'V2\Admin\ActivityController@postAdd'
+                'uses' => 'Admin\ActivityController@postAdd'
             ]);
         });
 
@@ -121,22 +121,22 @@ Route::group([
     Route::group([
         'prefix' => 'stats/',
     ], function () {
-        Route::get('/', ['as' => 'v2.stats.index', 'uses' => 'V2\StatsController@index']);
-        Route::get('/calendar', ['as' => 'v2.stats.calendar', 'uses' => 'V2\StatsController@calendar']);
+        Route::get('/', ['as' => 'v2.stats.index', 'uses' => 'StatsController@index']);
+        Route::get('/calendar', ['as' => 'v2.stats.calendar', 'uses' => 'StatsController@calendar']);
     });
 
     Route::group([
         'prefix' => 'maintenance/',
     ], function () {
-        Route::get('/sync', ['as' => 'v2.maintenance.sync', 'uses' => 'V2\MaintenanceController@sync']);
-        Route::post('/sync', ['uses' => 'V2\MaintenanceController@doSync']);
+        Route::get('/sync', ['as' => 'v2.maintenance.sync', 'uses' => 'MaintenanceController@sync']);
+        Route::post('/sync', ['uses' => 'MaintenanceController@doSync']);
     });
 
     Route::group([
         'prefix' => 'notifications/',
     ], function () {
-        Route::get('/', ['as' => 'v2.notifications.index', 'uses' => 'V2\NotificationsController@index']);
-        Route::post('/read/{id}',['as' => 'v2.notifications.read', 'uses' => 'V2\NotificationsController@read']);
+        Route::get('/', ['as' => 'v2.notifications.index', 'uses' => 'NotificationsController@index']);
+        Route::post('/read/{id}',['as' => 'v2.notifications.read', 'uses' => 'NotificationsController@read']);
     });
 });
 

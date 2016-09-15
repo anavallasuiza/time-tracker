@@ -1,13 +1,13 @@
 <?php
 
 
-namespace App\Http\Controllers\V2\Admin;
+namespace App\Http\Controllers\Admin;
 
 
 use App\Database\Models\Activity;
 use App\Database\Models\Tag;
 use App\Database\Models\User;
-use App\Http\Controllers\V2\BaseController;
+use App\Http\Controllers\BaseController;
 
 class EditController extends BaseController
 {

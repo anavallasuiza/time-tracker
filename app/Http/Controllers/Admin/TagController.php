@@ -1,13 +1,13 @@
 <?php
 
 
-namespace App\Http\Controllers\V2\Admin;
+namespace App\Http\Controllers\Admin;
 
 
 use App\Database\Repositories\ClientRepository;
 use App\Http\Controllers\Forms\Base;
 use App\Http\Controllers\Forms\Tag as TagForm;
-use App\Http\Controllers\V2\BaseController;
+use App\Http\Controllers\BaseController;
 use App\Http\Requests\TagRequest;
 
 class TagController extends BaseController

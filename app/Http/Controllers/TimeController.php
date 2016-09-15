@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Http\Controllers\V2;
+namespace App\Http\Controllers;
 
 use App\Database\Models\Fact;
 use App\Database\Models\Log;

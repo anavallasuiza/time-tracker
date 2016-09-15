@@ -1,11 +1,11 @@
 <?php
 
 
-namespace App\Http\Controllers\V2\Admin;
+namespace App\Http\Controllers\Admin;
 
 
 use App\Http\Controllers\Forms\User as UserForm;
-use App\Http\Controllers\V2\BaseController;
+use App\Http\Controllers\BaseController;
 use App\Http\Requests\UserRequest;
 
 class UserController extends BaseController

@@ -1,11 +1,11 @@
 <?php
 
 
-namespace App\Http\Controllers\V2\Admin;
+namespace App\Http\Controllers\Admin;
 
 
 use App\Http\Controllers\Forms\Activity as ActivityForm;
-use App\Http\Controllers\V2\BaseController;
+use App\Http\Controllers\BaseController;
 use App\Http\Requests\ActivityRequest;
 
 class ActivityController extends BaseController
