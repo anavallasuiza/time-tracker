@@ -10,7 +10,7 @@
 
         <div class="list-group">
             <?php foreach ($activities as $activity) { ?>
-            <a href="<?php echo url(route('v2.edit.activity.edit', ['id' => $activity->id])); ?>" class="list-group-item">
+            <a href="<?php echo url(route('edit.activity.edit', ['id' => $activity->id])); ?>" class="list-group-item">
                 <?php echo $activity->name; ?>
 
                 <span class="label label-<?php echo $activity->archived ? 'warning' : 'primary'; ?> pull-right">
@@ -21,7 +21,7 @@
             <?php } ?>
         </div>
 
-        <a href="<?php echo url(route('v2.edit.activity.add')); ?>" class="btn btn-success btn-block"><?php echo _('Add new activity'); ?></a>
+        <a href="<?php echo url(route('edit.activity.add')); ?>" class="btn btn-success btn-block"><?php echo _('Add new activity'); ?></a>
     </div>
 
     <div class="col-xs-6">
@@ -33,11 +33,11 @@
 
         <div class="list-group">
             <?php foreach ($tags as $tag) { ?>
-            <a href="<?php echo url(route('v2.edit.tag.edit', ['id' => $tag->id])); ?>" class="list-group-item"><?php echo $tag->name; ?></a>
+            <a href="<?php echo url(route('edit.tag.edit', ['id' => $tag->id])); ?>" class="list-group-item"><?php echo $tag->name; ?></a>
             <?php } ?>
         </div>
 
-        <a href="<?php echo url(route('v2.edit.tag.add')); ?>" class="btn btn-success btn-block"><?php echo _('Add new tag'); ?></a>
+        <a href="<?php echo url(route('edit.tag.add')); ?>" class="btn btn-success btn-block"><?php echo _('Add new tag'); ?></a>
     </div>
 
     <?php if ($users) { ?>
@@ -50,7 +50,7 @@
 
         <div class="list-group">
             <?php foreach ($users as $user) { ?>
-            <a href="<?php echo url(route('v2.edit.user.edit', ['id' => $user->id])); ?>" class="list-group-item">
+            <a href="<?php echo url(route('edit.user.edit', ['id' => $user->id])); ?>" class="list-group-item">
                 <?php echo $user->name; ?>
 
                 <span class="label label-<?php echo $user->enabled ? 'primary' : 'warning'; ?> pull-right">
@@ -61,7 +61,7 @@
             <?php } ?>
         </div>
 
-        <a href="<?php echo url(route('v2.edit.user.add')); ?>" class="btn btn-success btn-block"><?php echo _('Add new user'); ?></a>
+        <a href="<?php echo url(route('edit.user.add')); ?>" class="btn btn-success btn-block"><?php echo _('Add new user'); ?></a>
     </div>
     <?php } ?>
 
@@ -76,7 +76,7 @@
         <ul class="list-group">
             <?php foreach ($clients as $client) { ?>
             <li class="list-group-item">
-                <a href="<?php echo url(route('v2.edit.client.edit', ['id' => $client->id])); ?>" class="text-black">
+                <a href="<?php echo url(route('edit.client.edit', ['id' => $client->id])); ?>" class="text-black">
                     <?php echo $client->name; ?>
                 </a>
                 <div class="pull-right">
@@ -87,7 +87,7 @@
             <?php } ?>
         </ul>
 
-        <a href="<?php echo url(route('v2.edit.client.add')); ?>" class="btn btn-success btn-block"><?php echo _('Add new client'); ?></a>
+        <a href="<?php echo url(route('edit.client.add')); ?>" class="btn btn-success btn-block"><?php echo _('Add new client'); ?></a>
     </div>
     <?php } ?>
 </div>

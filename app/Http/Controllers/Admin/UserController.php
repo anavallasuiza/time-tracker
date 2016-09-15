@@ -21,14 +21,14 @@ class UserController extends BaseController
         unset($form['password_repeat']);
 
         return view('web.pages.edit.user')->with('form', $form)->with('formHeader', _('New user'))
-            ->with('action', url(route('v2.edit.user.add')));
+            ->with('action', url(route('edit.user.add')));
 
     }
 
     public function postAdd(UserRequest $request)
     {
         $this->usersRepo->persist($request->input());
-        return redirect()->route('v2.edit.index');
+        return redirect()->route('edit.index');
     }
 
 
@@ -52,13 +52,13 @@ class UserController extends BaseController
 
         return view('web.pages.edit.user')->with('form', $form)->with('formHeader', $user->name)
             ->with('clientActivities', $user->activities)
-            ->with('action', url(route('v2.edit.user.edit', ['id' => $user->id])));
+            ->with('action', url(route('edit.user.edit', ['id' => $user->id])));
 
     }
 
     public function postEdit($userId, UserRequest $request)
     {
         $this->usersRepo->updateUser($userId, $request->input());
-        return redirect()->route('v2.edit.index');
+        return redirect()->route('edit.index');
     }
 }

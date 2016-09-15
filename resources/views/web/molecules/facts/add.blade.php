@@ -1,4 +1,4 @@
-<form method="post"  action="{{url(route('v2.time.fact.add'))}}"  id="facts-form-add" class="facts-form">
+<form method="post"  action="{{url(route('time.fact.add'))}}"  id="facts-form-add" class="facts-form">
     <?php echo Form::token(); ?>
 
     <div class="row">

@@ -12,24 +12,23 @@ Route::get('/404', ['as' => 'error.404', 'uses' => 'Home@error404']);
 Route::get('/', ['as' => 'index', 'uses' => 'IndexController@index']);
 
 Route::group([
-    'middleware' => ['auth'],
-    'prefix' => 'v2/',
+    'middleware' => ['auth']
 ], function () {
 
 
     Route::group([
         'prefix' => 'time/',
     ], function () {
-        Route::get('/', ['as' => 'v2.time.index', 'uses' => 'TimeController@index']);
-        Route::post('/fact/edit', ['as' => 'v2.time.fact.edit','uses' => 'TimeController@updateFact']);
-        Route::post('/fact/add', ['as' => 'v2.time.fact.add','uses' => 'TimeController@addFact']);
+        Route::get('/', ['as' => 'time.index', 'uses' => 'TimeController@index']);
+        Route::post('/fact/edit', ['as' => 'time.fact.edit','uses' => 'TimeController@updateFact']);
+        Route::post('/fact/add', ['as' => 'time.fact.add','uses' => 'TimeController@addFact']);
     });
 
     Route::group([
        //'middleware'=>['auth.admin'],
         'prefix' => 'edit/',
     ], function () {
-        Route::get('/', ['as' => 'v2.edit.index', 'uses' => 'Admin\EditController@index']);
+        Route::get('/', ['as' => 'edit.index', 'uses' => 'Admin\EditController@index']);
 
         Route::group([
             //'middleware'=>['auth.admin'],
@@ -37,14 +36,14 @@ Route::group([
         ],function () {
 
             Route::get('/{id}', [
-                'as' => 'v2.edit.client.edit',
+                'as' => 'edit.client.edit',
                 'uses' => 'Admin\ClientController@edit'
             ]);
             Route::post('/{id}', [
                 'uses' => 'Admin\ClientController@postEdit'
             ]);
             Route::get('/', [
-                'as' => 'v2.edit.client.add',
+                'as' => 'edit.client.add',
                 'uses' => 'Admin\ClientController@add'
             ]);
             Route::post('/', [
@@ -58,14 +57,14 @@ Route::group([
         ],function () {
 
             Route::get('/{id}', [
-                'as' => 'v2.edit.user.edit',
+                'as' => 'edit.user.edit',
                 'uses' => 'Admin\UserController@edit'
             ]);
             Route::post('/{id}', [
                 'uses' => 'Admin\UserController@postEdit'
             ]);
             Route::get('/', [
-                'as' => 'v2.edit.user.add',
+                'as' => 'edit.user.add',
                 'uses' => 'Admin\UserController@add'
             ]);
             Route::post('/', [
@@ -80,14 +79,14 @@ Route::group([
         ],function () {
 
             Route::get('/{id}', [
-                'as' => 'v2.edit.tag.edit',
+                'as' => 'edit.tag.edit',
                 'uses' => 'Admin\TagController@edit'
             ]);
             Route::post('/{id}', [
                 'uses' => 'Admin\TagController@postEdit'
             ]);
             Route::get('/', [
-                'as' => 'v2.edit.tag.add',
+                'as' => 'edit.tag.add',
                 'uses' => 'Admin\TagController@add'
             ]);
             Route::post('/', [
@@ -101,14 +100,14 @@ Route::group([
         ],function () {
 
             Route::get('/{id}', [
-                'as' => 'v2.edit.activity.edit',
+                'as' => 'edit.activity.edit',
                 'uses' => 'Admin\ActivityController@edit'
             ]);
             Route::post('/{id}', [
                 'uses' => 'Admin\ActivityController@postEdit'
             ]);
             Route::get('/', [
-                'as' => 'v2.edit.activity.add',
+                'as' => 'edit.activity.add',
                 'uses' => 'Admin\ActivityController@add'
             ]);
             Route::post('/', [
@@ -121,22 +120,22 @@ Route::group([
     Route::group([
         'prefix' => 'stats/',
     ], function () {
-        Route::get('/', ['as' => 'v2.stats.index', 'uses' => 'StatsController@index']);
-        Route::get('/calendar', ['as' => 'v2.stats.calendar', 'uses' => 'StatsController@calendar']);
+        Route::get('/', ['as' => 'stats.index', 'uses' => 'StatsController@index']);
+        Route::get('/calendar', ['as' => 'stats.calendar', 'uses' => 'StatsController@calendar']);
     });
 
     Route::group([
         'prefix' => 'maintenance/',
     ], function () {
-        Route::get('/sync', ['as' => 'v2.maintenance.sync', 'uses' => 'MaintenanceController@sync']);
+        Route::get('/sync', ['as' => 'maintenance.sync', 'uses' => 'MaintenanceController@sync']);
         Route::post('/sync', ['uses' => 'MaintenanceController@doSync']);
     });
 
     Route::group([
         'prefix' => 'notifications/',
     ], function () {
-        Route::get('/', ['as' => 'v2.notifications.index', 'uses' => 'NotificationsController@index']);
-        Route::post('/read/{id}',['as' => 'v2.notifications.read', 'uses' => 'NotificationsController@read']);
+        Route::get('/', ['as' => 'notifications.index', 'uses' => 'NotificationsController@index']);
+        Route::post('/read/{id}',['as' => 'notifications.read', 'uses' => 'NotificationsController@read']);
     });
 });
 

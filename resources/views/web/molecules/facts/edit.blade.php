@@ -1,4 +1,4 @@
-<form method="post" action="{{url(route('v2.time.fact.edit'))}}" id="facts-form-edit" class="facts-form hidden">
+<form method="post" action="{{url(route('time.fact.edit'))}}" id="facts-form-edit" class="facts-form hidden">
     <?php echo Form::token(); ?>
 
     <div class="row">

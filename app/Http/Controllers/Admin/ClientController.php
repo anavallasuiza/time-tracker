@@ -18,7 +18,7 @@ class ClientController extends BaseController
         $form = (new ClientForm())->edit();
 
         return view('web.pages.edit.client')->with('form', $form)->with('formHeader', _('New client'))
-            ->with('action', url(route('v2.edit.client.add')));
+            ->with('action', url(route('edit.client.add')));
 
     }
 
@@ -26,7 +26,7 @@ class ClientController extends BaseController
     {
         /** @var ClientRepository $clientsRepo */
         $this->clientsRepo->persist($request->input());
-        return redirect()->route('v2.edit.index');
+        return redirect()->route('edit.index');
     }
 
 
@@ -41,7 +41,7 @@ class ClientController extends BaseController
 
         return view('web.pages.edit.client')->with('form', $form)->with('formHeader', $client->name)
             ->with('clientActivities', $client->activities)
-            ->with('action', url(route('v2.edit.client.edit', ['id' => $client->id])));
+            ->with('action', url(route('edit.client.edit', ['id' => $client->id])));
 
     }
 
@@ -49,6 +49,6 @@ class ClientController extends BaseController
     {
         /** @var ClientRepository $clientsRepo */
         $this->clientsRepo->updateClientName($clientId, $request->get('name'));
-        return redirect()->route('v2.edit.index');
+        return redirect()->route('edit.index');
     }
 }

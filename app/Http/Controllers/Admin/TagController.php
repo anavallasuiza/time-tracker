@@ -18,14 +18,14 @@ class TagController extends BaseController
         $form = (new TagForm())->edit();
 
         return view('web.pages.edit.tag')->with('form', $form)->with('formHeader', _('New tag'))
-            ->with('action', url(route('v2.edit.tag.add')));
+            ->with('action', url(route('edit.tag.add')));
 
     }
 
     public function postAdd(TagRequest $request)
     {
         $this->tagsRepo->persist($request->input());
-        return redirect()->route('v2.edit.index');
+        return redirect()->route('edit.index');
     }
 
 
@@ -39,7 +39,7 @@ class TagController extends BaseController
         $form->load($tag);
 
         return view('web.pages.edit.client')->with('form', $form)->with('formHeader', $tag->name)
-            ->with('action', url(route('v2.edit.tag.edit', ['id' => $tag->id])));
+            ->with('action', url(route('edit.tag.edit', ['id' => $tag->id])));
 
     }
 
@@ -47,6 +47,6 @@ class TagController extends BaseController
     {
         /** @var ClientRepository $clientsRepo */
         $this->tagsRepo->updateTagName($tagId, $request->get('name'));
-        return redirect()->route('v2.edit.index');
+        return redirect()->route('edit.index');
     }
 }

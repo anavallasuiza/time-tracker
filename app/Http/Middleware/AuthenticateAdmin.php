@@ -42,7 +42,7 @@ class AuthenticateAdmin
             if ($request->ajax()) {
                 return response('Unauthorized.', 401);
             } else {
-                return redirect()->guest(route('v2.time.index'));
+                return redirect()->guest(route('time.index'));
             }
         }
 

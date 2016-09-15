@@ -27,14 +27,14 @@ class ActivityController extends BaseController
 
         return view('web.pages.edit.activity')->with('form', $form)->with('formHeader', _('New activity'))
             ->with('activityTags', $activityTags)
-            ->with('action', url(route('v2.edit.activity.add')));
+            ->with('action', url(route('edit.activity.add')));
 
     }
 
     public function postAdd(ActivityRequest $request)
     {
         $this->activityRepo->persist($request->input());
-        return redirect()->route('v2.edit.index');
+        return redirect()->route('edit.index');
     }
 
 
@@ -57,7 +57,7 @@ class ActivityController extends BaseController
 
         return view('web.pages.edit.activity')->with('form', $form)->with('formHeader', $activity->name)
             ->with('activityTags', $activityTags)
-            ->with('action', url(route('v2.edit.activity.edit', ['id' => $activity->id])));
+            ->with('action', url(route('edit.activity.edit', ['id' => $activity->id])));
 
     }
 
@@ -65,6 +65,6 @@ class ActivityController extends BaseController
     {
         $this->activityRepo->updateActivity($activityId, $request->input('name'), $request->input('archived'),
             $request->input('tags'), $request->input('id_clients'));
-        return redirect()->route('v2.edit.index');
+        return redirect()->route('edit.index');
     }
 }

@@ -14,7 +14,7 @@
         </div>
 
         <div class="form-group text-center">
-            <a href="<?php echo url(route('v2.edit.index')); ?>" class="btn btn-info">
+            <a href="<?php echo url(route('edit.index')); ?>" class="btn btn-info">
                 <i class="fa fa-undo"></i>
                 <?php echo _('Back'); ?>
             </a>

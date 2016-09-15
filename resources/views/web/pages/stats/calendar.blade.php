@@ -23,7 +23,7 @@
         <?php foreach ($days as $hours) { ?>
         <td>
             <?php if ($hours['hours'] > 0) { ?>
-            <a href="<?php echo url(route('v2.time.index',[
+            <a href="<?php echo url(route('time.index',[
                 'user' => $filters['user'],
                 'activity' => $filters['activity'],
                 'tag' => $filters['tag'],

@@ -35,7 +35,7 @@ class RedirectIfAuthenticated
     public function handle($request, Closure $next)
     {
         if ($this->auth->check()) {
-            return redirect(route('v2.time.index'));
+            return redirect(route('time.index'));
         }
 
         return $next($request);

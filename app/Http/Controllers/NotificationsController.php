@@ -25,7 +25,7 @@ class NotificationsController extends BaseController
         $notification->read = true;
         $notification->save();
 
-        return redirect(route('v2.notifications.index'));
+        return redirect(route('notifications.index'));
     }
 
 }
