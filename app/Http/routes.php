@@ -4,11 +4,6 @@ Route::get('/login', ['as' => 'login', 'uses' => 'Auth\AuthController@getLogin']
 Route::post('/login', ['as' => 'login.post', 'uses' => 'Auth\AuthController@postLogin']);
 Route::get('/logout', ['as' => 'logout', 'uses' => 'Auth\AuthController@getLogout']);
 
-Route::get('/401', ['as' => 'error.401', 'uses' => 'Home@error401']);
-Route::get('/500', ['as' => 'error.401', 'uses' => 'Home@error500']);
-Route::get('/404', ['as' => 'error.404', 'uses' => 'Home@error404']);
-
-
 Route::get('/', ['as' => 'index', 'uses' => 'IndexController@index']);
 
 Route::group([
