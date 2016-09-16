@@ -1,6 +1,8 @@
 <?php
 namespace App\Database\Models;
 
+use ANavallaSuiza\Laravel\Database\Contracts\Repository\HasCustomRepository;
+use App\Database\Repositories\UserRepository;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -39,7 +41,7 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
  * @method static \Illuminate\Database\Query\Builder|\App\Database\Models\User whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Database\Models\User whereUpdatedAt($value)
  */
-class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
+class User extends Model implements AuthenticatableContract, CanResetPasswordContract, HasCustomRepository {
     use Authenticatable, CanResetPassword;
 
     protected $table = 'users';
@@ -51,4 +53,20 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     {
         return $this->hasMany(Fact::class, 'id_users', 'id');
     }
+
+    public function isAdmin()
+    {
+        return $this->admin;
+    }
+
+    public function getDateFormatConfig()
+    {
+       return 'd/m/Y'.($this->store_hours ? ' H:i' : '');
+    }
+
+    public function repository()
+    {
+        return UserRepository::class;
+    }
+
 }

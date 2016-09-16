@@ -1,68 +1,141 @@
 <?php
 
-Route::any('/login', ['as' => 'login', 'uses' => 'Home@login']);
+Route::get('/login', ['as' => 'login', 'uses' => 'Auth\AuthController@getLogin']);
+Route::post('/login', ['as' => 'login.post', 'uses' => 'Auth\AuthController@postLogin']);
+Route::get('/logout', ['as' => 'logout', 'uses' => 'Auth\AuthController@getLogout']);
 
-Route::get('/401', ['as' => 'error.401', 'uses' => 'Home@error401']);
-Route::get('/404', ['as' => 'error.404', 'uses' => 'Home@error404']);
+Route::get('/', ['as' => 'index', 'uses' => 'IndexController@index']);
 
-Route::group(['before' => 'auth'], function () {
-    Route::get('/logout', ['as' => 'logout', 'uses' => 'Auth\AuthController@getLogout']);
-
-
-    Route::any('/', ['as' => 'index', 'uses' => 'Home@index']);
-
-    Route::get('/stats', ['as' => 'stats.index', 'uses' => 'Home@stats']);
-
-    Route::get('/stats/calendar', ['as' => 'stats.calendar', 'uses' => 'Home@statsCalendar']);
-
-    Route::any('/sync', ['as' => 'sync', 'uses' => 'Home@sync']);
-
-    Route::any('/edit', [
-        'as' => 'edit.show',
-        'uses' => 'Home@edit'
-    ]);
-
-    Route::any('/activity/', ['as' => 'activity.add', 'uses' => 'Home@activityAdd']);
-
-    Route::any('/activity/{id}', [
-        'as' => 'activity.edit',
-        'uses' => 'Home@activityEdit'
-    ]);
-
-    Route::any('/tag/', ['as' => 'tag.add', 'uses' => 'Home@tagAdd']);
-    Route::any('/tag/{id}', ['as' => 'activity.edit', 'uses' => 'Home@tagEdit']);
-
-    Route::any('/user/', ['as' => 'user.add', 'uses' => 'Home@userAdd']);
-    Route::any('/user/{id}', ['as' => 'user.edit', 'uses' => 'Home@userEdit']);
-
-    Route::get('client', [
-        'as' => 'client.add',
-        'uses' => 'ClientController@add'
-    ]);
-    Route::post('client', [
-        'uses' => 'ClientController@postAdd'
-    ]);
-    Route::get('client/{id}', [
-        'as' => 'client.edit',
-        'uses' => 'ClientController@edit'
-    ]);
-    Route::post('client/{id}', [
-        'as' => 'client.edit',
-        'uses' => 'ClientController@postEdit'
-    ]);
+Route::group([
+    'middleware' => ['auth']
+], function () {
 
 
-    Route::get('/fact-tr/{id}', ['as' => 'fact.tr', 'uses' => 'Home@factTr']);
+    Route::group([
+        'prefix' => 'time/',
+    ], function () {
+        Route::get('/', ['as' => 'time.index', 'uses' => 'TimeController@index']);
+        Route::post('/fact/edit', ['as' => 'time.fact.edit','uses' => 'TimeController@updateFact']);
+        Route::post('/fact/add', ['as' => 'time.fact.add','uses' => 'TimeController@addFact']);
+        Route::get('/fact/{id}', ['as' => 'time.fact.item','uses' => 'TimeController@getFact']);
+    });
 
-    Route::get('/dump-sql', ['as' => 'maintenance.sql-dump', 'uses' => 'Home@sqlDownload']);
-    Route::any('/git-update', ['as' => 'maintenance.git-update', 'uses' => 'Home@gitUpdate']);
-    Route::any('/tools-duplicates', ['as' => 'maintenance.duplicates', 'uses' => 'Home@toolsDuplicates']);
+    Route::group([
+       //'middleware'=>['auth.admin'],
+        'prefix' => 'edit/',
+    ], function () {
+        Route::get('/', ['as' => 'edit.index', 'uses' => 'Admin\EditController@index']);
 
-    Route::get('/notifications', ['as' => 'notifications.index', 'uses' => 'Home@notifications']);
-    Route::post('/notifications/{id}/read', ['as' => 'notifications.read', 'uses' => 'Home@notificationRead']);
+        Route::group([
+            //'middleware'=>['auth.admin'],
+            'prefix' => 'client/',
+        ],function () {
+
+            Route::get('/{id}', [
+                'as' => 'edit.client.edit',
+                'uses' => 'Admin\ClientController@edit'
+            ]);
+            Route::post('/{id}', [
+                'uses' => 'Admin\ClientController@postEdit'
+            ]);
+            Route::get('/', [
+                'as' => 'edit.client.add',
+                'uses' => 'Admin\ClientController@add'
+            ]);
+            Route::post('/', [
+                'uses' => 'Admin\ClientController@postAdd'
+            ]);
+        });
+
+        Route::group([
+            //'middleware'=>['auth.admin'],
+            'prefix' => 'user/',
+        ],function () {
+
+            Route::get('/{id}', [
+                'as' => 'edit.user.edit',
+                'uses' => 'Admin\UserController@edit'
+            ]);
+            Route::post('/{id}', [
+                'uses' => 'Admin\UserController@postEdit'
+            ]);
+            Route::get('/', [
+                'as' => 'edit.user.add',
+                'uses' => 'Admin\UserController@add'
+            ]);
+            Route::post('/', [
+                'uses' => 'Admin\UserController@postAdd'
+            ]);
+        });
+
+
+        Route::group([
+            //'middleware'=>['auth.admin'],
+            'prefix' => 'tag/',
+        ],function () {
+
+            Route::get('/{id}', [
+                'as' => 'edit.tag.edit',
+                'uses' => 'Admin\TagController@edit'
+            ]);
+            Route::post('/{id}', [
+                'uses' => 'Admin\TagController@postEdit'
+            ]);
+            Route::get('/', [
+                'as' => 'edit.tag.add',
+                'uses' => 'Admin\TagController@add'
+            ]);
+            Route::post('/', [
+                'uses' => 'Admin\TagController@postAdd'
+            ]);
+        });
+
+        Route::group([
+            //'middleware'=>['auth.admin'],
+            'prefix' => 'activity/',
+        ],function () {
+
+            Route::get('/{id}', [
+                'as' => 'edit.activity.edit',
+                'uses' => 'Admin\ActivityController@edit'
+            ]);
+            Route::post('/{id}', [
+                'uses' => 'Admin\ActivityController@postEdit'
+            ]);
+            Route::get('/', [
+                'as' => 'edit.activity.add',
+                'uses' => 'Admin\ActivityController@add'
+            ]);
+            Route::post('/', [
+                'uses' => 'Admin\ActivityController@postAdd'
+            ]);
+        });
+
+    });
+
+    Route::group([
+        'prefix' => 'stats/',
+    ], function () {
+        Route::get('/', ['as' => 'stats.index', 'uses' => 'StatsController@index']);
+        Route::get('/calendar', ['as' => 'stats.calendar', 'uses' => 'StatsController@calendar']);
+    });
+
+    Route::group([
+        'prefix' => 'maintenance/',
+    ], function () {
+        Route::get('/sync', ['as' => 'maintenance.sync', 'uses' => 'MaintenanceController@sync']);
+        Route::post('/sync', ['uses' => 'MaintenanceController@doSync']);
+    });
+
+    Route::group([
+        'prefix' => 'notifications/',
+    ], function () {
+        Route::get('/', ['as' => 'notifications.index', 'uses' => 'NotificationsController@index']);
+        Route::post('/read/{id}',['as' => 'notifications.read', 'uses' => 'NotificationsController@read']);
+    });
 });
 
-Route::group(['prefix' => 'api', 'before' => 'auth.api'], function () {
+Route::group(['prefix' => 'api/', 'before' => 'auth.api'], function () {
     Route::get('activities', ['as' => 'api.activities', 'uses' => 'Api@getActivities']);
     Route::get('facts', ['as' => 'api.facts', 'uses' => 'Api@getFacts']);
     Route::get('tags', ['as' => 'api.tags', 'uses' => 'Api@getTags']);

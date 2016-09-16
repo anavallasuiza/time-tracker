@@ -1,6 +1,8 @@
 <?php
 namespace App\Database\Models;
 
+use ANavallaSuiza\Laravel\Database\Contracts\Repository\HasCustomRepository;
+use App\Database\Repositories\ActivityRepository;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -25,7 +27,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Query\Builder|\App\Database\Models\Activity whereUpdatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Database\Models\Activity whereIdClients($value)
  */
-class Activity extends Model {
+class Activity extends Model implements HasCustomRepository {
     protected $table = 'activities';
     protected $guarded = ['id'];
 
@@ -60,4 +62,8 @@ class Activity extends Model {
         return !empty($this->id_clients);
     }
 
+    public function repository()
+    {
+        return ActivityRepository::class;
+    }
 }
