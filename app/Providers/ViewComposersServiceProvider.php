@@ -4,6 +4,7 @@
 namespace App\Providers;
 
 
+use App\View\Composers\SubHeaderViewComposer;
 use Illuminate\Support\ServiceProvider;
 
 class ViewComposersServiceProvider extends ServiceProvider
@@ -22,7 +23,9 @@ class ViewComposersServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->app->view->composer([
-            'sub-header'
-        ], \App\View\Composers\SubHeaderViewComposer::class);
+            'sub-header',
+            'web.molecules.sub-header'
+        ], SubHeaderViewComposer::class);
+
     }
 }

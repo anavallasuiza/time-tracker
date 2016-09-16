@@ -1,6 +1,7 @@
 <?php
 namespace App\Libs;
 
+use App\Database\Models\User;
 use Input, Request, Response, Session;
 
 class Utils
@@ -89,6 +90,7 @@ class Utils
 
     public static function startEndTime($start, $end, $total)
     {
+        /** @var User $user */
         $user = Auth::user();
 
         if (empty($user->store_hours)) {
@@ -96,12 +98,12 @@ class Utils
             list($end) = explode(' ', $end);
         }
 
-        if (!($start = self::checkDate($start,  $user->dateFormat))) {
-            throw new \Exception(sprintf(_('"%s" has not a valid date time format (%s)'), _('start_time'), $user->dateFormat));
+        if (!($start = self::checkDate($start,  $user->getDateFormatConfig()))) {
+            throw new \Exception(sprintf(_('"%s" has not a valid date time format (%s)'), _('start_time'), $user->getDateFormatConfig()));
         }
 
-        if (!($end = self::checkDate($end, $user->dateFormat))) {
-            throw new \Exception(sprintf(_('"%s" has not a valid date time format (%s)'), _('end_time'), $user->dateFormat));
+        if (!($end = self::checkDate($end, $user->getDateFormatConfig()))) {
+            throw new \Exception(sprintf(_('"%s" has not a valid date time format (%s)'), _('end_time'), $user->getDateFormatConfig()));
         }
 
         if ($user->store_hours) {

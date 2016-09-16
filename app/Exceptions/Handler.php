@@ -53,10 +53,22 @@ class Handler extends ExceptionHandler
 
         if($e instanceof NotFoundHttpException)
         {
-            return Response::make(View::make('base')->nest('body', 'error404'), 404);
-        }elseif($e instanceof RuntimeException || $e instanceof FatalThrowableError || $e instanceof ErrorException){
+            if($request->ajax())
+            {
+                return response()->json(['errors'=>[$e->getMessage()]],404);
+            }else{
+                return response()->view('web.pages.error.404',[],404);
+            }
+        }elseif($e instanceof Exception){
             \Log::alert($e->getMessage());
-            return Response::make(View::make('base')->nest('body', 'error500'), 500);
+
+            if($request->ajax())
+            {
+                return response()->json(['errors'=>[$e->getMessage()]],404);
+
+            }else{
+                return response()->view('web.pages.error.500',[],500);
+            }
         }
 
     }

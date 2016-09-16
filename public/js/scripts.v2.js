@@ -90,7 +90,7 @@ var $addForm = $('#facts-form-add'),
                     var $original = $tr.prev();
                 }
 
-                $.get(BASE_WWW + '/fact-tr/' + response.id, function (response) {
+                $.get(BASE_WWW + '/time/fact/' + response.id, function (response) {
                     $original.replaceWith(response).find('[data-toggle="tooltip"]').tooltip();
                 });
 
@@ -105,7 +105,7 @@ var $addForm = $('#facts-form-add'),
                 }, 1000);
             },
             error: function(response) {
-                return showError(response.responseText, $form);
+                return showErrors(response.responseJSON, $form);
             }
         });
     };
@@ -130,6 +130,15 @@ var $addForm = $('#facts-form-add'),
             .html(message);
     };
 
+    var showErrors = function (errors, $form) {
+        console.log(errors);
+        var errorContainer = $form.find('div[rel="error-message"]');
+        $.each(errors, function (index, value) {
+            errorContainer.append('<div>'+value+'</div>');
+
+        });
+        errorContainer.show().removeClass('hidden');
+    };
     var $editOpen,
         $editForm = $('#facts-form-edit'),
         $headerTimer = $('#header-timer'),
