@@ -23,8 +23,8 @@ class FactRequest extends Request
         return [
             'activity' => 'required|integer',
             'tag' => 'required',
-            'start' => 'required|date',
-            'end' => 'required|date',
+            'start' => 'required',
+            'end' => 'required',
             'time' => 'required|regex:/[0-9]+:[0-9]+/'
         ];
     }
