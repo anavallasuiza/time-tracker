@@ -17,6 +17,7 @@ Route::group([
         Route::get('/', ['as' => 'time.index', 'uses' => 'TimeController@index']);
         Route::post('/fact/edit', ['as' => 'time.fact.edit','uses' => 'TimeController@updateFact']);
         Route::post('/fact/add', ['as' => 'time.fact.add','uses' => 'TimeController@addFact']);
+        Route::get('/fact/{id}', ['as' => 'time.fact.item','uses' => 'TimeController@getFact']);
     });
 
     Route::group([

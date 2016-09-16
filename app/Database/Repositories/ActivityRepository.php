@@ -29,7 +29,7 @@ class ActivityRepository extends Repository
     /**
      * @return Collection
      */
-    public function getUsers()
+    public function getActivities()
     {
         return $this->getModel()->orderBy('name', 'ASC')->get();
     }

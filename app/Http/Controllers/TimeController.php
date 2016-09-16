@@ -169,4 +169,11 @@ class TimeController extends BaseController
             'id' => $fact->id
         ]);
     }
+
+    public function getFact($id)
+    {
+        $fact = $this->factRepository->getFact($id);
+        $activities = $this->activityRepo->getActivities();
+        return view('web.atoms.fact')->with('fact', $fact)->with('activities',$activities);
+    }
 }

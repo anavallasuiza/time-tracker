@@ -1,6 +1,8 @@
 <?php
 namespace App\Database\Models;
 
+use ANavallaSuiza\Laravel\Database\Contracts\Repository\HasCustomRepository;
+use App\Database\Repositories\FactRepository;
 use DateTime;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -37,7 +39,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Database\Models\Fact whereIdActivities($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Database\Models\Fact whereIdUsers($value)
  */
-class Fact extends Model {
+class Fact extends Model implements HasCustomRepository {
     use SoftDeletes;
 
     protected $table = 'facts';
@@ -126,5 +128,15 @@ class Fact extends Model {
         $facts->orderBy($sort_field.'_time', $sort_mode);
 
         return $facts;
+    }
+
+    /**
+     * Get Eloquent Model custom repository
+     *
+     * @return string
+     */
+    public function repository()
+    {
+        return FactRepository::class;
     }
 }

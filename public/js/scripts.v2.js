@@ -90,7 +90,7 @@ var $addForm = $('#facts-form-add'),
                     var $original = $tr.prev();
                 }
 
-                $.get(BASE_WWW + '/fact-tr/' + response.id, function (response) {
+                $.get(BASE_WWW + '/time/fact/' + response.id, function (response) {
                     $original.replaceWith(response).find('[data-toggle="tooltip"]').tooltip();
                 });
 

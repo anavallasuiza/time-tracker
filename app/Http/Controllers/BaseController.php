@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 
 use App\Database\Models\Activity;
 use App\Database\Models\Client;
+use App\Database\Models\Fact;
 use App\Database\Models\Tag;
 use App\Database\Models\User;
 use App\Database\Repositories\ActivityRepository;
 use App\Database\Repositories\ClientRepository;
+use App\Database\Repositories\FactRepository;
 use App\Database\Repositories\TagRepository;
 use App\Database\Repositories\UserRepository;
 use Auth;
@@ -41,6 +43,11 @@ class BaseController extends Controller
     protected $activityRepo;
 
     /**
+     * @var FactRepository
+     */
+    protected $factRepository;
+
+    /**
      * BaseController constructor.
      */
     public function __construct( ) {
@@ -49,6 +56,7 @@ class BaseController extends Controller
         $this->usersRepo = ModelManager::getRepository(User::class);
         $this->tagsRepo = ModelManager::getRepository(Tag::class);
         $this->activityRepo = ModelManager::getRepository(Activity::class);
+        $this->factRepository = ModelManager::getRepository(Fact::class);
         $this->share();
     }
 
