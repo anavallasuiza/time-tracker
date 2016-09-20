@@ -29,7 +29,6 @@ task('deploy:upload', function () {
     $content = [
         'app',
         'bootstrap',
-        'cache.json',
         'composer.json',
         'composer.lock',
         'config',
