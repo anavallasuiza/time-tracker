@@ -2,11 +2,7 @@
 
 require 'recipe/composer.php';
 
-server(env('DEPLOY_SERVER_NAME'), env('DEPLOY_SERVER_HOST'), env('DEPLOY_SERVER_PORT'))
-    ->user(env('DEPLOY_SERVER_USER'))
-    ->identityFile(env('DEPLOY_IDENTIFY_FILE_PUBLIC_KEY'), env('DEPLOY_IDENTIFY_FILE_PRIVATE_KEY'))
-    ->stage(env('DEPLOY_STAGE'))
-    ->env('deploy_path', env('DEPLOY_PATH'));
+serverList('servers.yml');
 
 set('shared_files', [
     '.env',
