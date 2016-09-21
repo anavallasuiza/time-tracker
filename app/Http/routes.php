@@ -121,13 +121,6 @@ Route::group([
     });
 
     Route::group([
-        'prefix' => 'maintenance/',
-    ], function () {
-        Route::get('/sync', ['as' => 'maintenance.sync', 'uses' => 'MaintenanceController@sync']);
-        Route::post('/sync', ['uses' => 'MaintenanceController@doSync']);
-    });
-
-    Route::group([
         'prefix' => 'notifications/',
     ], function () {
         Route::get('/', ['as' => 'notifications.index', 'uses' => 'NotificationsController@index']);
