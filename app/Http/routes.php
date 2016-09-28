@@ -121,13 +121,6 @@ Route::group([
     });
 
     Route::group([
-        'prefix' => 'maintenance/',
-    ], function () {
-        Route::get('/sync', ['as' => 'maintenance.sync', 'uses' => 'MaintenanceController@sync']);
-        Route::post('/sync', ['uses' => 'MaintenanceController@doSync']);
-    });
-
-    Route::group([
         'prefix' => 'notifications/',
     ], function () {
         Route::get('/', ['as' => 'notifications.index', 'uses' => 'NotificationsController@index']);
@@ -141,10 +134,10 @@ Route::group(['prefix' => 'api/', 'before' => 'auth.api'], function () {
     Route::get('tags', ['as' => 'api.tags', 'uses' => 'Api@getTags']);
     Route::get('facts-tags', ['as' => 'api.facts.tags', 'uses' => 'Api@getFactsTags']);
 
-    Route::post('activities', ['uses' => 'Api@setActivities']);
-    Route::post('facts', ['as' => 'notifications.read', 'uses' => 'Api@setFacts']);
-    Route::post('tags', ['as' => 'notifications.read', 'uses' => 'Api@setTags']);
-    Route::post('facts-tags', ['as' => 'notifications.read', 'uses' => 'Api@setFactsTags']);
+    Route::post('activities', ['as' => 'api.activities.post', 'uses' => 'Api@setActivities']);
+    Route::post('facts', ['as' => 'api.facts.post', 'uses' => 'Api@setFacts']);
+    Route::post('tags', ['as' => 'api.tags.post', 'uses' => 'Api@setTags']);
+    Route::post('facts-tags', ['as' => 'api.facts-tags.post', 'uses' => 'Api@setFactsTags']);
 
-    Route::delete('facts', ['uses' => 'Api@deleteFacts']);
+    Route::delete('facts', ['as' => 'api.facts.delete', 'uses' => 'Api@deleteFacts']);
 });

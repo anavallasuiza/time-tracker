@@ -19,7 +19,6 @@ set('shared_dirs', [
 ]);
 
 set('writable_dirs', [
-    'public/storage',
     'bootstrap/cache',
     'storage'
 ]);
@@ -37,9 +36,11 @@ task('deploy:upload', function () {
         'artisan',
         'storage'
     ];
+
     foreach ($content as $path) {
         upload($path, $release.'/'.$path);
     }
+
     foreach (['lang', 'views'] as $path) {
         upload('resources/'.$path, $release.'/resources/'.$path);
     }
