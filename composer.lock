@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "98233bbef696950d7af56adaefb7c75f",
+    "content-hash": "da998f18bffc5f4543362c5d7e2cfa2e",
     "packages": [
         {
             "name": "ablunier/laravel-database",
@@ -728,16 +728,16 @@
         },
         {
             "name": "form-manager/form-manager",
-            "version": "v5.1.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/oscarotero/form-manager.git",
-                "reference": "61a65e84cb53e42a66f182f46737bd80381bedc2"
+                "reference": "9cbf43e591ea313e2a4bc3697085352f95b8e929"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oscarotero/form-manager/zipball/61a65e84cb53e42a66f182f46737bd80381bedc2",
-                "reference": "61a65e84cb53e42a66f182f46737bd80381bedc2",
+                "url": "https://api.github.com/repos/oscarotero/form-manager/zipball/9cbf43e591ea313e2a4bc3697085352f95b8e929",
+                "reference": "9cbf43e591ea313e2a4bc3697085352f95b8e929",
                 "shasum": ""
             },
             "require": {
@@ -2729,6 +2729,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "form-manager/form-manager": 20,
         "ifsnop/mysqldump-php": 20
     },
     "prefer-stable": false,
